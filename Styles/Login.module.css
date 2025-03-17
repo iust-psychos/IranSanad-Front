@@ -146,3 +146,13 @@
     margin: 1% 26%;
     font-weight: 100;
 }
+
+.errors {
+    width: 76%;
+    border: 1px solid rgb(255, 85, 85);
+    border-radius: 10px;
+    padding: 1%;
+    margin: 1%;
+    background-color: rgb(255, 186, 186);
+    color: #FFFFFF;
+}

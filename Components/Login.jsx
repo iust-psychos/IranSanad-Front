@@ -7,51 +7,58 @@ import CircleIcon from "@mui/icons-material/Circle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
-import InfoIcon from '@mui/icons-material/Info';
-import Tip_slide from './Tip_slide';
-
+import InfoIcon from "@mui/icons-material/Info";
+import Tip_slide from "./Tip_slide";
+import LoginManager from "../Managers/LoginManager";
+import * as yup from "yup";
 
 const Login = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const dotOne = useRef(null);
-  const dotTwo = useRef(null);
-  const dotThree = useRef(null);
-  const dotFour = useRef(null);
-  const theme = useTheme();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
 
-  const handleFirst = (e) => {
-    console.log(currentIndex);
-    setCurrentIndex(1);
-    dotOne.current.style.color = "#FFFFFF";
-    dotTwo.current.style.color = "#B2B2B2";
-    dotThree.current.style.color = "#B2B2B2";
-    dotFour.current.style.color = "#B2B2B2";
+  const icon = useRef(null);
+
+  const validationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("آدرس ایمیل نامعتبر است")
+      .required("ایمیل اجباری است"),
+    password: yup
+      .string()
+      .required("رمز عبور اجباری است")
+      .min(8, "رمز عبور باید حداقل 8 کارکتر باشد")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
+      ),
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSecond = (e) => {
-    console.log(currentIndex);
-    setCurrentIndex(2);
-    dotOne.current.style.color = "#B2B2B2";
-    dotTwo.current.style.color = "#FFFFFF";
-    dotThree.current.style.color = "#B2B2B2";
-    dotFour.current.style.color = "#B2B2B2";
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await validationSchema.validate(formData, { abortEarly: false });
+      let username = formData.email.split("@")[0];
+      let resp = await LoginManager.Login(formData.email , username , formData.password);
+      setErrors({});
+    } catch (err) {
+      const validationErrors = {};
+      console.log(err);
+      err.inner.forEach((error) => {
+        validationErrors[error.path] = error.message;
+      });
+      setErrors(validationErrors);
+      icon.current.style.top = '35%';
+    }
   };
-  const handleThird = (e) => {
-    console.log(currentIndex);
-    setCurrentIndex(3);
-    dotOne.current.style.color = "#B2B2B2";
-    dotTwo.current.style.color = "#B2B2B2";
-    dotThree.current.style.color = "#FFFFFF";
-    dotFour.current.style.color = "#B2B2B2";
-  };
-  const handleFourth = (e) => {
-    console.log(currentIndex);
-    setCurrentIndex(4);
-    dotOne.current.style.color = "#B2B2B2";
-    dotTwo.current.style.color = "#B2B2B2";
-    dotThree.current.style.color = "#B2B2B2";
-    dotFour.current.style.color = "#FFFFFF";
-  };
+
   return (
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
@@ -64,109 +71,71 @@ const Login = () => {
                 className={styles.image}
               />
             </div>
-            <Tip_slide text_list={login_slides} className={styles.InformationContainer} />
-            {/* <div className={styles.InformationContainer}>
-              <Box
-                sx={{
-                  position: "relative",
-                  width: "100%",
-                  maxWidth: 800,
-                  margin: "0 auto",
-                  overflow: "hidden",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    transition: "transform 0.5s ease-in-out",
-                    transform: `translateX(-${currentIndex * 100}%)`,
-                  }}
-                >
-                  {login_slides.map((slide) => (
-                    <Box
-                      key={slide.id}
-                      sx={{
-                        minWidth: "100%",
-                        boxSizing: "border-box",
-                        height: "40%",
-                      }}
-                    >
-                      <span className={styles.infoTitle}>{slide.title}</span>
-                      <br />
-                      <p className={styles.infoContent}>{slide.desc}</p>
-                    </Box>
-                  ))}
-                </Box>
-                <div className={styles.sliderBtns}>
-                  <CircleIcon
-                    onClick={handleFirst}
-                    fontSize="small"
-                    ref={dotOne}
-                    sx={{
-                      color: "#B2B2B2",
-                      cursor: "pointer",
-                    }}
-                  />
-                  <CircleIcon
-                    onClick={handleSecond}
-                    fontSize="small"
-                    ref={dotTwo}
-                    sx={{
-                      color: "#B2B2B2",
-                      cursor: "pointer",
-                    }}
-                  />
-                  <CircleIcon
-                    onClick={handleThird}
-                    fontSize="small"
-                    ref={dotThree}
-                    sx={{
-                      color: "#FFFFFF",
-                      cursor: "pointer",
-                    }}
-                  />
-                  <CircleIcon
-                    onClick={handleFourth}
-                    fontSize="small"
-                    ref={dotFour}
-                    sx={{
-                      color: "#B2B2B2",
-                      cursor: "pointer",
-                    }}
-                  />
-                </div>
-              </Box>
-            </div> */}
+            <Tip_slide
+              text_list={login_slides}
+              className={styles.InformationContainer}
+            />
+
           </div>
           <div className={styles.formBox}>
             <span className={styles.loginTitle}>ورود به حساب</span>
             <div className={styles.inputsBox}>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div>
                   <label className={styles.inputsBoxLabels} htmlFor="username">
                     نام کاربری
                   </label>
                   <br />
-                  <Input className={styles.inputField} type="text" id="username" />
+                  <Input
+                    className={styles.inputField}
+                    onChange={handleChange}
+                    type="text"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                  />
+                  {errors.email && <div className={styles.errors}>{errors.email}</div>}
                 </div>
                 <div className={styles.password}>
                   <label className={styles.inputsBoxLabels} htmlFor="password">
                     رمز عبور
                   </label>
-                  <InfoIcon sx={{ 
-                    position:'absolute',
-                    top:'34%',
-                    color: '#D4D4D4',
-                    width: '20px',
-                    height: '20px',
-                    left: '20%'
-                  }}/>
+                  <InfoIcon
+                    sx={{
+                      position: "absolute",
+                      top: "34%",
+                      color: "#D4D4D4",
+                      width: "20px",
+                      height: "20px",
+                      left: "20%",
+                    }}
+                    ref={icon}
+                  />
                   <br />
-                  <Input className={styles.inputField} type="password" id="password" /> <br />
-                  <p><a href="#" className={styles.forgetpasswordlink}>فراموشی رمز عبور؟</a></p>
-
-                  <button type="submit" className={styles.submitBtn}>ورود</button>
-                  <p className={styles.noAccLink}>حساب ندارید؟<a href="#" className={styles.forgetpasswordlink}>ثبت نام کنید.</a></p>
+                  <Input
+                    className={styles.inputField}
+                    onChange={handleChange}
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                  />
+                  <br />
+                  {errors.password && <div className={styles.errors}>{errors.password}</div>}
+                  <p>
+                    <a href="#" className={styles.forgetpasswordlink}>
+                      فراموشی رمز عبور؟
+                    </a>
+                  </p>
+                  <button type="submit" className={styles.submitBtn}>
+                    ورود
+                  </button>
+                  <p className={styles.noAccLink}>
+                    حساب ندارید؟
+                    <a href="#" className={styles.forgetpasswordlink}>
+                      ثبت نام کنید.
+                    </a>
+                  </p>
                 </div>
               </form>
             </div>
