@@ -1,33 +1,13 @@
 import "react";
-import styles from "../src/styles/Login.module.css";
+import styles from "../Styles/Login.module.css";
 import React, { useState } from "react";
 import { Box, Button, useTheme } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import CircleIcon from '@mui/icons-material/Circle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-const slides = [
-  {
-    id: 1,
-    title: "همکاری",
-    desc: "با دوستان و همکاران خود همکاری داشته باشید و به طور همزمان بر روی یک سند نگارش انجام دهید.",
-  },
-  {
-    id: 2,
-    title: "همکاری",
-    desc: "با دوستان و همکاران خود همکاری داشته باشید و به طور همزمان بر روی یک سند نگارش انجام دهید.",
-  },
-  {
-    id: 3,
-    title: "همکاری",
-    desc: "با دوستان و همکاران خود همکاری داشته باشید و به طور همزمان بر روی یک سند نگارش انجام دهید.",
-  },
-  {
-    id: 4,
-    title: "همکاری",
-    desc: "با دوستان و همکاران خود همکاری داشته باشید و به طور همزمان بر روی یک سند نگارش انجام دهید.",
-  },
-];
-const Login = () => {
+import { login_slides } from "../Scripts/mock_data";
+
+function Login () {
   const [currentIndex, setCurrentIndex] = useState(0);
   const theme = useTheme();
 
@@ -77,7 +57,7 @@ const Login = () => {
                     transform: `translateX(-${currentIndex * 100}%)`,
                   }}
                 >
-                  {slides.map((slide) => (
+                  {login_slides.map((slide) => (
                     <Box
                       key={slide.id}
                       sx={{

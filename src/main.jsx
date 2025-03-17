@@ -1,6 +1,10 @@
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import Login from '../Components/Login.jsx'
-import '../src/index.css';
+import '../Styles/index.css'
+import App from './App.jsx'
+
 createRoot(document.getElementById('root')).render(
-    <Login />,
+    <StrictMode>
+        <App />
+    </StrictMode>,
 )
