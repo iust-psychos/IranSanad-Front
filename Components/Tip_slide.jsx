@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Toggle } from "@base-ui-components/react/toggle";
 import { ToggleGroup } from "@base-ui-components/react/toggle-group";
 
-function Tip_slide({ text_list, className }) {
+const Tip_slide = ({ text_list, className }) => {
   const [currentTip, setCurrentTip] = useState(text_list[0]);
   let tipsCount = text_list.length
   const dotSVG = (

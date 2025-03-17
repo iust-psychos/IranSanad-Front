@@ -6,7 +6,7 @@ import { ToggleGroup } from "@base-ui-components/react/toggle-group";
 import Tip_slide from "./Tip_slide";
 import { login_slides } from "../Scripts/mock_data";
 
-function Forgot_password() {
+const Forgot_password = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   return (

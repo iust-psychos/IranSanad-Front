@@ -1,6 +1,6 @@
 import "react";
 
- function Sign_up() {
+ const Sign_up = () => {
     //ToDo
     return(<p>this page is unavailable</p>);
 }
