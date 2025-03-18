@@ -1,10 +1,6 @@
 import "react";
 import styles from "../Styles/Login.module.css";
 import React, { useRef, useState } from "react";
-import { Box, Button, useTheme } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import CircleIcon from "@mui/icons-material/Circle";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
 import InfoIcon from "@mui/icons-material/Info";
@@ -45,8 +41,7 @@ const Login = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
-      let username = formData.email.split("@")[0];
-      let resp = await LoginManager.Login(formData.email , username , formData.password);
+      let resp = await LoginManager.Login(formData.email , formData.password);
       setErrors({});
     } catch (err) {
       const validationErrors = {};
