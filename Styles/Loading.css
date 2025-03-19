@@ -1,0 +1,51 @@
+.loading-banner {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    color: #4F29CE;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.loading-container {
+    position: fixed; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E8E3F9;
+}
+
+.loading-circle {
+    margin: 0;
+    padding: 0;
+    border-radius: 50%;
+    height: 20vh;
+    width: 20vh;
+    mix-blend-mode: multiply;
+    position: absolute;
+    filter: blur(15px);
+}
+  
+.loading-circle:nth-child(3n+1) {
+    background-color: yellow;
+}
+
+.loading-circle:nth-child(3n+2) {
+    background-color: magenta;
+}
+
+.loading-circle:nth-child(3n) {
+    background-color: cyan;
+}
+
+.loading-text {
+    position: absolute;
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: x-large;
+}
