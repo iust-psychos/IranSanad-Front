@@ -7,8 +7,11 @@ import InfoIcon from "@mui/icons-material/Info";
 import Tip_slide from "./Tip_slide";
 import LoginManager from "../Managers/LoginManager";
 import * as yup from "yup";
+import {useLocation} from 'react-router-dom';
 
-const SignUp = () => {
+const Forgot_password = () => {
+  const location = useLocation()
+  console.log(location.state);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -122,12 +125,6 @@ const SignUp = () => {
                   <button type="submit" className={styles.submitBtn}>
                     ورود
                   </button>
-                  <p className={styles.noAccLink}>
-                    حساب ندارید؟
-                    <a href="#" className={styles.forgetpasswordlink}>
-                      ثبت نام کنید.
-                    </a>
-                  </p>
                 </div>
               </form>
             </div>
@@ -138,4 +135,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Forgot_password;

@@ -25,7 +25,6 @@
   height: 48%;
   position: relative;
   object-fit: cover;
-  mix-blend-mode: multiply;
 }
 .titleContainer {
   position: relative;

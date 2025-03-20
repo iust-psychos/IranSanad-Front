@@ -7,6 +7,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import Tip_slide from "./Tip_slide";
 import SignupManager from "../Managers/SignupManager";
 import * as yup from "yup";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -173,9 +174,9 @@ const SignUp = () => {
                   </button>
                   <p className={styles.noAccLink}>
                     حساب دارید؟
-                    <a href="#" className={styles.forgetpasswordlink}>
+                    <Link to="/login" className={styles.forgetpasswordlink}>
                       وارد شوید
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </form>

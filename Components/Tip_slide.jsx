@@ -16,7 +16,6 @@ const Tip_slide = ({ text_list, className }) => {
 
     slidingRef.current.classList.remove(styles.slideIn);
     slidingRef.current.classList.add(styles.slideOut);
-
     slidingRef.current.addEventListener(
       "animationend",
       () => {
@@ -39,7 +38,7 @@ const Tip_slide = ({ text_list, className }) => {
         />
         <div className={styles.textContainer}>
           <h3 className={styles.titleContainer}>{currentTip.current.title}</h3>
-          <p style={{bottom:'5%'}}> {currentTip.current.desc}</p>
+          <p> {currentTip.current.desc}</p>
         </div>
       </div>
       <div className={styles.dotContainer}>

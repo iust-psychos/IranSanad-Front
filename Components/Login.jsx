@@ -7,6 +7,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import Tip_slide from "./Tip_slide";
 import LoginManager from "../Managers/LoginManager";
 import * as yup from "yup";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -115,18 +116,22 @@ const Login = () => {
                     <div className={styles.errors}>{errors.password}</div>
                   )}
                   <p>
-                    <a href="#" className={styles.forgetpasswordlink}>
+                    <Link
+                      to="/forgot_password"
+                      state={{email:formData.email}}
+                      className={styles.forgetpasswordlink}
+                    >
                       فراموشی رمز عبور؟
-                    </a>
+                    </Link>
                   </p>
                   <button type="submit" className={styles.submitBtn}>
                     ورود
                   </button>
                   <p className={styles.noAccLink}>
                     حساب ندارید؟
-                    <a href="#" className={styles.forgetpasswordlink}>
+                    <Link to="/signup" className={styles.forgetpasswordlink}>
                       ثبت نام کنید.
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </form>
