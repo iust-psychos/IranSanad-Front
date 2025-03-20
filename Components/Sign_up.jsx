@@ -5,7 +5,7 @@ import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
 import InfoIcon from "@mui/icons-material/Info";
 import Tip_slide from "./Tip_slide";
-import SignupManager from '../Managers/SignupManager';
+import SignupManager from "../Managers/SignupManager";
 import * as yup from "yup";
 
 const SignUp = () => {
@@ -13,7 +13,7 @@ const SignUp = () => {
     email: "",
     password: "",
     repeatpassword: "",
-    username: ""
+    username: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -33,7 +33,7 @@ const SignUp = () => {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
         "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
       ),
-      repeatpassword: yup
+    repeatpassword: yup
       .string()
       .required("تکرار رمز عبور اجباری است")
       .min(8, "تکرار رمز عبور باید حداقل 8 کارکتر باشد")
@@ -52,9 +52,14 @@ const SignUp = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
-      if(formData.password !== formData.repeatpassword)
+      if (formData.password !== formData.repeatpassword)
         throw new Error("کلمه عبور و تکرار آن یکسان نیستند");
-      let resp = await SignupManager.Signup(formData.username , formData.email , formData.repeatpassword , formData.password);
+      let resp = await SignupManager.Signup(
+        formData.username,
+        formData.email,
+        formData.repeatpassword,
+        formData.password
+      );
       setErrors({});
     } catch (err) {
       const validationErrors = {};
@@ -63,7 +68,7 @@ const SignUp = () => {
         validationErrors[error.path] = error.message;
       });
       setErrors(validationErrors);
-      icon.current.style.top = '35%';
+      icon.current.style.top = "35%";
     }
   };
 
@@ -73,23 +78,16 @@ const SignUp = () => {
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
             <span className={styles.Title}>ایران سند</span>
-            <div className={styles.ImageContainer}>
-              <img
-                src="../src/Images/b8fce91ad812f4581b7eebab2147575e.png"
-                className={styles.image}
-              />
-            </div>
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
             />
-
           </div>
           <div className={styles.formBox}>
             <span className={styles.loginTitle}>حساب جدید</span>
             <div className={styles.inputsBox}>
               <form onSubmit={handleSubmit}>
-              <div>
+                <div>
                   <label className={styles.inputsBoxLabels} htmlFor="username">
                     نام کاربری
                   </label>
@@ -102,7 +100,9 @@ const SignUp = () => {
                     name="email"
                     value={formData.email}
                   />
-                  {errors.email && <div className={styles.errors}>{errors.email}</div>}
+                  {errors.email && (
+                    <div className={styles.errors}>{errors.email}</div>
+                  )}
                 </div>
                 <div>
                   <label className={styles.inputsBoxLabels} htmlFor="username">
@@ -117,7 +117,9 @@ const SignUp = () => {
                     name="email"
                     value={formData.email}
                   />
-                  {errors.email && <div className={styles.errors}>{errors.email}</div>}
+                  {errors.email && (
+                    <div className={styles.errors}>{errors.email}</div>
+                  )}
                 </div>
                 <div className={styles.password}>
                   <label className={styles.inputsBoxLabels} htmlFor="password">
@@ -143,23 +145,29 @@ const SignUp = () => {
                     name="password"
                     value={formData.password}
                   />
-                  <br/>
-                  {errors.password && <div className={styles.errors}>{errors.password}</div>}
-                  <label className={styles.inputsBoxLabels} htmlFor="repeatpassword">
+                  <br />
+                  {errors.password && (
+                    <div className={styles.errors}>{errors.password}</div>
+                  )}
+                  <label
+                    className={styles.inputsBoxLabels}
+                    htmlFor="repeatpassword"
+                  >
                     تکرار رمز عبور
-                  </label> <br/>
+                  </label>{" "}
+                  <br />
                   <Input
-                  
                     className={styles.inputField}
                     onChange={handleChange}
                     type="repeatpassword"
                     id="repeatpassword"
                     name="repeatpassword"
                     value={formData.repeatpassword}
-
                   />
                   <br />
-                  {errors.repeatpassword && <div className={styles.errors}>{errors.repeatpassword}</div>}
+                  {errors.repeatpassword && (
+                    <div className={styles.errors}>{errors.repeatpassword}</div>
+                  )}
                   <button type="submit" className={styles.submitBtn}>
                     ایجاد حساب
                   </button>

@@ -41,7 +41,7 @@ const Login = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
-      let resp = await LoginManager.Login(formData.email , formData.password);
+      let resp = await LoginManager.Login(formData.email, formData.password);
       setErrors({});
     } catch (err) {
       const validationErrors = {};
@@ -50,7 +50,7 @@ const Login = () => {
         validationErrors[error.path] = error.message;
       });
       setErrors(validationErrors);
-      icon.current.style.top = '35%';
+      icon.current.style.top = "35%";
     }
   };
 
@@ -59,18 +59,11 @@ const Login = () => {
       <div className={styles.Box}>
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
-            <span className={styles.Title}>ایران سند</span>
-            <div className={styles.ImageContainer}>
-              <img
-                src="../src/Images/b8fce91ad812f4581b7eebab2147575e.png"
-                className={styles.image}
-              />
-            </div>
+            <div className={styles.Title}>ایران سند</div>
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
             />
-
           </div>
           <div className={styles.formBox}>
             <span className={styles.loginTitle}>ورود به حساب</span>
@@ -89,7 +82,9 @@ const Login = () => {
                     name="email"
                     value={formData.email}
                   />
-                  {errors.email && <div className={styles.errors}>{errors.email}</div>}
+                  {errors.email && (
+                    <div className={styles.errors}>{errors.email}</div>
+                  )}
                 </div>
                 <div className={styles.password}>
                   <label className={styles.inputsBoxLabels} htmlFor="password">
@@ -116,7 +111,9 @@ const Login = () => {
                     value={formData.password}
                   />
                   <br />
-                  {errors.password && <div className={styles.errors}>{errors.password}</div>}
+                  {errors.password && (
+                    <div className={styles.errors}>{errors.password}</div>
+                  )}
                   <p>
                     <a href="#" className={styles.forgetpasswordlink}>
                       فراموشی رمز عبور؟

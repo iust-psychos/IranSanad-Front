@@ -1,7 +1,7 @@
 @keyframes slideIn {
   0% {
     opacity: 0;
-    transform: translateX(-100%);
+    transform: translateX(-20%);
   }
   100% {
     opacity: 1;
@@ -16,37 +16,54 @@
   }
   100% {
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateX(20%);
   }
 }
 
+.imageContainer {
+  width: 92%;
+  height: 48%;
+  position: relative;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+}
 .titleContainer {
   position: relative;
   margin-top: 1%;
   padding-bottom: 4%;
-  transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .textContainer {
   position: relative;
   margin-top: 4%;
-  height: 40%;
-  transition: opacity 0.4s ease-in-out;
+  min-height: 40%;
+  transition: opacity 0.2s ease-in-out;
 }
 .slideIn {
-  animation: slideIn 0.4s ease-in-out;
+  animation: slideIn 0.2s ease-in-out;
 }
 .slideOut {
-  animation: slideOut 0.4s ease-in-out;
+  animation: slideOut 0.2s ease-in-out;
+}
+.rawText {
+  min-height: 90%;
 }
 .dotContainer {
   direction: ltr;
   position: relative;
-  margin-top: 3%;
-  padding-top: 15%; 
-  height: 15%;
-  margin-bottom: 2%;
-  padding-bottom: 10%;
-  padding-left: 45%;
+  height: 1%;
+  width: 60%;
 }
-
+.svgContainer {
+  position: relative;
+  width: 4%;
+  height: 1%;
+}
+.tipCircle {
+  position: relative;
+  cx: 50%;
+  cy: 50%;
+  r: 3.5%;
+  transition: fill 0.3s ease-in-out;
+}
