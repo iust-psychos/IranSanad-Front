@@ -34,8 +34,7 @@ const SignUp = () => {
         /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
         "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
       ),
-    repeatpassword: yup.string().required("تکرار رمز عبور اجباری است").string()
-    .required("تکرار رمز عبور اجباری است")
+    repeatpassword: yup.string().required("تکرار رمز عبور اجباری است")
     .matches(
       `${formData.password}`,
       "تکرار رمز وارد شده با رمز تطابق ندارد"

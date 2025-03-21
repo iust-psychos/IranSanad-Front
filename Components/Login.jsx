@@ -94,7 +94,7 @@ const Login = () => {
                   <InfoIcon
                     sx={{
                       position: "absolute",
-                      top: "34%",
+                      top: "31%",
                       color: "#D4D4D4",
                       width: "20px",
                       height: "20px",
