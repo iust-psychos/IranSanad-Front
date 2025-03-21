@@ -31,17 +31,15 @@ const SignUp = () => {
       .required("رمز عبور اجباری است")
       .min(8, "رمز عبور باید حداقل 8 کارکتر باشد")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
         "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
       ),
-    repeatpassword: yup
-      .string()
-      .required("تکرار رمز عبور اجباری است")
-      .min(8, "تکرار رمز عبور باید حداقل 8 کارکتر باشد")
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-        "تکرار کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
-      ),
+    repeatpassword: yup.string().required("تکرار رمز عبور اجباری است").string()
+    .required("تکرار رمز عبور اجباری است")
+    .matches(
+      `${formData.password}`,
+      "تکرار رمز وارد شده با رمز تطابق ندارد"
+    )
   });
 
   const handleChange = (e) => {
@@ -53,8 +51,6 @@ const SignUp = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
-      if (formData.password !== formData.repeatpassword)
-        throw new Error("کلمه عبور و تکرار آن یکسان نیستند");
       let resp = await SignupManager.Signup(
         formData.username,
         formData.email,

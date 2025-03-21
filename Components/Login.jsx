@@ -28,7 +28,7 @@ const Login = () => {
       .required("رمز عبور اجباری است")
       .min(8, "رمز عبور باید حداقل 8 کارکتر باشد")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
         "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
       ),
   });
@@ -46,7 +46,7 @@ const Login = () => {
       setErrors({});
     } catch (err) {
       const validationErrors = {};
-      console.log(err);
+      console.log(err.message);
       err.inner.forEach((error) => {
         validationErrors[error.path] = error.message;
       });
@@ -118,7 +118,7 @@ const Login = () => {
                   <p>
                     <Link
                       to="/forgot_password"
-                      state={{email:formData.email}}
+                      state={{ email: formData.email }}
                       className={styles.forgetpasswordlink}
                     >
                       فراموشی رمز عبور؟

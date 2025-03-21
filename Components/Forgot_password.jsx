@@ -7,11 +7,8 @@ import { Input } from "@base-ui-components/react/input";
 import Tip_slide from "./Tip_slide";
 import * as yup from "yup";
 import { useLocation } from "react-router-dom";
-import {
-  getValidationCode,
-  sendNewPassword,
-} from "../Managers/ForgotPasswordManager";
-
+import {getValidationCode,sendNewPassword,} from "../Managers/ForgotPasswordManager";
+//connection to back remain
 const Forgot_password = () => {
   const [trueValidationCode, setTrueValidationCode] = useState("");
   const location = useLocation();
@@ -40,21 +37,20 @@ const Forgot_password = () => {
   const validationSchemaCode = yup.string().required("کد نمیتواند خالی باشد");
 
   const validationSchemaPassword = yup.object().shape({
-    password: yup
+    newPassword: yup
       .string()
       .required("رمز عبور اجباری است")
       .min(8, "رمز عبور باید حداقل 8 کارکتر باشد")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
         "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
       ),
     repeatPassword: yup
       .string()
       .required("تکرار رمز عبور اجباری است")
-      .min(8, "تکرار رمز عبور باید حداقل 8 کارکتر باشد")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-        "تکرار کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
+        `${newPassword.newPassword}`,
+        "تکرار رمز وارد شده با رمز تطابق ندارد"
       ),
   });
 
@@ -66,7 +62,7 @@ const Forgot_password = () => {
   };
   const handleChangePassword = (e) => {
     setNewPassword({
-      ...validationSchemaPassword,
+      ...newPassword,
       [e.target.name]: e.target.value,
     });
   };
@@ -105,8 +101,6 @@ const Forgot_password = () => {
     try {
       await validationSchemaCode.validate(validationCode);
       if (validationCode != trueValidationCode) {
-        console.log(validationCode);
-        console.log(trueValidationCode);
         throw new Error("کد وارد شده نادرست است");
       } else {
         setErrorValidationCode(null);
@@ -130,22 +124,23 @@ const Forgot_password = () => {
     e.preventDefault();
 
     try {
-      await validationSchemaPassword.validate(newPassword);
-      //connection to back remain
-      if (newPassword.newPassword !== newPassword.repeatPassword) {
-        throw new Error("کلمه عبور و تکرار آن یکسان نیستند");
-      }
+      await validationSchemaPassword.validate(newPassword, {
+        abortEarly: false,
+      });
       let resp = await sendNewPassword(
+        email,
         newPassword.newPassword,
         newPassword.repeatPassword
       );
+      console.log(resp)
+      if (resp.code == 201){
+        console.log('here we must route to dashboard');
+      }
       setErrorNewPassword({});
     } catch (err) {
       const validationErrors = {};
-      console.log(err.inner);
       err.inner.forEach((error) => {
-        console.log(error.path);
-        //validationErrors[error.path] = error.message;
+        validationErrors[error.path] = error.message;
       });
 
       setErrorNewPassword(validationErrors);
@@ -227,14 +222,14 @@ const Forgot_password = () => {
               style={{ display: "none" }}
             >
               <div className={styles.password}>
-                <label className={styles.inputsBoxLabels} htmlFor="newpassword">
+                <label className={styles.inputsBoxLabels} htmlFor="newPassword">
                   رمز عبور جدید
                 </label>
                 <br />
                 <Input
                   className={styles.inputField}
                   onChange={handleChangePassword}
-                  type="newPassword"
+                  type="Password"
                   id="newPassword"
                   name="newPassword"
                   value={newPassword.newPassword}
@@ -255,7 +250,7 @@ const Forgot_password = () => {
                 <Input
                   className={styles.inputField}
                   onChange={handleChangePassword}
-                  type="repeatPassword"
+                  type="Password"
                   id="repeatPassword"
                   name="repeatPassword"
                   value={newPassword.repeatPassword}
