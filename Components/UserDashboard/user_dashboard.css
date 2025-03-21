@@ -1,0 +1,181 @@
+.user-dashboard * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Vazir";
+  font-size: 62.5%;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.user-dashboard {
+  font-size: 2.4rem;
+  height: 100vh;
+  background-color: #e8e3f9;
+
+  display: grid;
+  grid-template-rows: 4rem 8rem min-content;
+  grid-template-columns: 2rem 1fr 2rem;
+}
+
+.user-dashboard menu {
+  color: white;
+  padding: 0 2rem;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.user-dashboard .navbar {
+  grid-row: 1/2;
+  grid-column: 1/-1;
+  background-color: #bba1ea;
+}
+
+.user-dashboard .menu-profile {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.user-dashboard .menu-logo {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.user-dashboard .utility {
+  grid-row: 2/3;
+  grid-column: 2/3;
+  padding: 1rem 10rem;
+}
+
+.user-dashboard .utility .menu-button {
+  border-radius: 0.5rem;
+  color: white;
+  padding: 1rem;
+  cursor: pointer;
+  border: none;
+}
+
+.user-dashboard .menu-sort {
+  background-color: #7f62e0;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  /* background-color: #7f62e0;
+  font-size: 1.3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem; */
+}
+
+.user-dashboard-dropdown.dropdown-menu {
+  background-color: #f2f2f2;
+  /* box-sizing: border-box; */
+  /* padding-block: 0.25rem; */
+  /* border-radius: 0.375rem; */
+  border-radius: 1rem;
+  outline: 0;
+}
+
+.user-dashboard-dropdown.dropdown-item {
+  background-color: #f2f2f2;
+  font-size: 0.9rem;
+  outline: 0;
+  cursor: default;
+  display: flex;
+  user-select: none;
+  padding-block: 0.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.user-dashboard-dropdown.dropdown-item:hover {
+  background-color: #dedede;
+}
+
+.user-dashboard .menu-create {
+  background-color: #4f29ce;
+  font-size: 1.3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-dashboard .menu-search {
+  margin-left: auto;
+  background-color: #ffffff;
+  border-radius: 999px;
+  display: flex;
+  width: 25rem;
+}
+
+.user-dashboard .menu-search button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  justify-self: flex-start;
+  padding: 0 1rem;
+}
+.user-dashboard .menu-search input {
+  font-size: 1rem;
+  flex-grow: 1;
+  padding: 0.5rem 0 0.5rem 1rem;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.user-dashboard table {
+  grid-row: 3/4;
+  grid-column: 2/3;
+  margin-left: auto;
+  margin-right: auto;
+  width: 72rem;
+  border-collapse: collapse; /* Allows border-spacing to work */
+  /* border-spacing: 0 10px; */
+  font-size: 4rem;
+  box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.2);
+}
+.user-dashboard tr {
+}
+.user-dashboard thead {
+  background-color: #4f3388;
+  color: white;
+  font-weight: bold;
+}
+.user-dashboard tbody tr:hover {
+  background-color: #dedede;
+}
+.user-dashboard th {
+  padding: 1rem 1rem;
+  text-align: center;
+  vertical-align: middle;
+}
+.user-dashboard td {
+  padding: 0.5rem 1rem;
+  text-align: center;
+  vertical-align: middle;
+  /* border-left: 1px solid #909090; */
+}
+.user-dashboard table button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
