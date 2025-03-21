@@ -26,17 +26,21 @@
   position: relative;
   object-fit: cover;
 }
+.slideContainer {
+  height: 90%;
+}
 .titleContainer {
+  display: block;
   position: relative;
   margin-top: 1%;
   padding-bottom: 4%;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .textContainer {
-  position: relative;
+  display: block;
   margin-top: 4%;
-  min-height: 40%;
+  max-height: 10%;
   transition: opacity 0.2s ease-in-out;
 }
 .slideIn {
@@ -50,19 +54,18 @@
 }
 .dotContainer {
   direction: ltr;
-  position: relative;
-  height: 1%;
-  width: 60%;
+  height: 10%;
+  width: 55%; ;
 }
 .svgContainer {
-  position: relative;
-  width: 4%;
-  height: 1%;
+  display: inline;
+  width: 5%;
+  max-height: 0.9rem;
 }
 .tipCircle {
   position: relative;
   cx: 50%;
   cy: 50%;
-  r: 3.5%;
+  r: 4;
   transition: fill 0.3s ease-in-out;
 }
