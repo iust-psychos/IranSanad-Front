@@ -28,7 +28,7 @@ const Login = () => {
       .required("رمز عبور اجباری است")
       .min(8, "رمز عبور باید حداقل 8 کارکتر باشد")
       .matches(
-        /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%#*?&])[A-Za-z\d@$!%#*?&]{8,}$/,
         "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
       ),
   });
@@ -43,6 +43,7 @@ const Login = () => {
     try {
       await validationSchema.validate(formData, { abortEarly: false });
       let resp = await LoginManager.Login(formData.email, formData.password);
+      console.log(resp);
       setErrors({});
     } catch (err) {
       const validationErrors = {};
@@ -72,7 +73,7 @@ const Login = () => {
               <form onSubmit={handleSubmit}>
                 <div>
                   <label className={styles.inputsBoxLabels} htmlFor="username">
-                    نام کاربری
+                    ایمیل
                   </label>
                   <br />
                   <Input
