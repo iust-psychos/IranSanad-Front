@@ -166,7 +166,7 @@ const SignUp = () => {
                 <InfoIcon
                   sx={{
                     position: "absolute",
-                    top: "35%",
+                    top: "39%",
                     color: "#D4D4D4",
                     width: "20px",
                     height: "20px",
