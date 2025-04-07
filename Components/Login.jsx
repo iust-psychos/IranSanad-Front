@@ -8,6 +8,8 @@ import Tip_slide from "./Tip_slide";
 import LoginManager from "../Managers/LoginManager";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -15,9 +17,21 @@ const Login = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(true);
+  const [passFieldType, setPassFieldType] = useState("password");
+  const [showPassIcon, setShowPassIcon] = useState(
+    <RemoveRedEyeIcon
+      sx={{
+        position: "absolute",
+        top: "41%",
+        left: "21%",
+      }}
+    />
+  );
 
   const icon = useRef(null);
-
+  const iconContainer = useRef(null);
+  const passwordHintBox = useRef(null);
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -35,6 +49,44 @@ const Login = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleShowPassword = (e) => {
+    e.preventDefault();
+    if (!showPassword) {
+      setShowPassIcon(
+        <RemoveRedEyeIcon
+          sx={{
+            position: "absolute",
+            top: "41%",
+            left: "21%",
+          }}
+        />
+      );
+      setPassFieldType("password");
+    } else {
+      setShowPassIcon(
+        <VisibilityOffIcon
+          sx={{
+            position: "absolute",
+            top: "41%",
+            left: "21%",
+          }}
+        />
+      );
+      setPassFieldType("text");
+    }
+    setShowPassword(!showPassword);
+  };
+
+  const showPasswordHint = (e) => {
+    e.preventDefault();
+    passwordHintBox.current.style.display = "block";
+  };
+
+  const hidePasswordHint = (e) => {
+    e.preventDefault();
+    passwordHintBox.current.style.display = "none";
   };
 
   const handleSubmit = async (e) => {
@@ -61,7 +113,12 @@ const Login = () => {
       <div className={styles.Box}>
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
-            <div className={styles.Title}>ایران سند</div>
+            <img src="../Images/" className={styles.ImageTitle} />
+            <div className={styles.Title}>
+              ایران
+              <br />
+              سند
+            </div>
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
@@ -92,6 +149,13 @@ const Login = () => {
                   <label className={styles.inputsBoxLabels} htmlFor="password">
                     رمز عبور
                   </label>
+                  <div
+                    ref={passwordHintBox}
+                    className={styles.passwordPrequestiesLogin}
+                  >
+                    کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و
+                    حداقل یک عدد و یک کارکتر خاص باشد
+                  </div>
                   <InfoIcon
                     sx={{
                       position: "absolute",
@@ -102,12 +166,17 @@ const Login = () => {
                       left: "20%",
                     }}
                     ref={icon}
+                    onMouseEnter={showPasswordHint}
+                    onMouseLeave={hidePasswordHint}
                   />
                   <br />
+                  <span ref={iconContainer} onClick={handleShowPassword}>
+                    {showPassIcon}
+                  </span>
                   <Input
                     className={styles.inputField}
                     onChange={handleChange}
-                    type="password"
+                    type={passFieldType}
                     id="password"
                     name="password"
                     value={formData.password}

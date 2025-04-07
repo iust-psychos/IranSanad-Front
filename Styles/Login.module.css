@@ -41,6 +41,27 @@
     height: 10%;
 }
 
+.passwordPrequesties , .passwordPrequestiesLogin {
+    padding: 1% 2%;
+    background-color: #EAE4FF;
+    position: absolute;
+    top:24%;
+    left:15%;
+    border-radius: 7px;
+    width: 60%;
+    display: none;
+}
+
+.passwordPrequestiesLogin {
+    top:10%;
+}
+
+.ImageTitle {
+    position: absolute;
+    right: 6%;
+    top:11%;
+}
+
 .InformationContainer { 
     position: relative;
     padding: 5% 10%;
