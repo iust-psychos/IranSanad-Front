@@ -6,6 +6,7 @@ import Login from "../Components/Login";
 import Forgot_password from "../Components/Forgot_password";
 import UserDashboard from "../Components/UserDashboard/user_dashboard";
 import Loading from "../Components/Loading";
+import ContentEdit from "../Components/ContentEdit/ContentEdit";
 
 function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,6 +31,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<div>Home Page Content</div>} />
           <Route path="/login" element={<Login />} />
+          <Route path="/contentedit" element={<ContentEdit />} />
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot_password" element={<Forgot_password />} />
