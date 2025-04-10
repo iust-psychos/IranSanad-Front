@@ -7,6 +7,7 @@ import axios from "axios";
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 const changePasswordAPI =
   "http://iransanad.fiust.ir/api/v1/auth/change_password/";
+const changeUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 
 const initialPassword = {
   old_password: "",
@@ -83,8 +84,36 @@ const UserProfile = () => {
       .catch((error) => console.log(error));
   }, []);
 
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    email: "",
+    phone_number: "",
+    first_name: "",
+    last_name: "",
+  });
+
+  useEffect(() => {
+    if (user) {
+      setUserInfo({
+        username: user.username || "",
+        email: user.email || "",
+        phone_number: user.phone_number || "",
+        first_name: user.first_name || "",
+        last_name: user.last_name || "",
+      });
+    }
+  }, [user]);
+
+  const handleChangeUserInfo = (event) => {
+    const { name, value } = event.target;
+    setUserInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const [passwordData, setPasswordData] = useState(initialPassword);
-  const handleChange = (event) => {
+  const handleChangePassword = (event) => {
     const { name, value } = event.target;
     setPasswordData((prev) => ({
       ...prev,
@@ -103,11 +132,23 @@ const UserProfile = () => {
     return false;
   };
 
+  const checkChangeUserInfo = () => {
+    if (
+      user.username !== userInfo.username ||
+      user.phone_number !== userInfo.phone_number ||
+      user.first_name !== userInfo.first_name ||
+      user.last_name !== userInfo.last_name
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const [edit, setEdit] = useState(true);
   const handleSave = async (event) => {
     event.preventDefault();
     setEdit(!edit);
-    if (edit == false && checkChangePassword()) {
+    if (edit === false && checkChangePassword()) {
       try {
         const response = await axios.post(
           changePasswordAPI,
@@ -125,6 +166,30 @@ const UserProfile = () => {
         );
         console.log(response);
         setPasswordData(initialPassword);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (edit === false && checkChangeUserInfo()) {
+      try {
+        const response = await axios.put(
+          changeUserInfoAPI,
+          {
+            username: userInfo.username,
+            email: userInfo.email,
+            phone_number: userInfo.phone_number,
+            first_name: userInfo.first_name,
+            last_name: userInfo.last_name,
+          },
+          {
+            headers: {
+              Authorization: `JWT ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -171,9 +236,19 @@ const UserProfile = () => {
                   <input
                     type="text"
                     name="fullname"
-                    defaultValue={user.first_name + " " + user.last_name}
+                    defaultValue={`${userInfo.first_name} ${userInfo.last_name}`}
                     autoComplete="on"
                     disabled={edit}
+                    value={`${userInfo.first_name} ${userInfo.last_name}`}
+                    onChange={(e) => {
+                      const [firstName = "", lastName = ""] =
+                        e.target.value.split(" ");
+                      setUserInfo((prev) => ({
+                        ...prev,
+                        first_name: firstName,
+                        last_name: lastName,
+                      }));
+                    }}
                   />
                 ) : (
                   <input
@@ -182,6 +257,16 @@ const UserProfile = () => {
                     placeholder="نام و نام خانوادگی خود را وارد کنید."
                     autoComplete="on"
                     disabled={edit}
+                    value={`${userInfo.first_name} ${userInfo.last_name}`}
+                    onChange={(e) => {
+                      const [firstName = "", lastName = ""] =
+                        e.target.value.split(" ");
+                      setUserInfo((prev) => ({
+                        ...prev,
+                        first_name: firstName,
+                        last_name: lastName,
+                      }));
+                    }}
                   />
                 )}
               </div>
@@ -194,6 +279,8 @@ const UserProfile = () => {
                     defaultValue={user.username}
                     autoComplete="on"
                     disabled={edit}
+                    value={userInfo.username}
+                    onChange={handleChangeUserInfo}
                   />
                 ) : (
                   <input
@@ -202,6 +289,8 @@ const UserProfile = () => {
                     placeholder="نام کاربری خود را وارد کنید."
                     autoComplete="on"
                     disabled={edit}
+                    value={""}
+                    onChange={handleChangeUserInfo}
                   />
                 )}
               </div>
@@ -209,28 +298,32 @@ const UserProfile = () => {
                 <label htmlFor="country">کشور</label>
                 <select name="country" defaultValue={"ایران"} disabled={edit}>
                   <option value="Iran">ایران</option>
-                  <option value="Tajikstan">تاجیکستان</option>
+                  {/* <option value="Tajikstan">تاجیکستان</option> */}
                 </select>
               </div>
               <div className="user-profile-label-input">
-                <label htmlFor="telephone">شماره تلفن</label>
+                <label htmlFor="phone_number">شماره تلفن</label>
                 {user && user.phone_number ? (
                   <input
                     type="tel"
-                    name="telephone"
+                    name="phone_number"
                     pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                     defaultValue={user.phone_number}
                     autoComplete="on"
                     disabled={edit}
+                    value={userInfo.phone_number}
+                    onChange={handleChangeUserInfo}
                   />
                 ) : (
                   <input
                     type="tel"
-                    name="telephone"
+                    name="phone_number"
                     pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-                    placeholder="912 345 6789"
+                    placeholder="989123456789"
                     autoComplete="on"
                     disabled={edit}
+                    value={"989123456789"}
+                    onChange={handleChangeUserInfo}
                   />
                 )}
               </div>
@@ -246,7 +339,7 @@ const UserProfile = () => {
                     autoComplete="off"
                     disabled={edit}
                     value={passwordData.old_password}
-                    onChange={handleChange}
+                    onChange={handleChangePassword}
                   />
                 </div>
                 <div className="user-profile-label-input">
@@ -257,7 +350,7 @@ const UserProfile = () => {
                     autoComplete="off"
                     disabled={edit}
                     value={passwordData.new_password}
-                    onChange={handleChange}
+                    onChange={handleChangePassword}
                   />
                 </div>
                 <div className="user-profile-label-input">
@@ -268,7 +361,7 @@ const UserProfile = () => {
                     autoComplete="off"
                     disabled={edit}
                     value={passwordData.new_password2}
-                    onChange={handleChange}
+                    onChange={handleChangePassword}
                   />
                 </div>
               </div>
