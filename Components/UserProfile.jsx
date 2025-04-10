@@ -1,14 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../Styles/UserProfile.css";
 import userProfileIcon from "../src/Images/user-profile.png";
+import { toJalaali } from "jalaali-js";
 
 const UserProfile = () => {
+  const [dateText, setDateText] = useState("");
+
+  const toPersianDigits = (num) => {
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    return num.toString().replace(/\d/g, (d) => persianDigits[d]);
+  };
+
+  useEffect(() => {
+    const updateDate = () => {
+      const today = new Date();
+      const {
+        jy: year,
+        jm: month,
+        jd: day,
+      } = toJalaali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+
+      const weekday = today.toLocaleDateString("fa-IR", { weekday: "long" });
+
+      const formattedDate = `${weekday}، ${toPersianDigits(
+        day
+      )} ${getPersianMonthName(month)} ${toPersianDigits(year)}`;
+      setDateText(formattedDate);
+    };
+
+    updateDate();
+    const timer = setInterval(updateDate, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const getPersianMonthName = (month) => {
+    const months = [
+      "فروردین",
+      "اردیبهشت",
+      "خرداد",
+      "تیر",
+      "مرداد",
+      "شهریور",
+      "مهر",
+      "آبان",
+      "آذر",
+      "دی",
+      "بهمن",
+      "اسفند",
+    ];
+    return months[month - 1];
+  };
+
   return (
     <div className="user-profile">
       <div className="user-profile-area">
         <div className="user-profile-area-header">
           <h2>خوش آمدی عرفان عزیز</h2>
-          <p>پنجشنبه، ۲۱ فروردین</p>
+          <p>{dateText}</p>
         </div>
         <div className="user-profile-area-body">
           <div className="color-tape"></div>

@@ -17,6 +17,7 @@
     "@mui/joy": "^5.0.0-beta.51",
     "@mui/material": "^6.4.10",
     "axios": "^1.8.3",
+    "jalaali-js": "^1.2.8",
     "motion": "^12.5.0",
     "mui": "^0.0.1",
     "react": "^19.0.0",
