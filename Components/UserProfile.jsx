@@ -5,6 +5,14 @@ import { toJalaali } from "jalaali-js";
 import axios from "axios";
 
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
+const changePasswordAPI =
+  "http://iransanad.fiust.ir/api/v1/auth/change_password/";
+
+const initialPassword = {
+  old_password: "",
+  new_password: "",
+  new_password2: "",
+};
 
 const UserProfile = () => {
   const [dateText, setDateText] = useState("");
@@ -58,7 +66,7 @@ const UserProfile = () => {
   const [user, setUser] = useState(null);
 
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODg4NzgyLCJpYXQiOjE3NDQyOTY3ODIsImp0aSI6IjI1NmU3YWZlNTI1YTQ0NWNiMGVhZTk4Nzk3ZDBhNTQ5IiwidXNlcl9pZCI6OH0.f980Oxuk4LwUwEPMKid6w2wKJjGC4h1qr16ry3kcEHk";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2OTA4MTk0LCJpYXQiOjE3NDQzMTYxOTQsImp0aSI6IjYxMTUyYTA5ODFmODRiMDM4NjI4MGJkMjM0OWJmNWI1IiwidXNlcl9pZCI6OH0.tog-CME7QSKpWIyWviMICgzaExhECsxW4zaJfQHjPqA";
 
   useEffect(() => {
     axios
@@ -75,7 +83,53 @@ const UserProfile = () => {
       .catch((error) => console.log(error));
   }, []);
 
+  const [passwordData, setPasswordData] = useState(initialPassword);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setPasswordData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const checkChangePassword = () => {
+    if (
+      passwordData.new_password != "" &&
+      passwordData.new_password2 != "" &&
+      passwordData.old_password != ""
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const [edit, setEdit] = useState(true);
+  const handleSave = async (event) => {
+    event.preventDefault();
+    setEdit(!edit);
+    if (edit == false && checkChangePassword()) {
+      try {
+        const response = await axios.post(
+          changePasswordAPI,
+          {
+            old_password: passwordData.old_password,
+            new_password: passwordData.new_password,
+            new_password2: passwordData.new_password2,
+          },
+          {
+            headers: {
+              Authorization: `JWT ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response);
+        setPasswordData(initialPassword);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <div className="user-profile">
@@ -105,9 +159,9 @@ const UserProfile = () => {
                 </div>
               </div>
               {edit ? (
-                <button onClick={() => setEdit(false)}>ویرایش</button>
+                <button onClick={handleSave}>ویرایش</button>
               ) : (
-                <button onClick={() => setEdit(true)}>ذخیره</button>
+                <button onClick={handleSave}>ذخیره</button>
               )}
             </div>
             <div className="user-profile-info-2">
@@ -125,7 +179,7 @@ const UserProfile = () => {
                   <input
                     type="text"
                     name="fullname"
-                    placeholder="مثلا مهران رزقی"
+                    placeholder="نام و نام خانوادگی خود را وارد کنید."
                     autoComplete="on"
                     disabled={edit}
                   />
@@ -145,7 +199,7 @@ const UserProfile = () => {
                   <input
                     type="text"
                     name="username"
-                    placeholder="مثلا rez80"
+                    placeholder="نام کاربری خود را وارد کنید."
                     autoComplete="on"
                     disabled={edit}
                   />
@@ -185,32 +239,36 @@ const UserProfile = () => {
               <h3>تغییر رمز عبور</h3>
               <div className="user-profile-info-3-grid">
                 <div className="user-profile-label-input">
-                  <label htmlFor="oldpassword">رمز عبور کنونی</label>
+                  <label htmlFor="old_password">رمز عبور کنونی</label>
                   <input
                     type="password"
-                    name="oldpassword"
+                    name="old_password"
                     autoComplete="off"
                     disabled={edit}
+                    value={passwordData.old_password}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="user-profile-label-input">
-                  <label htmlFor="newpassword">رمز عبور جدید</label>
+                  <label htmlFor="new_password">رمز عبور جدید</label>
                   <input
                     type="password"
-                    name="newpassword"
+                    name="new_password"
                     autoComplete="off"
                     disabled={edit}
+                    value={passwordData.new_password}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="user-profile-label-input">
-                  <label htmlFor="confirmnewpassword">
-                    تایید رمز عبور جدید
-                  </label>
+                  <label htmlFor="new_password2">تایید رمز عبور جدید</label>
                   <input
                     type="password"
-                    name="confirmnewpassword"
+                    name="new_password2"
                     autoComplete="off"
                     disabled={edit}
+                    value={passwordData.new_password2}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
