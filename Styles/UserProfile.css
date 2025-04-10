@@ -74,8 +74,10 @@
     height: 15%;
 }
 
+/* Button */
+
 .user-profile-info-1 > button {
-    background-color: #0000FF;
+    background-color: #AE8EE6;
     color: white;
     border-radius: 10px;
     width: 70px;
@@ -84,7 +86,59 @@
     font-family: 'Vazir';
     font-weight: bold;
     font-size: 15px;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
 }
+
+.user-profile-info-1 > button:before {
+    content: '';
+    background: linear-gradient(45deg, #E8E3F9, #e2d2fd, #d5befc, #c4a1fe, #b38cf4, #a37edf, #8b66c8, #9478c3, #AE8EE6);
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+}
+
+.user-profile-info-1 > button:active {
+    color: white;
+}
+
+.user-profile-info-1 > button:active:after {
+    background: transparent;
+}
+
+.user-profile-info-1 > button:hover:before {
+    opacity: 1;
+}
+
+.user-profile-info-1 > button:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #AE8EE6;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+
+/* ----- */
 
 .user-profile-batch {
     display: flex;

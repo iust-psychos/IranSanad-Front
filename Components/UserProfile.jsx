@@ -75,7 +75,7 @@ const UserProfile = () => {
       .catch((error) => console.log(error));
   }, []);
 
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState(true);
 
   return (
     <div className="user-profile">
@@ -104,9 +104,11 @@ const UserProfile = () => {
                   {user ? <p>{user.email}</p> : <p>example@email.com</p>}
                 </div>
               </div>
-              <button onClick={() => setEdit(!edit)}>
-                {edit ? "ذخیره" : "ویرایش"}
-              </button>
+              {edit ? (
+                <button onClick={() => setEdit(false)}>ویرایش</button>
+              ) : (
+                <button onClick={() => setEdit(true)}>ذخیره</button>
+              )}
             </div>
             <div className="user-profile-info-2">
               <div className="user-profile-label-input">
@@ -117,6 +119,7 @@ const UserProfile = () => {
                     name="fullname"
                     defaultValue={user.first_name + " " + user.last_name}
                     autoComplete="on"
+                    disabled={edit}
                   />
                 ) : (
                   <input
@@ -124,6 +127,7 @@ const UserProfile = () => {
                     name="fullname"
                     placeholder="مثلا مهران رزقی"
                     autoComplete="on"
+                    disabled={edit}
                   />
                 )}
               </div>
@@ -135,6 +139,7 @@ const UserProfile = () => {
                     name="username"
                     defaultValue={user.username}
                     autoComplete="on"
+                    disabled={edit}
                   />
                 ) : (
                   <input
@@ -142,12 +147,13 @@ const UserProfile = () => {
                     name="username"
                     placeholder="مثلا rez80"
                     autoComplete="on"
+                    disabled={edit}
                   />
                 )}
               </div>
               <div className="user-profile-label-input">
                 <label htmlFor="country">کشور</label>
-                <select name="country" defaultValue={"ایران"}>
+                <select name="country" defaultValue={"ایران"} disabled={edit}>
                   <option value="Iran">ایران</option>
                   <option value="Tajikstan">تاجیکستان</option>
                 </select>
@@ -161,6 +167,7 @@ const UserProfile = () => {
                     pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                     defaultValue={user.phone_number}
                     autoComplete="on"
+                    disabled={edit}
                   />
                 ) : (
                   <input
@@ -169,6 +176,7 @@ const UserProfile = () => {
                     pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                     placeholder="912 345 6789"
                     autoComplete="on"
+                    disabled={edit}
                   />
                 )}
               </div>
@@ -182,6 +190,7 @@ const UserProfile = () => {
                     type="password"
                     name="oldpassword"
                     autoComplete="off"
+                    disabled={edit}
                   />
                 </div>
                 <div className="user-profile-label-input">
@@ -190,6 +199,7 @@ const UserProfile = () => {
                     type="password"
                     name="newpassword"
                     autoComplete="off"
+                    disabled={edit}
                   />
                 </div>
                 <div className="user-profile-label-input">
@@ -200,6 +210,7 @@ const UserProfile = () => {
                     type="password"
                     name="confirmnewpassword"
                     autoComplete="off"
+                    disabled={edit}
                   />
                 </div>
               </div>
