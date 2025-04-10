@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import "../Styles/UserProfile.css";
 import userProfileIcon from "../src/Images/user-profile.png";
 import { toJalaali } from "jalaali-js";
+import axios from "axios";
+
+const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 
 const UserProfile = () => {
   const [dateText, setDateText] = useState("");
@@ -52,11 +55,37 @@ const UserProfile = () => {
     return months[month - 1];
   };
 
+  const [user, setUser] = useState(null);
+
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODg4NzgyLCJpYXQiOjE3NDQyOTY3ODIsImp0aSI6IjI1NmU3YWZlNTI1YTQ0NWNiMGVhZTk4Nzk3ZDBhNTQ5IiwidXNlcl9pZCI6OH0.f980Oxuk4LwUwEPMKid6w2wKJjGC4h1qr16ry3kcEHk";
+
+  useEffect(() => {
+    axios
+      .get(`${getUserInfoAPI}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `JWT ${token}`,
+        },
+      })
+      .then((response) => {
+        setUser(response.data);
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  const [edit, setEdit] = useState(false);
+
   return (
     <div className="user-profile">
       <div className="user-profile-area">
         <div className="user-profile-area-header">
-          <h2>خوش آمدی عرفان عزیز</h2>
+          {user && user.first_name ? (
+            <h2>خوش آمدی {user.first_name} عزیز</h2>
+          ) : (
+            <h2>خوش آمدی</h2>
+          )}
           <p>{dateText}</p>
         </div>
         <div className="user-profile-area-body">
@@ -66,30 +95,55 @@ const UserProfile = () => {
               <div className="user-profile-batch">
                 <img src={userProfileIcon} alt="user profile image" />
                 <div className="user-profile-titles">
-                  <h3>نام کاربر</h3>
-                  <p>example@gmail.com</p>
+                  <h3>
+                    {" "}
+                    {user && user.first_name
+                      ? user.first_name
+                      : "کاربر ایران سند"}
+                  </h3>
+                  {user ? <p>{user.email}</p> : <p>example@email.com</p>}
                 </div>
               </div>
-              <button>ویرایش</button>
+              <button onClick={() => setEdit(!edit)}>
+                {edit ? "ذخیره" : "ویرایش"}
+              </button>
             </div>
             <div className="user-profile-info-2">
               <div className="user-profile-label-input">
                 <label htmlFor="fullname">نام و نام خانوادگی</label>
-                <input
-                  type="text"
-                  name="fullname"
-                  placeholder="نام و نام خانوادکی خود را وارد کنید"
-                  autoComplete="on"
-                />
+                {user && user.first_name ? (
+                  <input
+                    type="text"
+                    name="fullname"
+                    defaultValue={user.first_name + " " + user.last_name}
+                    autoComplete="on"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    name="fullname"
+                    placeholder="مثلا مهران رزقی"
+                    autoComplete="on"
+                  />
+                )}
               </div>
               <div className="user-profile-label-input">
                 <label htmlFor="username">نام کاربری</label>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="نام کاربری خود را وارد کنید"
-                  autoComplete="on"
-                />
+                {user && user.username ? (
+                  <input
+                    type="text"
+                    name="username"
+                    defaultValue={user.username}
+                    autoComplete="on"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="مثلا rez80"
+                    autoComplete="on"
+                  />
+                )}
               </div>
               <div className="user-profile-label-input">
                 <label htmlFor="country">کشور</label>
@@ -100,13 +154,23 @@ const UserProfile = () => {
               </div>
               <div className="user-profile-label-input">
                 <label htmlFor="telephone">شماره تلفن</label>
-                <input
-                  type="tel"
-                  name="telephone"
-                  pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-                  placeholder="912 345 6789"
-                  autoComplete="on"
-                />
+                {user && user.phone_number ? (
+                  <input
+                    type="tel"
+                    name="telephone"
+                    pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                    defaultValue={user.phone_number}
+                    autoComplete="on"
+                  />
+                ) : (
+                  <input
+                    type="tel"
+                    name="telephone"
+                    pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                    placeholder="912 345 6789"
+                    autoComplete="on"
+                  />
+                )}
               </div>
             </div>
             <div className="user-profile-info-3">
