@@ -6,6 +6,7 @@ import Login from "../Components/Login";
 import Forgot_password from "../Components/Forgot_password";
 import UserDashboard from "../Components/UserDashboard/user_dashboard";
 import Loading from "../Components/Loading";
+import UserProfile from "../Components/UserProfile";
 
 function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +29,7 @@ function AppContent() {
         <Loading />
       ) : (
         <Routes>
-          <Route path="/" element={<div>Home Page Content</div>} />
+          <Route path="/" element={<UserProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/signup" element={<SignUp />} />
