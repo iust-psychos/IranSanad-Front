@@ -7,6 +7,11 @@ import Forgot_password from "../Components/Forgot_password";
 import UserDashboard from "../Components/user-dashboard/UserDashboard";
 import { userDashboardLoader } from "../Managers/user-dashboard-manager";
 import Loading from "../Components/Loading";
+import UserProfile from "../Components/UserProfile";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ContentEdit from "../Components/ContentEdit/ContentEdit";
+import EmailVerification from "../Components/EmailVerification";
 
 function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,17 +30,31 @@ function AppContent() {
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={true}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {isLoading && location.pathname === "/" ? (
         <Loading />
       ) : (
         <Routes>
-          <Route path="/" element={<div>Home Page Content</div>} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/dashboard"
             element={<UserDashboard />}
             // loader={userDashboardLoader}
           />
+          <Route path="/EmailVerification" element={<EmailVerification />} />
+          <Route path="/contentedit" element={<ContentEdit />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot_password" element={<Forgot_password />} />
         </Routes>

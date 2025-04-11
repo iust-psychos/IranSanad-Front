@@ -1,0 +1,258 @@
+*::selection {
+    color: white;
+    background-color: #AE8EE6;
+}
+
+.user-profile {
+    height: 100vh;
+    background-color: #E8E3F9;
+    align-items: center;
+}
+
+.user-profile-area {
+    width: 65%;
+    height: 85%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: whitesmoke;
+    border-radius: 30px;
+    box-shadow: -4px -4px 4px 2px rgba(0, 0, 0, 0.25), 4px 4px 4px 2px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    padding: 2% 3%;
+}
+
+.user-profile-area-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-profile-area-header > h2 {
+    font-size: 22px;
+    font-family: 'Vazir';
+    font-weight: bold;
+}
+
+.user-profile-area-header > p {
+    font-size: 0.9rem;
+    font-family: 'Vazir';
+    font-weight: 100;
+    color: #C9BEBE;
+}
+
+.user-profile-area-body {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 92%;
+    width: 100%;
+    margin-top: 1%;
+    border-radius: 10px;
+}
+
+.user-profile-area-body > .color-tape {
+    background: linear-gradient(to right, #E8E3F9, #AE8EE6);
+    width: 100%;
+    height: 9%;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.user-profile-area-body-content {
+    display: flex;
+    flex-direction: column;
+    height: 91%;
+    padding: 2% 5% 0 5%;
+}
+
+.user-profile-info-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 15%;
+}
+
+/* Button */
+
+.user-profile-info-1 > button {
+    background-color: #AE8EE6;
+    color: white;
+    border-radius: 10px;
+    width: 70px;
+    height: 35px;
+    border: none;
+    font-family: 'Vazir';
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+}
+
+.user-profile-info-1 > button:before {
+    content: '';
+    background: linear-gradient(45deg, #E8E3F9, #e2d2fd, #d5befc, #c4a1fe, #b38cf4, #a37edf, #8b66c8, #9478c3, #AE8EE6);
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 10s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+}
+
+.user-profile-info-1 > button:active {
+    color: white;
+}
+
+.user-profile-info-1 > button:active:after {
+    background: transparent;
+}
+
+.user-profile-info-1 > button:hover:before {
+    opacity: 1;
+}
+
+.user-profile-info-1 > button:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #AE8EE6;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+
+/* ----- */
+
+.user-profile-batch {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.user-profile-batch > img {
+    margin-left: 5%;
+}
+
+.user-profile-titles {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-profile-titles > h3 {
+    font-family: 'Vazir';
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.user-profile-titles > p {
+    color: #C9BEBE;
+    font-family: 'Vazir';
+    font-weight: 100;
+    font-size: 15px;
+}
+
+.user-profile-info-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    align-content: center;
+    gap: 10% 5%;
+    margin: 3% 0;
+}
+
+.user-profile-label-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-profile-label-input > label {
+    margin-bottom: 1%;
+}
+
+.user-profile-label-input > input, select{
+    border-radius: 10px;
+    background-color: #F5F5F5;
+    color: #C9BEBE;
+    font-family: 'Vazir';
+    border: none;
+    height: 40px;
+    padding: 0 2%;
+}
+
+.user-profile-label-input > input {
+    width: 95%;
+}
+
+.user-profile-label-input > select {
+    width: 100%;
+}
+
+.user-profile-info-3 {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-profile-info-3 > h3 {
+    margin-bottom: 1%;
+    font-size: 18px;
+}
+
+.user-profile-info-3-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    align-content: center;
+    gap: 10% 5%;
+}
+
+.password-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.user-profile-label-input > .password-box > input {
+    border-radius: 10px;
+    background-color: #F5F5F5;
+    color: #C9BEBE;
+    font-family: 'Vazir';
+    border: none;
+    height: 40px;
+    padding: 0 2%;
+    width: 100%;
+    z-index: 0;
+}
+
+.password-toggle {
+    width: 40px;
+    height: 40px;
+    background-color: inherit;
+    outline: none;
+    border: none;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+}
+
+.password-toggle > svg {
+    width: 60%;
+}
