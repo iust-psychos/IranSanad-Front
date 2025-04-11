@@ -7,9 +7,14 @@ import { Input } from "@base-ui-components/react/input";
 import Tip_slide from "./Tip_slide";
 import * as yup from "yup";
 import { useLocation } from "react-router-dom";
-import {getValidationCode,sendNewPassword,} from "../Managers/ForgotPasswordManager";
+import {
+  getValidationCode,
+  sendNewPassword,
+} from "../Managers/ForgotPasswordManager";
+import { Tooltip } from "react-tooltip";
 //connection to back remain
 const Forgot_password = () => {
+  
   const [trueValidationCode, setTrueValidationCode] = useState("");
   const location = useLocation();
   const [email, setEmail] = useState(
@@ -42,7 +47,7 @@ const Forgot_password = () => {
       .required("رمز عبور اجباری است")
       .min(8, "رمز عبور باید حداقل 8 کارکتر باشد")
       .matches(
-        /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%#*?&])[A-Za-z\d@$!%#*?&]{8,}$/,
         "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
       ),
     repeatPassword: yup
@@ -68,15 +73,16 @@ const Forgot_password = () => {
   };
 
   const handleSubmitEmail = async (e) => {
+    console.log('Fuck')
     e.preventDefault();
-
     try {
       await validationSchemaEmail.validate(email);
+      setErrorEmail(null);
       //connection to backend remains
       let respEmail = await getValidationCode(email);
+      
       if (respEmail.code == 201) {
         setTrueValidationCode(respEmail.validationCode);
-        setErrorEmail(null);
         emailRef.current.classList.add(TipStyles.slideOut);
         emailRef.current.addEventListener(
           "animationend",
@@ -127,16 +133,16 @@ const Forgot_password = () => {
       await validationSchemaPassword.validate(newPassword, {
         abortEarly: false,
       });
+      setErrorNewPassword({});
       let resp = await sendNewPassword(
         email,
         newPassword.newPassword,
         newPassword.repeatPassword
       );
-      console.log(resp)
-      if (resp.code == 201){
-        console.log('here we must route to dashboard');
+      console.log(resp);
+      if (resp.code == 201) {
+        console.log("here we must route to dashboard");
       }
-      setErrorNewPassword({});
     } catch (err) {
       const validationErrors = {};
       err.inner.forEach((error) => {
@@ -150,8 +156,13 @@ const Forgot_password = () => {
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
         <div className={styles.InnerBox}>
-          <div className={styles.detailsContainer}>
-            <div className={styles.Title}>ایران سند</div>
+        <div className={styles.detailsContainer}>
+            <img src="../Images/" className={styles.ImageTitle} />
+            <div className={styles.Title}>
+              ایران
+              <br />
+              سند
+            </div>
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
@@ -170,18 +181,26 @@ const Forgot_password = () => {
                 </label>
                 <br />
                 <Input
-                  className={styles.inputField}
+                  className={
+                    !errorEmail ? styles.inputField : styles.inputFieldError
+                  }
                   onChange={handleChangeEmail}
                   type="text"
                   id="email"
                   name="email"
                   value={email}
+                  data-tooltip-id="email_tooltip"
+                  style={{direction:'ltr'}}
                 />
                 {errorEmail && (
-                  <div className={styles.errors}>{errorEmail}</div>
+                  <Tooltip
+                    id="email_tooltip"
+                    className={styles.errors}
+                    content={errorEmail}
+                  />
                 )}
               </div>
-              <button type="submit" className={styles.submitBtn}>
+              <button type="submit" className={styles.submitBtn} style={{marginTop:"10%"}}>
                 ارسال کد
               </button>
             </form>
@@ -200,18 +219,30 @@ const Forgot_password = () => {
                 </label>
                 <br />
                 <Input
-                  className={styles.inputField}
+                  className={
+                    !errorValidationCode
+                      ? styles.inputField
+                      : styles.inputFieldError
+                  }
                   onChange={handleChangeCode}
                   type="text"
                   id="validationCode"
                   name="validationCode"
                   value={validationCode}
+                  data-tooltip-id="validation_tooltip"
                 />
                 {errorValidationCode && (
-                  <div className={styles.errors}>{errorValidationCode}</div>
+                  <Tooltip
+                    id="validation_tooltip"
+                    className={styles.errors}
+                    content={errorValidationCode}
+                  />
                 )}
               </div>
-              <button type="submit" className={styles.submitBtn}>
+                <p className={styles.resend}>
+                  ارسال دوباره کد
+                </p>
+              <button type="submit" className={styles.submitBtn} style={{marginTop:"10%"}}>
                 تایید کد
               </button>
             </form>
@@ -227,18 +258,25 @@ const Forgot_password = () => {
                 </label>
                 <br />
                 <Input
-                  className={styles.inputField}
+                  className={
+                    !errorNewPassword.newPassword
+                      ? styles.inputField
+                      : styles.inputFieldError
+                  }
                   onChange={handleChangePassword}
                   type="Password"
                   id="newPassword"
                   name="newPassword"
                   value={newPassword.newPassword}
+                  data-tooltip-id="password_tooltip"
                 />
                 <br />
                 {errorNewPassword.newPassword && (
-                  <div className={styles.errors}>
-                    {errorNewPassword.newPassword}
-                  </div>
+                  <Tooltip
+                    id="password_tooltip"
+                    className={styles.errors}
+                    content={errorNewPassword.newPassword}
+                  />
                 )}
                 <label
                   className={styles.inputsBoxLabels}
@@ -248,20 +286,27 @@ const Forgot_password = () => {
                 </label>
                 <br />
                 <Input
-                  className={styles.inputField}
+                  className={
+                    !errorNewPassword.repeatPassword
+                      ? styles.inputField
+                      : styles.inputFieldError
+                  }
                   onChange={handleChangePassword}
                   type="Password"
                   id="repeatPassword"
                   name="repeatPassword"
                   value={newPassword.repeatPassword}
+                  data-tooltip-id="repeatPassword_tooltip"
                 />
                 <br />
                 {errorNewPassword.repeatPassword && (
-                  <div className={styles.errors}>
-                    {errorNewPassword.repeatPassword}
-                  </div>
+                  <Tooltip
+                    id="repeatPassword_tooltip"
+                    className={styles.errors}
+                    content={errorNewPassword.repeatPassword}
+                  />
                 )}
-                <button type="submit" className={styles.submitBtn}>
+                <button type="submit" className={styles.submitBtn} style={{marginTop:"10%"}}>
                   تایید
                 </button>
               </div>
