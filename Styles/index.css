@@ -13,3 +13,9 @@ body {
   direction: rtl;
   font-family: 'Vazir';
 }
+
+.Toastify__toast, .Toastify__toast-body {
+  font-family: 'Vazir' !important;
+  direction: rtl;
+  text-align: right;
+}

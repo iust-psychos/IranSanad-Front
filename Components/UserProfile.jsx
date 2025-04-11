@@ -3,6 +3,8 @@ import "../Styles/UserProfile.css";
 import userProfileIcon from "../src/Images/user-profile.png";
 import { toJalaali } from "jalaali-js";
 import axios from "axios";
+// import { LoadToken } from "../Managers/CookieManager.js";
+import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 const changePasswordAPI =
@@ -66,7 +68,7 @@ const UserProfile = () => {
 
   const [user, setUser] = useState(null);
 
-  const token =
+  const token = //LoadToken();
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2OTA4MTk0LCJpYXQiOjE3NDQzMTYxOTQsImp0aSI6IjYxMTUyYTA5ODFmODRiMDM4NjI4MGJkMjM0OWJmNWI1IiwidXNlcl9pZCI6OH0.tog-CME7QSKpWIyWviMICgzaExhECsxW4zaJfQHjPqA";
 
   useEffect(() => {
@@ -147,7 +149,6 @@ const UserProfile = () => {
   const [edit, setEdit] = useState(true);
   const handleSave = async (event) => {
     event.preventDefault();
-    setEdit(!edit);
     if (edit === false && checkChangePassword()) {
       try {
         const response = await axios.post(
@@ -166,8 +167,15 @@ const UserProfile = () => {
         );
         console.log(response);
         setPasswordData(initialPassword);
+        showSuccessToast("رمز عبور با موفقیت تغییر یافت");
       } catch (error) {
         console.log(error);
+        const errorMessage =
+          error.response?.data?.detail ||
+          error.response?.data?.message ||
+          error.response?.data?.non_field_errors[0] ||
+          "خطا در تغییر رمز عبور";
+        showErrorToast(errorMessage);
       }
     }
 
@@ -190,10 +198,25 @@ const UserProfile = () => {
           }
         );
         console.log(response);
+        showSuccessToast("اطلاعات با موفقیت ذخیره شد");
+        setUser({
+          username: response.data.username,
+          email: response.data.email,
+          phone_number: response.data.phone_number,
+          first_name: response.data.first_name,
+          last_name: response.data.last_name,
+        });
       } catch (error) {
         console.log(error);
+        showErrorToast(
+          error.response?.data?.detail ||
+            error.response?.data?.non_field_errors[0] ||
+            "خطا در ذخیره اطلاعات"
+        );
       }
     }
+
+    setEdit(!edit);
   };
 
   return (
@@ -217,56 +240,68 @@ const UserProfile = () => {
                   <h3>
                     {" "}
                     {user && user.first_name
-                      ? user.first_name
+                      ? `${user.first_name} ${user.last_name}`
                       : "کاربر ایران سند"}
                   </h3>
                   {user ? <p>{user.email}</p> : <p>example@email.com</p>}
                 </div>
               </div>
               {edit ? (
-                <button onClick={handleSave}>ویرایش</button>
+                <button type="button" onClick={handleSave}>
+                  ویرایش
+                </button>
               ) : (
-                <button onClick={handleSave}>ذخیره</button>
+                <button type="button" onClick={handleSave}>
+                  ذخیره
+                </button>
               )}
             </div>
             <div className="user-profile-info-2">
               <div className="user-profile-label-input">
-                <label htmlFor="fullname">نام و نام خانوادگی</label>
+                <label htmlFor="first_name">نام</label>
                 {user && user.first_name ? (
                   <input
                     type="text"
-                    name="fullname"
-                    defaultValue={`${userInfo.first_name} ${userInfo.last_name}`}
+                    name="first_name"
+                    defaultValue={`${userInfo.first_name}`}
                     autoComplete="on"
                     disabled={edit}
-                    value={`${userInfo.first_name} ${userInfo.last_name}`}
-                    onChange={(e) => {
-                      const [firstName = "", lastName = ""] =
-                        e.target.value.split(" ");
-                      setUserInfo((prev) => ({
-                        ...prev,
-                        first_name: firstName,
-                        last_name: lastName,
-                      }));
-                    }}
+                    value={`${userInfo.first_name}`}
+                    onChange={handleChangeUserInfo}
                   />
                 ) : (
                   <input
                     type="text"
-                    name="fullname"
-                    placeholder="نام و نام خانوادگی خود را وارد کنید."
+                    name="first_name"
+                    placeholder="نام خود را وارد کنید."
                     autoComplete="on"
                     disabled={edit}
-                    value={`${userInfo.first_name} ${userInfo.last_name}`}
-                    onChange={(e) => {
-                      const [firstName = "", lastName = ""] =
-                        e.target.value.split(" ");
-                      setUserInfo((prev) => ({
-                        ...prev,
-                        first_name: firstName,
-                        last_name: lastName,
-                      }));
-                    }}
+                    value={`${userInfo.first_name}`}
+                    onChange={handleChangeUserInfo}
+                  />
+                )}
+              </div>
+              <div className="user-profile-label-input">
+                <label htmlFor="last_name">نام خانوادگی</label>
+                {user && user.last_name ? (
+                  <input
+                    type="text"
+                    name="last_name"
+                    defaultValue={`${userInfo.last_name}`}
+                    autoComplete="on"
+                    disabled={edit}
+                    value={`${userInfo.last_name}`}
+                    onChange={handleChangeUserInfo}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    name="last_name"
+                    placeholder="نام خانوادگی خود را وارد کنید."
+                    autoComplete="on"
+                    disabled={edit}
+                    value={`${userInfo.last_name}`}
+                    onChange={handleChangeUserInfo}
                   />
                 )}
               </div>
@@ -294,13 +329,12 @@ const UserProfile = () => {
                   />
                 )}
               </div>
-              <div className="user-profile-label-input">
+              {/* <div className="user-profile-label-input">
                 <label htmlFor="country">کشور</label>
                 <select name="country" defaultValue={"ایران"} disabled={edit}>
                   <option value="Iran">ایران</option>
-                  {/* <option value="Tajikstan">تاجیکستان</option> */}
                 </select>
-              </div>
+              </div> */}
               <div className="user-profile-label-input">
                 <label htmlFor="phone_number">شماره تلفن</label>
                 {user && user.phone_number ? (

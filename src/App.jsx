@@ -7,6 +7,8 @@ import Forgot_password from "../Components/Forgot_password";
 import UserDashboard from "../Components/UserDashboard/user_dashboard";
 import Loading from "../Components/Loading";
 import UserProfile from "../Components/UserProfile";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,11 +27,23 @@ function AppContent() {
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={true}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {isLoading && location.pathname === "/" ? (
         <Loading />
       ) : (
         <Routes>
-          <Route path="/" element={<UserProfile />} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/signup" element={<SignUp />} />
