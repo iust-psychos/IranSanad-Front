@@ -1,6 +1,6 @@
 import "react";
 import styles from "../Styles/Login.module.css";
-import React, { useRef, useState } from "react";
+import React, { useState,useRef } from "react";
 import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
 import InfoIcon from "@mui/icons-material/Info";
@@ -10,7 +10,7 @@ import * as yup from "yup";
 import { Link } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import CookieManager from '../Managers/CookieManager';
+import { Tooltip } from "react-tooltip";
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -23,15 +23,12 @@ const Login = () => {
     <RemoveRedEyeIcon
       sx={{
         position: "absolute",
-        top: "41%",
+        top: "39%",
         left: "21%",
       }}
     />
   );
-
-  const icon = useRef(null);
   const iconContainer = useRef(null);
-  const passwordHintBox = useRef(null);
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -58,7 +55,7 @@ const Login = () => {
         <RemoveRedEyeIcon
           sx={{
             position: "absolute",
-            top: "41%",
+            top: "39%",
             left: "21%",
           }}
         />
@@ -69,7 +66,7 @@ const Login = () => {
         <VisibilityOffIcon
           sx={{
             position: "absolute",
-            top: "41%",
+            top: "39%",
             left: "21%",
           }}
         />
@@ -79,25 +76,14 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const showPasswordHint = (e) => {
-    e.preventDefault();
-    passwordHintBox.current.style.display = "block";
-  };
-
-  const hidePasswordHint = (e) => {
-    e.preventDefault();
-    passwordHintBox.current.style.display = "none";
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
-      let resp = await LoginManager.Login(formData.email, formData.password);
-      CookieManager.SaveToken('12' ,resp.data.tokens.access);
-      let token = CookieManager.LoadToken();
       setErrors({});
+      let resp = await LoginManager.Login(formData.email, formData.password);
+      console.log(resp);
     } catch (err) {
       const validationErrors = {};
       console.log(err.message);
@@ -105,7 +91,6 @@ const Login = () => {
         validationErrors[error.path] = error.message;
       });
       setErrors(validationErrors);
-      icon.current.style.top = "35%";
     }
   };
 
@@ -113,7 +98,7 @@ const Login = () => {
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
         <div className={styles.InnerBox}>
-          <div className={styles.detailsContainer}>
+        <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
             <div className={styles.Title}>
               ایران
@@ -127,91 +112,107 @@ const Login = () => {
           </div>
           <div className={styles.formBox}>
             <span className={styles.loginTitle}>ورود به حساب</span>
-            <div className={styles.inputsBox}>
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <label className={styles.inputsBoxLabels} htmlFor="username">
-                    ایمیل
-                  </label>
-                  <br />
-                  <Input
-                    className={styles.inputField}
-                    onChange={handleChange}
-                    type="text"
-                    id="email"
-                    name="email"
-                    value={formData.email}
+
+            <form onSubmit={handleSubmit} className={styles.inputsBox}>
+              <div>
+                <label className={styles.inputsBoxLabels} htmlFor="username">
+                  ایمیل
+                </label>
+                <br />
+                <Input
+                  className={
+                    !errors.email ? styles.inputField : styles.inputFieldError
+                  }
+                  onChange={handleChange}
+                  type="text"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  data-tooltip-id="email_tooltip"
+                  style={{direction:'ltr'}}
+                />
+                {errors.email && (
+                  <Tooltip
+                    id="email_tooltip"
+                    className={styles.errors}
+                    content={errors.email}
                   />
-                  {errors.email && (
-                    <div className={styles.errors}>{errors.email}</div>
-                  )}
-                </div>
-                <div className={styles.password}>
-                  <label className={styles.inputsBoxLabels} htmlFor="password">
-                    رمز عبور
-                  </label>
-                  <div
-                    ref={passwordHintBox}
-                    className={styles.passwordPrequestiesLogin}
+                )}
+              </div>
+              <div className={styles.password}>
+                <label className={styles.inputsBoxLabels} htmlFor="password">
+                  رمز عبور
+                </label>
+                <InfoIcon
+                  sx={{
+                    position: "absolute",
+                    top: "30%",
+                    color: "#D4D4D4",
+                    width: "20px",
+                    height: "20px",
+                    left: "20%",
+                  }}
+                  data-tooltip-id="passwordPrequesties_tooltip"
+                />
+                <Tooltip
+                  id="passwordPrequesties_tooltip"
+                  className={styles.passwordPrequestiesLogin}
+                  content={
+                    "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
+                  }
+                  place="right-start"
+                />
+                <br />
+                <span ref={iconContainer} onClick={handleShowPassword}>
+                  {showPassIcon}
+                </span>
+                <Input
+                  className={
+                    !errors.password
+                      ? styles.inputField
+                      : styles.inputFieldError
+                  }
+                  onChange={handleChange}
+                  type={passFieldType}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  data-tooltip-id="password_tooltip"
+                />
+                <br />
+                {errors.password && (
+                  <Tooltip
+                    id="password_tooltip"
+                    className={styles.errors}
+                    content={errors.password}
+                  />
+                )}
+                <p style={{marginTop:"1%"}}>
+                  <Link
+                    to="/forgot_password"
+                    state={errors.email? { email: "" }  :{ email: formData.email }}
+                    className={styles.forgetpasswordlink}
                   >
-                    کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و
-                    حداقل یک عدد و یک کارکتر خاص باشد
-                  </div>
-                  <InfoIcon
-                    sx={{
-                      position: "absolute",
-                      top: "31%",
-                      color: "#D4D4D4",
-                      width: "20px",
-                      height: "20px",
-                      left: "20%",
-                    }}
-                    ref={icon}
-                    onMouseEnter={showPasswordHint}
-                    onMouseLeave={hidePasswordHint}
-                  />
-                  <br />
-                  <span ref={iconContainer} onClick={handleShowPassword}>
-                    {showPassIcon}
-                  </span>
-                  <Input
-                    className={styles.inputField}
-                    onChange={handleChange}
-                    type={passFieldType}
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                  />
-                  <br />
-                  {errors.password && (
-                    <div className={styles.errors}>{errors.password}</div>
-                  )}
-                  <p>
-                    <Link
-                      to="/forgot_password"
-                      state={{ email: formData.email }}
-                      className={styles.forgetpasswordlink}
-                    >
-                      فراموشی رمز عبور؟
-                    </Link>
-                  </p>
-                  <button type="submit" className={styles.submitBtn}>
-                    ورود
-                  </button>
-                  <p className={styles.noAccLink}>
-                    حساب ندارید؟
-                    <Link to="/signup" className={styles.forgetpasswordlink}>
-                      ثبت نام کنید.
-                    </Link>
-                  </p>
-                </div>
-              </form>
-            </div>
+                    فراموشی رمز عبور؟
+                  </Link>
+                </p>
+                <button type="submit" className={styles.submitBtn}>
+                  ورود
+                </button>
+                <p className={styles.noAccLink}>
+                  حساب ندارید؟
+                  <Link to="/signup" className={styles.forgetpasswordlink}>
+                    ثبت نام کنید.
+                  </Link>
+                </p>
+              </div>
+            </form>
           </div>
+          <div></div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default Login;
