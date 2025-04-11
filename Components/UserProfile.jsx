@@ -69,7 +69,6 @@ const UserProfile = () => {
   const [user, setUser] = useState(null);
 
   const token = CookieManager.LoadToken();
-  // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2OTA4MTk0LCJpYXQiOjE3NDQzMTYxOTQsImp0aSI6IjYxMTUyYTA5ODFmODRiMDM4NjI4MGJkMjM0OWJmNWI1IiwidXNlcl9pZCI6OH0.tog-CME7QSKpWIyWviMICgzaExhECsxW4zaJfQHjPqA";
 
   useEffect(() => {
     axios
@@ -92,6 +91,7 @@ const UserProfile = () => {
     phone_number: "",
     first_name: "",
     last_name: "",
+    profile_image: "",
   });
 
   useEffect(() => {
@@ -102,6 +102,7 @@ const UserProfile = () => {
         phone_number: user.phone_number || "",
         first_name: user.first_name || "",
         last_name: user.last_name || "",
+        profile_image: user.profile_image || "",
       });
     }
   }, [user]);
@@ -144,6 +145,46 @@ const UserProfile = () => {
       return true;
     }
     return false;
+  };
+
+  const getErrorMessage = (error) => {
+    if (!error.response) {
+      return "خطا در ارتباط با سرور";
+    }
+    const { data } = error.response;
+
+    const errorFields = [
+      "detail",
+      "phone_number",
+      "username",
+      "first_name",
+      "last_name",
+      "non_field_errors",
+    ];
+
+    for (const field of errorFields) {
+      if (data[field]) {
+        if (Array.isArray(data[field])) {
+          return data[field][0];
+        }
+        return data[field];
+      }
+    }
+
+    switch (error.response.status) {
+      case 400:
+        return "داده‌های ارسالی نامعتبر هستند";
+      case 401:
+        return "احراز هویت ناموفق بود";
+      case 403:
+        return "دسترسی غیرمجاز";
+      case 404:
+        return "منبع یافت نشد";
+      case 500:
+        return "خطای سرور";
+      default:
+        return "خطای ناشناخته رخ داد";
+    }
   };
 
   const [edit, setEdit] = useState(true);
@@ -208,11 +249,7 @@ const UserProfile = () => {
         });
       } catch (error) {
         console.log(error);
-        showErrorToast(
-          error.response?.data?.detail ||
-            error.response?.data?.non_field_errors[0] ||
-            "خطا در ذخیره اطلاعات"
-        );
+        showErrorToast(getErrorMessage(error));
       }
     }
 
@@ -259,75 +296,53 @@ const UserProfile = () => {
             <div className="user-profile-info-2">
               <div className="user-profile-label-input">
                 <label htmlFor="first_name">نام</label>
-                {user && user.first_name ? (
-                  <input
-                    type="text"
-                    name="first_name"
-                    defaultValue={`${userInfo.first_name}`}
-                    autoComplete="on"
-                    disabled={edit}
-                    value={`${userInfo.first_name}`}
-                    onChange={handleChangeUserInfo}
-                  />
-                ) : (
-                  <input
-                    type="text"
-                    name="first_name"
-                    placeholder="نام خود را وارد کنید."
-                    autoComplete="on"
-                    disabled={edit}
-                    value={`${userInfo.first_name}`}
-                    onChange={handleChangeUserInfo}
-                  />
-                )}
+                <input
+                  id="first_name"
+                  name="first_name"
+                  type="text"
+                  placeholder="نام خود را وارد کنید."
+                  autoComplete="on"
+                  disabled={edit}
+                  value={`${userInfo.first_name}`}
+                  onChange={handleChangeUserInfo}
+                />
               </div>
               <div className="user-profile-label-input">
                 <label htmlFor="last_name">نام خانوادگی</label>
-                {user && user.last_name ? (
-                  <input
-                    type="text"
-                    name="last_name"
-                    defaultValue={`${userInfo.last_name}`}
-                    autoComplete="on"
-                    disabled={edit}
-                    value={`${userInfo.last_name}`}
-                    onChange={handleChangeUserInfo}
-                  />
-                ) : (
-                  <input
-                    type="text"
-                    name="last_name"
-                    placeholder="نام خانوادگی خود را وارد کنید."
-                    autoComplete="on"
-                    disabled={edit}
-                    value={`${userInfo.last_name}`}
-                    onChange={handleChangeUserInfo}
-                  />
-                )}
+                <input
+                  id="last_name"
+                  name="last_name"
+                  type="text"
+                  placeholder="نام خانوادگی خود را وارد کنید."
+                  autoComplete="on"
+                  disabled={edit}
+                  value={`${userInfo.last_name}`}
+                  onChange={handleChangeUserInfo}
+                />
               </div>
               <div className="user-profile-label-input">
                 <label htmlFor="username">نام کاربری</label>
-                {user && user.username ? (
-                  <input
-                    type="text"
-                    name="username"
-                    defaultValue={user.username}
-                    autoComplete="on"
-                    disabled={edit}
-                    value={userInfo.username}
-                    onChange={handleChangeUserInfo}
-                  />
-                ) : (
-                  <input
-                    type="text"
-                    name="username"
-                    placeholder="نام کاربری خود را وارد کنید."
-                    autoComplete="on"
-                    disabled={edit}
-                    value={""}
-                    onChange={handleChangeUserInfo}
-                  />
-                )}
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="on"
+                  disabled={edit}
+                  value={userInfo.username}
+                  onChange={handleChangeUserInfo}
+                  placeholder="نام کاربری خود را وارد کنید."
+                  style={
+                    user && userInfo.username
+                      ? {
+                          direction: "ltr",
+                          textAlign: "left",
+                        }
+                      : {
+                          direction: "rtl",
+                          textAlign: "right",
+                        }
+                  }
+                />
               </div>
               {/* <div className="user-profile-label-input">
                 <label htmlFor="country">کشور</label>
@@ -337,29 +352,28 @@ const UserProfile = () => {
               </div> */}
               <div className="user-profile-label-input">
                 <label htmlFor="phone_number">شماره تلفن</label>
-                {user && user.phone_number ? (
-                  <input
-                    type="tel"
-                    name="phone_number"
-                    pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-                    defaultValue={user.phone_number}
-                    autoComplete="on"
-                    disabled={edit}
-                    value={userInfo.phone_number}
-                    onChange={handleChangeUserInfo}
-                  />
-                ) : (
-                  <input
-                    type="tel"
-                    name="phone_number"
-                    pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-                    placeholder="989123456789"
-                    autoComplete="on"
-                    disabled={edit}
-                    value={"989123456789"}
-                    onChange={handleChangeUserInfo}
-                  />
-                )}
+                <input
+                  id="phone_number"
+                  name="phone_number"
+                  type="tel"
+                  pattern="\+98\d{10}"
+                  autoComplete="on"
+                  disabled={edit}
+                  value={userInfo.phone_number}
+                  onChange={handleChangeUserInfo}
+                  placeholder="شماره تلفن همراه را وارد کنید"
+                  style={
+                    userInfo.phone_number
+                      ? {
+                          direction: "ltr",
+                          textAlign: "left",
+                        }
+                      : {
+                          direction: "rtl",
+                          textAlign: "right",
+                        }
+                  }
+                />
               </div>
             </div>
             <div className="user-profile-info-3">
@@ -368,8 +382,9 @@ const UserProfile = () => {
                 <div className="user-profile-label-input">
                   <label htmlFor="old_password">رمز عبور کنونی</label>
                   <input
-                    type="password"
+                    id="old_password"
                     name="old_password"
+                    type="password"
                     autoComplete="off"
                     disabled={edit}
                     value={passwordData.old_password}
@@ -379,8 +394,9 @@ const UserProfile = () => {
                 <div className="user-profile-label-input">
                   <label htmlFor="new_password">رمز عبور جدید</label>
                   <input
-                    type="password"
+                    id="new_password"
                     name="new_password"
+                    type="password"
                     autoComplete="off"
                     disabled={edit}
                     value={passwordData.new_password}
@@ -390,8 +406,9 @@ const UserProfile = () => {
                 <div className="user-profile-label-input">
                   <label htmlFor="new_password2">تایید رمز عبور جدید</label>
                   <input
-                    type="password"
+                    id="new_password2"
                     name="new_password2"
+                    type="password"
                     autoComplete="off"
                     disabled={edit}
                     value={passwordData.new_password2}
