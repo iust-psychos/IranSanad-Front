@@ -5,6 +5,8 @@ import { toJalaali } from "jalaali-js";
 import axios from "axios";
 import CookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 const changePasswordAPI =
@@ -256,6 +258,10 @@ const UserProfile = () => {
     setEdit(!edit);
   };
 
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showNewPassword2, setShowNewPassword2] = useState(false);
+
   return (
     <div className="user-profile">
       <div className="user-profile-area">
@@ -381,39 +387,66 @@ const UserProfile = () => {
               <div className="user-profile-info-3-grid">
                 <div className="user-profile-label-input">
                   <label htmlFor="old_password">رمز عبور کنونی</label>
-                  <input
-                    id="old_password"
-                    name="old_password"
-                    type="password"
-                    autoComplete="off"
-                    disabled={edit}
-                    value={passwordData.old_password}
-                    onChange={handleChangePassword}
-                  />
+                  <div className="password-box">
+                    <input
+                      id="old_password"
+                      name="old_password"
+                      type={showOldPassword ? "text" : "password"}
+                      autoComplete="off"
+                      disabled={edit}
+                      value={passwordData.old_password}
+                      onChange={handleChangePassword}
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowOldPassword(!showOldPassword)}
+                    >
+                      {showOldPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
                 <div className="user-profile-label-input">
                   <label htmlFor="new_password">رمز عبور جدید</label>
-                  <input
-                    id="new_password"
-                    name="new_password"
-                    type="password"
-                    autoComplete="off"
-                    disabled={edit}
-                    value={passwordData.new_password}
-                    onChange={handleChangePassword}
-                  />
+                  <div className="password-box">
+                    <input
+                      id="new_password"
+                      name="new_password"
+                      type={showNewPassword ? "text" : "password"}
+                      autoComplete="off"
+                      disabled={edit}
+                      value={passwordData.new_password}
+                      onChange={handleChangePassword}
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                      {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
                 <div className="user-profile-label-input">
                   <label htmlFor="new_password2">تایید رمز عبور جدید</label>
-                  <input
-                    id="new_password2"
-                    name="new_password2"
-                    type="password"
-                    autoComplete="off"
-                    disabled={edit}
-                    value={passwordData.new_password2}
-                    onChange={handleChangePassword}
-                  />
+                  <div className="password-box">
+                    <input
+                      id="new_password2"
+                      name="new_password2"
+                      type={showNewPassword2 ? "text" : "password"}
+                      autoComplete="off"
+                      disabled={edit}
+                      value={passwordData.new_password2}
+                      onChange={handleChangePassword}
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowNewPassword2(!showNewPassword2)}
+                    >
+                      {showNewPassword2 ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

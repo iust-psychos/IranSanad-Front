@@ -220,5 +220,39 @@
     grid-template-rows: 1fr 1fr;
     align-content: center;
     gap: 10% 5%;
-    /* margin-top: 1%; */
+}
+
+.password-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.user-profile-label-input > .password-box > input {
+    border-radius: 10px;
+    background-color: #F5F5F5;
+    color: #C9BEBE;
+    font-family: 'Vazir';
+    border: none;
+    height: 40px;
+    padding: 0 2%;
+    width: 100%;
+    z-index: 0;
+}
+
+.password-toggle {
+    width: 40px;
+    height: 40px;
+    background-color: inherit;
+    outline: none;
+    border: none;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+}
+
+.password-toggle > svg {
+    width: 60%;
 }
