@@ -34,7 +34,7 @@ function AppContent() {
           <Route
             path="/dashboard"
             element={<UserDashboard />}
-            loader={userDashboardLoader}
+            // loader={userDashboardLoader}
           />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot_password" element={<Forgot_password />} />
