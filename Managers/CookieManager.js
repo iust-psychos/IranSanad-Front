@@ -5,16 +5,18 @@ const SaveToken = (expire , token) => {
     date.setTime(date.getTime() + expire);
     const expires = `expires=${date.toUTCString()}`;
   
-    document.cookie = `${TokenCookieKey}=${token}; ${expires}; path=/; Secure; SameSite=Strict`;
+    document.cookie = `${TokenCookieKey.TokenCookieKey}=${token}; ${expires}; path=/; Secure; SameSite=Strict`;
 }
 
 const LoadToken = () => {
     const cookies = document.cookie.split('; ');
     for (const cookie of cookies) {
       const [name, value] = cookie.split('=');
-      if (name === TokenCookieKey) {
+      if (name === TokenCookieKey.TokenCookieKey) {
         return value;
       }
     }
     return null;
 }
+
+export default { SaveToken , LoadToken };
