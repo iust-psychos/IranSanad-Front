@@ -4,7 +4,8 @@ import "../Styles/App.css";
 import SignUp from "../Components/Sign_up";
 import Login from "../Components/Login";
 import Forgot_password from "../Components/Forgot_password";
-import UserDashboard from "../Components/UserDashboard/user_dashboard";
+import UserDashboard from "../Components/user-dashboard/UserDashboard";
+import { userDashboardLoader } from "../Managers/user-dashboard-manager";
 import Loading from "../Components/Loading";
 
 function AppContent() {
@@ -30,7 +31,11 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<div>Home Page Content</div>} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route
+            path="/dashboard"
+            element={<UserDashboard />}
+            loader={userDashboardLoader}
+          />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot_password" element={<Forgot_password />} />
         </Routes>
