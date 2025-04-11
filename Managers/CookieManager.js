@@ -5,7 +5,7 @@ const SaveToken = (expire , token) => {
     date.setTime(date.getTime() + expire);
     const expires = `expires=${date.toUTCString()}`;
   
-    document.cookie = `${TokenCookieKey}=${token}; ${expires}; path=/; Secure; SameSite=Strict`;
+    document.cookie = `${TokenCookieKey.TokenCookieKey}=${token}; ${expires}; path=/; Secure; SameSite=Strict`;
 }
 
 const LoadToken = () => {

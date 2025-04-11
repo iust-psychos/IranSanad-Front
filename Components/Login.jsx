@@ -95,10 +95,8 @@ const Login = () => {
     try {
       await validationSchema.validate(formData, { abortEarly: false });
       let resp = await LoginManager.Login(formData.email, formData.password);
-      
       CookieManager.SaveToken('12' ,resp.data.tokens.access);
       let token = CookieManager.LoadToken();
-      console.log(token);
       setErrors({});
     } catch (err) {
       const validationErrors = {};
