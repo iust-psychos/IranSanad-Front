@@ -32,13 +32,16 @@ export const initialDocuments = [
 ];
 
 export const userDashboardLoader = async () => {
-  console.log("here");
   const token = CookieManager.LoadToken();
   const res = await fetch("http://iransanad.fiust.ir/api/v1/docs/", {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (!res.ok) throw new Error("User Dashboard fetch failed");
-  return res.json();
+  if (!res.ok) {
+    console.error(res);
+    throw new Error("User Dashboard fetch failed");
+  }
+  return await res.json();
 };

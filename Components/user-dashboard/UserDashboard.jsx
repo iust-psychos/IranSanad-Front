@@ -11,8 +11,8 @@ import { useLoaderData } from "react-router-dom";
 export default function UserDashboard() {
   const searchRef = useRef();
   const [sortField, setSortField] = useState("last_seen_time");
-  // const fetchedDocuments = useLoaderData();
-  const [documents, setDocuments] = useState(initialDocuments);
+  const fetchedDocuments = useLoaderData();
+  const [documents, setDocuments] = useState(fetchedDocuments);
 
   const handleSearch = () => {
     const searchValue = searchRef.current.value;
