@@ -3,7 +3,7 @@ import "../Styles/UserProfile.css";
 import userProfileIcon from "../src/Images/user-profile.png";
 import { toJalaali } from "jalaali-js";
 import axios from "axios";
-// import { LoadToken } from "../Managers/CookieManager.js";
+import CookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
@@ -68,8 +68,8 @@ const UserProfile = () => {
 
   const [user, setUser] = useState(null);
 
-  const token = //LoadToken();
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2OTA4MTk0LCJpYXQiOjE3NDQzMTYxOTQsImp0aSI6IjYxMTUyYTA5ODFmODRiMDM4NjI4MGJkMjM0OWJmNWI1IiwidXNlcl9pZCI6OH0.tog-CME7QSKpWIyWviMICgzaExhECsxW4zaJfQHjPqA";
+  const token = CookieManager.LoadToken();
+  // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2OTA4MTk0LCJpYXQiOjE3NDQzMTYxOTQsImp0aSI6IjYxMTUyYTA5ODFmODRiMDM4NjI4MGJkMjM0OWJmNWI1IiwidXNlcl9pZCI6OH0.tog-CME7QSKpWIyWviMICgzaExhECsxW4zaJfQHjPqA";
 
   useEffect(() => {
     axios

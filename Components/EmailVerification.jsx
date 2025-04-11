@@ -10,41 +10,21 @@ import * as yup from "yup";
 import { Link } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import CookieManager from '../Managers/CookieManager';
-const Login = () => {
+
+const EmailVerification = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(true);
-  const [passFieldType, setPassFieldType] = useState("password");
-  const [showPassIcon, setShowPassIcon] = useState(
-    <RemoveRedEyeIcon
-      sx={{
-        position: "absolute",
-        top: "41%",
-        left: "21%",
-      }}
-    />
-  );
 
   const icon = useRef(null);
-  const iconContainer = useRef(null);
   const passwordHintBox = useRef(null);
   const validationSchema = yup.object().shape({
     email: yup
       .string()
-      .email("آدرس ایمیل نامعتبر است")
-      .required("ایمیل اجباری است"),
-    password: yup
-      .string()
-      .required("رمز عبور اجباری است")
-      .min(8, "رمز عبور باید حداقل 8 کارکتر باشد")
-      .matches(
-        /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%#*?&])[A-Za-z\d@$!%#*?&]{8,}$/,
-        "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
-      ),
+      .required("کد اجباری است"),
   });
 
   const handleChange = (e) => {
@@ -95,8 +75,7 @@ const Login = () => {
     try {
       await validationSchema.validate(formData, { abortEarly: false });
       let resp = await LoginManager.Login(formData.email, formData.password);
-      CookieManager.SaveToken('12' ,resp.data.tokens.access);
-      let token = CookieManager.LoadToken();
+      console.log(resp);
       setErrors({});
     } catch (err) {
       const validationErrors = {};
@@ -126,12 +105,12 @@ const Login = () => {
             />
           </div>
           <div className={styles.formBox}>
-            <span className={styles.loginTitle}>ورود به حساب</span>
+            <span className={styles.loginTitle}>تایید ایمیل</span>
             <div className={styles.inputsBox}>
               <form onSubmit={handleSubmit}>
                 <div>
-                  <label className={styles.inputsBoxLabels} htmlFor="username">
-                    ایمیل
+                  <label className={styles.inputsBoxLabels} htmlFor="email">
+                    کد تایید
                   </label>
                   <br />
                   <Input
@@ -147,63 +126,18 @@ const Login = () => {
                   )}
                 </div>
                 <div className={styles.password}>
-                  <label className={styles.inputsBoxLabels} htmlFor="password">
-                    رمز عبور
-                  </label>
-                  <div
-                    ref={passwordHintBox}
-                    className={styles.passwordPrequestiesLogin}
-                  >
-                    کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و
-                    حداقل یک عدد و یک کارکتر خاص باشد
-                  </div>
-                  <InfoIcon
-                    sx={{
-                      position: "absolute",
-                      top: "31%",
-                      color: "#D4D4D4",
-                      width: "20px",
-                      height: "20px",
-                      left: "20%",
-                    }}
-                    ref={icon}
-                    onMouseEnter={showPasswordHint}
-                    onMouseLeave={hidePasswordHint}
-                  />
-                  <br />
-                  <span ref={iconContainer} onClick={handleShowPassword}>
-                    {showPassIcon}
-                  </span>
-                  <Input
-                    className={styles.inputField}
-                    onChange={handleChange}
-                    type={passFieldType}
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                  />
-                  <br />
-                  {errors.password && (
-                    <div className={styles.errors}>{errors.password}</div>
-                  )}
                   <p>
                     <Link
-                      to="/forgot_password"
+                      to="/login"
                       state={{ email: formData.email }}
                       className={styles.forgetpasswordlink}
                     >
-                      فراموشی رمز عبور؟
+                      ایمیل اشتباه است؟ 
                     </Link>
                   </p>
                   <button type="submit" className={styles.submitBtn}>
-                    ورود
+                    ارسال
                   </button>
-                  <p className={styles.noAccLink}>
-                    حساب ندارید؟
-                    <Link to="/signup" className={styles.forgetpasswordlink}>
-                      ثبت نام کنید.
-                    </Link>
-                  </p>
                 </div>
               </form>
             </div>
@@ -214,4 +148,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default EmailVerification;

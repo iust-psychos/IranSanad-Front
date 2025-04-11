@@ -9,6 +9,8 @@ import Loading from "../Components/Loading";
 import UserProfile from "../Components/UserProfile";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ContentEdit from "../Components/ContentEdit/ContentEdit";
+import EmailVerification from "../Components/EmailVerification";
 
 function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +47,8 @@ function AppContent() {
         <Routes>
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/EmailVerification" element={<EmailVerification />} />
+          <Route path="/contentedit" element={<ContentEdit />} />
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot_password" element={<Forgot_password />} />
