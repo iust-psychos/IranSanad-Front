@@ -10,7 +10,7 @@ import * as yup from "yup";
 import { Link } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-
+import CookieManager from '../Managers/CookieManager';
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -95,7 +95,10 @@ const Login = () => {
     try {
       await validationSchema.validate(formData, { abortEarly: false });
       let resp = await LoginManager.Login(formData.email, formData.password);
-      console.log(resp);
+      
+      CookieManager.SaveToken('12' ,resp.data.tokens.access);
+      let token = CookieManager.LoadToken();
+      console.log(token);
       setErrors({});
     } catch (err) {
       const validationErrors = {};

@@ -12,9 +12,11 @@ const LoadToken = () => {
     const cookies = document.cookie.split('; ');
     for (const cookie of cookies) {
       const [name, value] = cookie.split('=');
-      if (name === TokenCookieKey) {
+      if (name === TokenCookieKey.TokenCookieKey) {
         return value;
       }
     }
     return null;
 }
+
+export default { SaveToken , LoadToken };
