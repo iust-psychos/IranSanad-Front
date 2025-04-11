@@ -1,13 +1,12 @@
 .Bakcground { 
     width: 100%;
-    height: 45.5rem;
+    height: 100vh;
     background-color: #E3D9FF;
 }
 
 .Box {
     width: 82%;
     height:38rem;
-    background-color: #DCD1FF;
     border-radius: 10px;
     padding: 0.8%;
     position: relative;
@@ -20,46 +19,49 @@
     border-radius: 10px;
     width: 100%;
     height: 100%;
+    display: flex;
+    box-shadow: 0.7rem 0.7rem 0.1rem 0 #DCD1FF , -0.7rem -0.7rem 0.1rem 0 #DCD1FF;
 }
 
 .detailsContainer {
     width:55%;
     height:100%;
+    display: inline-block;
 }
 
 .Title {
     position: relative;
-    top:7%;
-    right:20%;
+    padding-top:7%;
+    padding-right:13%;
     color:#FFFFFF;
     z-index: 2;
     font-weight: 700;
     font-size: 21px;
     line-height: 100%;
+    height: 10%;
 }
 
-.ImageContainer {
-    width: 92%;
-    height: 48%;
-    position: relative;
-    top: 14%;
-    right: 4%;
+.passwordPrequesties , .passwordPrequestiesLogin {
+    background-color: #EAE4FF !important;
+    color: black !important;
+    width: 60% !important;
 }
 
-.image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    mix-blend-mode: multiply;
+.passwordPrequestiesLogin {
+    top:10%;
+}
+
+.ImageTitle {
+    position: absolute;
+    right: 6%;
+    top:11%;
 }
 
 .InformationContainer { 
-    width: 65%;
-    height: 27%;
     position: relative;
-    top:16%;
-    right:10%;
-    padding: 1% 2%;
+    padding: 5% 10%;
+    width: 80%;
+    height: 72%;
 }
 
 .infoTitle {
@@ -74,4 +76,97 @@
     font-size: 16px;
     font-weight: 700;
     color :rgba(255, 255, 255, 1)
+}
+
+.formBox {
+    width: 45%;
+    height:100%;
+    background-color: #FFFBFB;
+    display: inline-block;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.loginTitle {
+    position: relative;
+    top: 10%;
+    right:10%;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.inputsBox {
+    position: relative;
+    top:20%;
+    right:10%;
+}
+
+.inputsBoxLabels {
+    color:#747275;
+    font-weight: 100;
+}
+
+.inputField {
+    width: 76%;
+    padding: 1% 2%;
+    font-size: 18px;
+    border: 1px solid #EEEDEF;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.inputFieldError {
+    width: 76%;
+    padding: 1% 2%;
+    font-size: 18px;
+    border: 2px solid #e61515;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.inputField:focus {
+    outline: none;
+}
+
+.password {
+    margin-top: 5%;
+}
+
+.forgetpasswordlink {
+    text-decoration: none;
+    color: #C7B5FF;
+    font-weight: 100;
+}
+
+.submitBtn {
+    padding: 1%;
+    width: 78%;
+    margin-top:60px;
+    margin-right: 8px;
+    font-family: 'Vazir';
+    border: none;
+    background-color: #C7B5FF;
+    border-radius: 5px;
+    color: #FFFBFB;
+    font-size: 18px;
+}
+
+.noAccLink {
+    margin: 3% 26%;
+    font-weight: 100;
+}
+
+.errors {
+    background-color: rgb(255, 99, 99) !important;
+    color: #FFFFFF !important;
+}
+
+.resend {
+    margin-top: 2%;
+    margin-right: 2% ;
+    text-decoration: none;
+    color: #C7B5FF;
+    font-weight: 100;
+    display: block;
+    
 }

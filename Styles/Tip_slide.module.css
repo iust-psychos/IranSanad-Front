@@ -1,0 +1,74 @@
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-10%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(10%);
+  }
+}
+
+.imageContainer {
+  width: 92%;
+  height: 70%;
+  position: relative;
+  object-fit: cover;
+  margin-top: 1%;
+}
+.slideContainer {
+  height: 90%;
+}
+.titleContainer {
+  display: block;
+  position: relative;
+  margin-top: 1%;
+  padding-bottom: 4%;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.textContainer {
+  display: block;
+  margin-top: 4%;
+  max-height: 10%;
+  /* mix-blend-mode: multiply;  */
+  color: #ffffff;
+}
+.slideIn {
+  animation: slideIn 0.2s ease-in-out;
+}
+.slideOut {
+  animation: slideOut 0.2s ease-in-out;
+}
+.rawText {
+  min-height: 90%;
+}
+.dotContainer {
+  direction: ltr;
+  height: 10%;
+  width: 55%;
+  margin-top:5%;
+}
+.svgContainer {
+  display: inline;
+  width: 5%;
+  max-height: 0.9rem;
+}
+.tipCircle {
+  position: relative;
+  cx: 50%;
+  cy: 50%;
+  r: 4;
+  transition: fill 0.3s ease-in-out;
+}

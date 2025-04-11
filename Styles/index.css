@@ -14,7 +14,8 @@ body {
   font-family: 'Vazir';
 }
 
-#root {
-  height: 100%;
-  width: 100%;
+.Toastify__toast, .Toastify__toast-body {
+  font-family: 'Vazir' !important;
+  direction: rtl;
+  text-align: right;
 }
