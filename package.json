@@ -23,6 +23,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-toastify": "^11.0.5",
+    "react-tooltip": "^5.28.1",
+    "toastify": "^2.0.1",
     "yup": "^1.6.1"
   },
   "devDependencies": {
