@@ -129,6 +129,21 @@ const SignUp = () => {
     }
   };
 
+  const handleSubmitCode = async (e) => {
+    e.preventDefault();
+
+    try {
+      await validationSchemaCode.validate(validationCode);
+      if (validationCode != trueValidationCode) {
+        throw new Error("کد وارد شده نادرست است");
+      } else {
+        setErrorValidationCode(null);
+      }
+    } catch (err) {
+      setErrorValidationCode(err.message);
+    }
+  };
+
   return (
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
