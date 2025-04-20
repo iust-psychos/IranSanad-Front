@@ -1,6 +1,6 @@
 import "react";
 import styles from "../Styles/Login.module.css";
-import React, { useState,useRef } from "react";
+import React, { useState, useRef } from "react";
 import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
 import InfoIcon from "@mui/icons-material/Info";
@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
+import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -84,6 +86,7 @@ const Login = () => {
       setErrors({});
       let resp = await LoginManager.Login(formData.email, formData.password);
       console.log(resp);
+      showSuccessToast("ورود با موفقیت انجام شد");
     } catch (err) {
       const validationErrors = {};
       console.log(err.message);
@@ -91,6 +94,13 @@ const Login = () => {
         validationErrors[error.path] = error.message;
       });
       setErrors(validationErrors);
+      if (err.message === "Request failed with status code 401") {
+        showErrorToast("ایمیل یا رمز عبور اشتباه است");
+      } else if (err.message === "Network Error") {
+        showErrorToast("خطا در برقراری ارتباط با سرور");
+      } else {
+        showErrorToast("خطا در ورود به حساب کاربری");
+      }
     }
   };
 
@@ -98,7 +108,7 @@ const Login = () => {
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
         <div className={styles.InnerBox}>
-        <div className={styles.detailsContainer}>
+          <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
             <div className={styles.Title}>
               ایران
@@ -115,7 +125,7 @@ const Login = () => {
 
             <form onSubmit={handleSubmit} className={styles.inputsBox}>
               <div>
-                <label className={styles.inputsBoxLabels} htmlFor="username">
+                <label className={styles.inputsBoxLabels} htmlFor="email">
                   ایمیل
                 </label>
                 <br />
@@ -129,7 +139,8 @@ const Login = () => {
                   name="email"
                   value={formData.email}
                   data-tooltip-id="email_tooltip"
-                  style={{direction:'ltr'}}
+                  style={{ direction: "ltr" }}
+                  autoComplete="on"
                 />
                 {errors.email && (
                   <Tooltip
@@ -187,10 +198,12 @@ const Login = () => {
                     content={errors.password}
                   />
                 )}
-                <p style={{marginTop:"1%"}}>
+                <p style={{ marginTop: "1%" }}>
                   <Link
                     to="/forgot_password"
-                    state={errors.email? { email: "" }  :{ email: formData.email }}
+                    state={
+                      errors.email ? { email: "" } : { email: formData.email }
+                    }
                     className={styles.forgetpasswordlink}
                   >
                     فراموشی رمز عبور؟
@@ -200,7 +213,7 @@ const Login = () => {
                   ورود
                 </button>
                 <p className={styles.noAccLink}>
-                  حساب ندارید؟
+                  حساب ندارید؟&nbsp;
                   <Link to="/signup" className={styles.forgetpasswordlink}>
                     ثبت نام کنید.
                   </Link>
@@ -213,6 +226,6 @@ const Login = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

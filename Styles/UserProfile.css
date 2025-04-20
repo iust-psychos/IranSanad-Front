@@ -146,8 +146,17 @@
     align-items: center;
 }
 
-.user-profile-batch > img {
+.user-profile-batch img {
     margin-left: 5%;
+    transition: 0.5s ease-out;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+}
+
+.user-profile-batch img:hover {
+    opacity: 0.8;
+    scale: 1.1;
 }
 
 .user-profile-titles {
@@ -255,4 +264,5 @@
 
 .password-toggle > svg {
     width: 60%;
+    vertical-align: middle;
 }

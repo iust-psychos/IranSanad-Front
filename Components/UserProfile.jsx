@@ -5,13 +5,16 @@ import { toJalaali } from "jalaali-js";
 import axios from "axios";
 import CookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
+import { convertToBase64 } from "../Scripts/base64ImageConverter.js";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import ChangeIcon from "../src/Images/UserProfile/change.svg";
 
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 const changePasswordAPI =
   "http://iransanad.fiust.ir/api/v1/auth/change_password/";
 const changeUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
+const changeProfileImageAPI = "http://iransanad.fiust.ir/api/v1/auth/profile/";
 
 const initialPassword = {
   old_password: "",
@@ -232,6 +235,7 @@ const UserProfile = () => {
             phone_number: userInfo.phone_number,
             first_name: userInfo.first_name,
             last_name: userInfo.last_name,
+            // profile_image: userInfo.profile_image,
           },
           {
             headers: {
@@ -248,6 +252,7 @@ const UserProfile = () => {
           phone_number: response.data.phone_number,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
+          // profile_image: response.data.profile_image,
         });
       } catch (error) {
         console.log(error);
@@ -261,6 +266,42 @@ const UserProfile = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showNewPassword2, setShowNewPassword2] = useState(false);
+
+  const handleProfileImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formatted_file = await convertToBase64(file);
+    console.log(formatted_file);
+
+    try {
+      const response = await axios.post(
+        changeProfileImageAPI,
+        {
+          profile_image: formatted_file,
+        },
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      showSuccessToast("تصویر پروفایل با موفقیت تغییر کرد");
+      setUser((prev) => ({
+        ...prev,
+        profile_image: response.data.profile_image,
+      }));
+    } catch (error) {
+      console.error("Profile image upload error:", error);
+      if (error.status == 413) {
+        showErrorToast("حجم فایل ارسالی بیش از حد مجاز است");
+      } else {
+        showErrorToast("خطا در تغییر تصویر پروفایل");
+      }
+    }
+  };
 
   return (
     <div className="user-profile">
@@ -278,7 +319,26 @@ const UserProfile = () => {
           <div className="user-profile-area-body-content">
             <div className="user-profile-info-1">
               <div className="user-profile-batch">
-                <img src={userProfileIcon} alt="user profile image" />
+                <input
+                  type="file"
+                  id="profile-image-input"
+                  style={{ display: "none" }}
+                  accept="image/*"
+                  onChange={handleProfileImageChange}
+                />
+                <img
+                  src={
+                    user && user.profile_image
+                      ? "http://iransanad.fiust.ir/" + user.profile_image
+                      : userProfileIcon
+                  }
+                  alt="user profile image"
+                  style={!edit ? { cursor: "pointer" } : { cursor: "default" }}
+                  onClick={() =>
+                    !edit &&
+                    document.getElementById("profile-image-input").click()
+                  }
+                />
                 <div className="user-profile-titles">
                   <h3>
                     {" "}
@@ -350,12 +410,6 @@ const UserProfile = () => {
                   }
                 />
               </div>
-              {/* <div className="user-profile-label-input">
-                <label htmlFor="country">کشور</label>
-                <select name="country" defaultValue={"ایران"} disabled={edit}>
-                  <option value="Iran">ایران</option>
-                </select>
-              </div> */}
               <div className="user-profile-label-input">
                 <label htmlFor="phone_number">شماره تلفن</label>
                 <input
@@ -400,7 +454,11 @@ const UserProfile = () => {
                     <button
                       type="button"
                       className="password-toggle"
-                      onClick={() => setShowOldPassword(!showOldPassword)}
+                      onClick={() => {
+                        if (!edit) {
+                          setShowOldPassword(!showOldPassword);
+                        }
+                      }}
                     >
                       {showOldPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -421,7 +479,11 @@ const UserProfile = () => {
                     <button
                       type="button"
                       className="password-toggle"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      onClick={() => {
+                        if (!edit) {
+                          setShowNewPassword(!showNewPassword);
+                        }
+                      }}
                     >
                       {showNewPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -442,7 +504,11 @@ const UserProfile = () => {
                     <button
                       type="button"
                       className="password-toggle"
-                      onClick={() => setShowNewPassword2(!showNewPassword2)}
+                      onClick={() => {
+                        if (!edit) {
+                          setShowNewPassword2(!showNewPassword2);
+                        }
+                      }}
                     >
                       {showNewPassword2 ? <FaEyeSlash /> : <FaEye />}
                     </button>
