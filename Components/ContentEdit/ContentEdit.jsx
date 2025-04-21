@@ -20,10 +20,10 @@ import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND as FORMAT_TEXT } 
 import Header from "../Header";
 import React, { Fragment } from "react"; 
 import ToolbarPlugin from "../ToolbarPlugin";
-
+import styles from './ContentEdit.module.css';
 const theme = {
-  ltr: 'ltr',
-  rtl: 'rtl',
+  rtl: 'editor-rtl',
+  ltr: 'editor-ltr',
   paragraph: 'editor-paragraph',
   quote: 'editor-quote',
   heading: {
@@ -78,8 +78,12 @@ const ContentEdit = () => {
   return (
     <div className="editor-container">
       <Header />
+      
       <LexicalComposer initialConfig={initialConfig}>
-        <ToolbarPlugin />
+      <div className={styles.toolbar}>
+      <ToolbarPlugin />
+      </div>
+        
         <div className="editor-inner">
           <RichTextPlugin
             contentEditable={<ContentEditable className="editor-input" />}
