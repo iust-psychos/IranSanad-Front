@@ -50,16 +50,15 @@ const SignUp = () => {
       .required("رمز عبور اجباری است")
       .min(8, "رمز عبور باید حداقل 8 کارکتر باشد")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%#*?&])[A-Za-z\d@$!%#*?&]{8,}$/,
         "کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
       ),
     repeatpassword: yup
       .string()
       .required("تکرار رمز عبور اجباری است")
-      .min(8, "تکرار رمز عبور باید حداقل 8 کارکتر باشد")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-        "تکرار کلمه عبور باید شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
+        `${formData.repeatpassword}`,
+        "تکرار رمز وارد شده با رمز تطابق ندارد"
       ),
   });
 
@@ -131,7 +130,7 @@ const SignUp = () => {
   const handleChangeCode = (e) => {
     setValidationCode(e.target.value);
   };
-  
+
   const handleSubmitCode = async (e) => {
     e.preventDefault();
 
