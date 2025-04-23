@@ -1,9 +1,9 @@
 import { Menu } from "@base-ui-components/react/menu";
-import DEFAULT_IMAGE from "../../src/Images/UserProfile/Default.png";
+import DEFAULT_IMAGE from "../../../src/Images/UserProfile/Default.png";
 import { IconUserProfileClose } from "./Icons";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { userInfoLoader } from "../../Managers/user-dashboard-manager";
+import { userInfoLoader } from "../../../Managers/user-dashboard-manager";
 
 export default function UserProfileDropdown() {
   const {

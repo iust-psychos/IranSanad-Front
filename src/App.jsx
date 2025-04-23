@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SignUp from "../Components/Sign_up";
 import Login from "../Components/Login";
 import Forgot_password from "../Components/Forgot_password";
-import UserDashboard from "../Components/user-dashboard/UserDashboard";
+import UserDashboard from "../Components/user-dashboard/components/UserDashboard";
 import { userDashboardLoader } from "../Managers/user-dashboard-manager";
 import Loading from "../Components/Loading";
 import UserProfile from "../Components/UserProfile";
