@@ -1,20 +1,16 @@
 import React, { useState, useRef } from "react";
 import { Dialog } from "@base-ui-components/react/dialog";
 
-export default function DocumentRenameModal() {
-  const [dialogOpen, setDialogOpen] = useState(false);
+export default function DocumentRenameModal({ open }) {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
 
   return (
     <Dialog.Root
-      open={dialogOpen}
+      open={open}
       onOpenChange={(open) => {
         if (!open && textareaValue) {
           setConfirmationOpen(true);
-        } else {
-          setTextareaValue("");
-          setDialogOpen(open);
         }
       }}
     >

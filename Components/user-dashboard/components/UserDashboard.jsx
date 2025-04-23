@@ -1,13 +1,12 @@
 import React, { useState, useRef } from "react";
-import "./user-dashboard.css";
-import { initialDocuments } from "../../Managers/user-dashboard-manager.js";
+import "../styles/user-dashboard.css";
 import { IconLogo, IconPlus, IconSearch, IconPlusFill } from "./Icons.jsx";
 import DocumentOptionsDropdown from "./DocumentOptionsDropdown.jsx";
 import DocumentSortByDropdown from "./DocumentSortByDropdown.jsx";
 import UserProfileDropdown from "./UserProfileDropdown.jsx";
-import { toPersianDigit } from "../../Scripts/persian-number-converter.js";
+import { toPersianDigit } from "../../../Scripts/persian-number-converter.js";
 import { useLoaderData } from "react-router-dom";
-import { toPersianDate } from "../../Scripts/persian-date-converter.js";
+import { toPersianDate } from "../../../Scripts/persian-date-converter.js";
 
 export default function UserDashboard() {
   const searchRef = useRef();
