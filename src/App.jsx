@@ -26,7 +26,7 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <UserDashboard />,
-    loader: userDashboardLoader, // now loader works
+    loader: userDashboardLoader,
   },
   {
     path: "/EmailVerification",

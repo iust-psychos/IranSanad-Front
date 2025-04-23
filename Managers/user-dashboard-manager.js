@@ -1,4 +1,5 @@
 import CookieManager from "./CookieManager";
+import { apiFetch } from "../Scripts/api-fetch";
 
 export const initialDocuments = [
   {
@@ -32,16 +33,15 @@ export const initialDocuments = [
 ];
 
 export const userDashboardLoader = async () => {
-  const token = CookieManager.LoadToken();
-  const res = await fetch("http://iransanad.fiust.ir/api/v1/docs/", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  return apiFetch("http://iransanad.fiust.ir/api/v1/docs/");
+};
+
+export const userInfoLoader = async () => {
+  return apiFetch("http://iransanad.fiust.ir/api/v1/auth/info/");
+};
+
+export const deleteDocument = async (id) => {
+  return await apiFetch(`http://iransanad.fiust.ir/api/v1/docs/${id}/`, {
+    method: "DELETE",
   });
-  if (!res.ok) {
-    console.error(res);
-    throw new Error("User Dashboard fetch failed");
-  }
-  return await res.json();
 };

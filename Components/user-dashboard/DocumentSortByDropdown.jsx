@@ -13,13 +13,13 @@ export default function DocumentSortByDropdown({ updateStateFunction }) {
           <Menu.Popup className="user-dashboard-dropdown dropdown-menu">
             <Menu.Item
               className="user-dashboard-dropdown dropdown-item"
-              onClick={() => updateStateFunction("last_seen_time")}
+              onClick={() => updateStateFunction("created_at")}
             >
-              زمان آخرین بازدید
+              زمان ایجاد
             </Menu.Item>
             <Menu.Item
               className="user-dashboard-dropdown dropdown-item"
-              onClick={() => updateStateFunction("last_modified_time")}
+              onClick={() => updateStateFunction("updated_at")}
             >
               زمان آخرین تغییر
             </Menu.Item>
