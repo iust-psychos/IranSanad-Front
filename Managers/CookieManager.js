@@ -9,4 +9,9 @@ const LoadToken = () => {
     return Cookies.get(TokenCookieKey.TokenCookieKey);
 }
 
-export default { SaveToken, LoadToken };
+const RemoveToken = () => {
+
+    Cookies.remove(TokenCookieKey.TokenCookieKey);
+}
+
+export default { SaveToken, LoadToken, RemoveToken };
