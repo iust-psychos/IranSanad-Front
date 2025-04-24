@@ -1,105 +1,166 @@
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import {LexicalErrorBoundary} from '@lexical/react/LexicalErrorBoundary';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
-import { ListItemNode, ListNode } from '@lexical/list';
-import { CodeHighlightNode, CodeNode } from '@lexical/code';
-import { AutoLinkNode, LinkNode } from '@lexical/link';
-import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
-import { ListPlugin } from '@lexical/react/LexicalListPlugin';
-import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
-import { TRANSFORMERS } from '@lexical/markdown';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { FORMAT_TEXT_COMMAND, FORMAT_ELEMENT_COMMAND } from 'lexical';
-import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND as FORMAT_TEXT } from 'lexical';
-import Header from "../Header";
-import React, { Fragment } from "react"; 
-import ToolbarPlugin from "../ToolbarPlugin";
-import styles from './ContentEdit.module.css';
-const theme = {
-  rtl: 'editor-rtl',
-  ltr: 'editor-ltr',
-  paragraph: 'editor-paragraph',
-  quote: 'editor-quote',
-  heading: {
-    h1: 'editor-heading-h1',
-    h2: 'editor-heading-h2',
-    h3: 'editor-heading-h3',
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+import {CollaborationPlugin} from '@lexical/react/LexicalCollaborationPlugin';
+import {LexicalComposer} from '@lexical/react/LexicalComposer';
+import {Fragment, useCallback, useEffect, useRef, useState} from 'react';
+import * as Y from 'yjs';
+
+import Editor from './Editor';
+import ExampleTheme from './ExampleTheme';
+import {getRandomUserProfile} from './getRandomUserProfile';
+import {createWebsocketProvider} from './providers';
+
+// interface ActiveUserProfile extends UserProfile {
+//   userId: number;
+// }
+
+const editorConfig = {
+  // NOTE: This is critical for collaboration plugin to set editor state to null. It
+  // would indicate that the editor should not try to set any default state
+  // (not even empty one), and let collaboration plugin do it instead
+  editorState: null,
+  namespace: 'React.js Collab Demo',
+  nodes: [],
+  // Handling of errors during update
+  onError(error) {
+    throw error;
   },
-  list: {
-    nested: {
-      listitem: 'editor-nested-listitem',
-    },
-    ol: 'editor-list-ol',
-    ul: 'editor-list-ul',
-    listitem: 'editor-listitem',
-  },
-  link: 'editor-link',
-  text: {
-    bold: 'editor-text-bold',
-    italic: 'editor-text-italic',
-    overflowed: 'editor-text-overflowed',
-    underline: 'editor-text-underline',
-    strikethrough: 'editor-text-strikethrough',
-    underlineStrikethrough: 'editor-text-underlineStrikethrough',
-    code: 'editor-text-code',
-  },
+  // The editor theme
+  theme: ExampleTheme,
 };
 
-function onError(error) {
-  console.error(error);
-}
-
 const ContentEdit = () => {
-  const initialConfig = {
-    namespace: 'MyEditor',
-    theme,
-    onError,
-    nodes: [
-      HeadingNode,
-      ListNode,
-      ListItemNode,
-      QuoteNode,
-      CodeNode,
-      CodeHighlightNode,
-      TableNode,
-      TableCellNode,
-      TableRowNode,
-      AutoLinkNode,
-      LinkNode
-    ]
+  const providerName = 'websockets';
+  const [userProfile, setUserProfile] = useState(() => getRandomUserProfile());
+  const containerRef = useRef(null);
+  const [yjsProvider, setYjsProvider] = useState(null);
+  const [connected, setConnected] = useState(false);
+  const [activeUsers, setActiveUsers] = useState([]);
+
+  const handleAwarenessUpdate = useCallback(() => {
+    const awareness = yjsProvider.awareness;
+    setActiveUsers(
+      Array.from(awareness.getStates().entries()).map(
+        ([userId, {color, name}]) => ({
+          color,
+          name,
+          userId,
+        }),
+      ),
+    );
+  }, [yjsProvider]);
+
+  const handleConnectionToggle = () => {
+    if (yjsProvider == null) {
+      return;
+    }
+    if (connected) {
+      yjsProvider.disconnect();
+    } else {
+      yjsProvider.connect();
+    }
   };
 
+  useEffect(() => {
+    if (yjsProvider == null) {
+      return;
+    }
+
+    yjsProvider.awareness.on('update', handleAwarenessUpdate);
+
+    return () => yjsProvider.awareness.off('update', handleAwarenessUpdate);
+  }, [yjsProvider, handleAwarenessUpdate]);
+
+  const providerFactory = useCallback(
+    (id, yjsDocMap) => {
+      const provider = createWebsocketProvider(id, yjsDocMap);
+      provider.on('status', (event) => {
+        setConnected(
+          // Websocket provider
+          event.status === 'connected' ||
+            // WebRTC provider has different approact to status reporting
+            ('connected' in event && event.connected === true),
+        );
+      });
+
+      // This is a hack to get reference to provider with standard CollaborationPlugin.
+      // To be fixed in future versions of Lexical.
+      setTimeout(() => setYjsProvider(provider), 0);
+
+      return provider;
+    },
+    [providerName],
+  );
+
   return (
-    <div className="editor-container">
-      <Header />
-      
-      <LexicalComposer initialConfig={initialConfig}>
-      <div className={styles.toolbar}>
-      <ToolbarPlugin />
-      </div>
-        
-        <div className="editor-inner">
-          <RichTextPlugin
-            contentEditable={<ContentEditable className="editor-input" />}
-            placeholder={<div className="editor-placeholder">Enter some text...</div>}
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-          <HistoryPlugin />
-          <AutoFocusPlugin />
-          <ListPlugin />
-          <LinkPlugin />
-          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-          <OnChangePlugin  />
-        </div>
+    <div ref={containerRef}>
+      <p>
+        <b>Used provider:</b>{' '}
+        {providerName === 'webrtc'
+          ? 'WebRTC (within browser communication via BroadcastChannel fallback, unless run locally)'
+          : 'Websockets (cross-browser communication)'}
+        <br />
+        {window.location.hostname === 'localhost' ? (
+          providerName === 'webrtc' ? (
+            <a href="/app?provider=wss">Enable WSS</a>
+          ) : (
+            <a href="/app">Enable WebRTC</a>
+          )
+        ) : null}{' '}
+        {/* WebRTC provider doesn't implement disconnect correctly */}
+        {providerName !== 'webrtc' ? (
+          <button onClick={handleConnectionToggle}>
+            {connected ? 'Disconnect' : 'Connect'}
+          </button>
+        ) : null}
+      </p>
+      <p>
+        <b>My Name:</b>{' '}
+        <input
+          type="text"
+          value={userProfile.name}
+          onChange={(e) =>
+            setUserProfile((profile) => ({...profile, name: e.target.value}))
+          }
+        />{' '}
+        <input
+          type="color"
+          value={userProfile.color}
+          onChange={(e) =>
+            setUserProfile((profile) => ({...profile, color: e.target.value}))
+          }
+        />
+      </p>
+      <p>
+        <b>Active users:</b>{' '}
+        {activeUsers.map(({name, color, userId}, idx) => (
+          <Fragment key={userId}>
+            <span style={{color}}>{name}</span>
+            {idx === activeUsers.length - 1 ? '' : ', '}
+          </Fragment>
+        ))}
+      </p>
+      <LexicalComposer initialConfig={editorConfig}>
+        {/* With CollaborationPlugin - we MUST NOT use @lexical/react/LexicalHistoryPlugin */}
+        <CollaborationPlugin
+          id="lexical/react-rich-collab"
+          providerFactory={providerFactory}
+          // Unless you have a way to avoid race condition between 2+ users trying to do bootstrap simultaneously
+          // you should never try to bootstrap on client. It's better to perform bootstrap within Yjs server.
+          shouldBootstrap={false}
+          username={userProfile.name}
+          cursorColor={userProfile.color}
+          cursorsContainerRef={containerRef}
+        />
+        <Editor />
       </LexicalComposer>
     </div>
   );
-};
+}
 
 export default ContentEdit;
