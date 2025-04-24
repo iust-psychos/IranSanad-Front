@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ContentEdit from "../Components/ContentEdit/ContentEdit";
 import EmailVerification from "../Components/EmailVerification";
+import Share from "../Components/Share";
 
 function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
@@ -57,6 +58,7 @@ function AppContent() {
           <Route path="/contentedit" element={<ContentEdit />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot_password" element={<Forgot_password />} />
+          <Route path="/share" element={<Share />} />
         </Routes>
       )}
     </>

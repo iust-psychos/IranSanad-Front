@@ -1,4 +1,4 @@
-import TokenCookieKey from "./constants";
+import TokenCookieKey from './constants';
 
 const SaveToken = (expire , token) => {
     const date = new Date();
