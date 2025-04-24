@@ -9,7 +9,7 @@
 // import {Provider} from '@lexical/yjs';
 import {WebsocketProvider} from 'y-websocket';
 import * as Y from 'yjs';
-
+import CookieManager from '../../Managers/CookieManager';
 let idSuffix = 0; // In React Strict mode "new WebrtcProvider" may be called twice
 
 
@@ -18,9 +18,9 @@ export function createWebsocketProvider(
   yjsDocMap,
 ) {
   const doc = getDocFromMap(id, yjsDocMap);
-
+  const token = CookieManager.LoadToken();
   // @ts-expect-error TODO: FIXME
-  return new WebsocketProvider('ws://localhost:5003', id, doc, {
+  return new WebsocketProvider($`ws://iransanad.fiust.ir/:8000/ws/save/doc-init/?Authorization={token}`, id, doc, {
     connect: false,
   });
 }
