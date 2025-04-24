@@ -9,6 +9,7 @@ import UserProfile from "../Components/UserProfile";
 import { ToastContainer } from "react-toastify";
 import ContentEdit from "../Components/ContentEdit/ContentEdit";
 import EmailVerification from "../Components/EmailVerification";
+import ErrorPage from "../Components/error/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
   {
     path: "/forgot_password",
     element: <Forgot_password />,
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
 

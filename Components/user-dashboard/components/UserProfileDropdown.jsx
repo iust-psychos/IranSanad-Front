@@ -1,11 +1,14 @@
 import { Menu } from "@base-ui-components/react/menu";
 import DEFAULT_IMAGE from "../../../src/Images/UserProfile/Default.png";
 import { IconUserProfileClose } from "./Icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { userInfoLoader } from "../../../Managers/user-dashboard-manager";
+import CookieManager from "../../../Managers/CookieManager";
+import { RingLoader } from "react-spinners";
 
 export default function UserProfileDropdown() {
+  const navigate = useNavigate();
   const {
     data: userInfo,
     isLoading,
@@ -17,6 +20,13 @@ export default function UserProfileDropdown() {
     enabled: false,
   });
 
+  const handleSignOut = () => {
+    CookieManager.RemoveToken();
+    setTimeout(() => {
+      navigate("/login");
+    }, 1000);
+  };
+
   return (
     <Menu.Root modal={false} onOpenChange={(open) => open && refetch()}>
       <Menu.Trigger className="menu-profile">
@@ -26,7 +36,7 @@ export default function UserProfileDropdown() {
         <Menu.Positioner sideOffset={6} align="end">
           <Menu.Popup className="user-dashboard-dropdown profile-dropdown">
             {isLoading ? (
-              <div className="p-4">در حال بارگذاری...</div>
+              <RingLoader color="#bba1ea" size="1.5rem" />
             ) : isError ? (
               <div className="p-4 text-red-600">خطا در دریافت اطلاعات</div>
             ) : userInfo ? (
@@ -53,13 +63,13 @@ export default function UserProfileDropdown() {
                   <p>{userInfo.email}</p>
                 </section>
                 <menu className="user-dashboard-dropdown profile-dropdown-buttons">
-                  <Link to="/profile">
+                  <Link to="/profile" discover="none">
                     <button>تغییر مشخصات کاربری</button>
                   </Link>
-                  <Link to="/dashboard">
+                  <Link to="/dashboard" discover="none">
                     <button>داشبورد کاربر</button>
                   </Link>
-                  <button>خروج از حساب</button>
+                  <button onClick={handleSignOut}>خروج از حساب</button>
                 </menu>
               </>
             ) : null}

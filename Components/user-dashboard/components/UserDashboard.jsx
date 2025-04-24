@@ -12,7 +12,6 @@ export default function UserDashboard() {
   const searchRef = useRef();
   const [sortField, setSortField] = useState("updated_at");
   const fetchedDocuments = useLoaderData();
-  console.log(fetchedDocuments);
   const [documents, setDocuments] = useState(fetchedDocuments);
 
   const handleSearch = () => {
