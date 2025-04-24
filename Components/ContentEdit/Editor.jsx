@@ -21,7 +21,7 @@ export default function Editor() {
           ErrorBoundary={LexicalErrorBoundary}
         />
         <AutoFocusPlugin />
-        <TreeViewPlugin />
+        {/* <TreeViewPlugin /> */}
       </div>
     </div>
   );

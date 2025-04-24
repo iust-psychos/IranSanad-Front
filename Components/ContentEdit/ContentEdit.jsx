@@ -9,11 +9,12 @@ import {CollaborationPlugin} from '@lexical/react/LexicalCollaborationPlugin';
 import {LexicalComposer} from '@lexical/react/LexicalComposer';
 import {Fragment, useCallback, useEffect, useRef, useState} from 'react';
 import * as Y from 'yjs';
-
+import styles from './ContentEdit.module.css';
 import Editor from './Editor';
 import ExampleTheme from './ExampleTheme';
 import {getRandomUserProfile} from './getRandomUserProfile';
 import {createWebsocketProvider} from './providers';
+import Header from '../Header';
 
 // interface ActiveUserProfile extends UserProfile {
 //   userId: number;
@@ -99,7 +100,7 @@ const ContentEdit = () => {
 
   return (
     <div ref={containerRef}>
-      <p>
+      {/* <p>
         <b>Used provider:</b>{' '}
         {providerName === 'webrtc'
           ? 'WebRTC (within browser communication via BroadcastChannel fallback, unless run locally)'
@@ -111,9 +112,9 @@ const ContentEdit = () => {
           ) : (
             <a href="/app">Enable WebRTC</a>
           )
-        ) : null}{' '}
+        ) : null}{' '} */}
         {/* WebRTC provider doesn't implement disconnect correctly */}
-        {providerName !== 'webrtc' ? (
+        {/* {providerName !== 'webrtc' ? (
           <button onClick={handleConnectionToggle}>
             {connected ? 'Disconnect' : 'Connect'}
           </button>
@@ -135,8 +136,8 @@ const ContentEdit = () => {
             setUserProfile((profile) => ({...profile, color: e.target.value}))
           }
         />
-      </p>
-      <p>
+      </p> */}
+      {/* <p>
         <b>Active users:</b>{' '}
         {activeUsers.map(({name, color, userId}, idx) => (
           <Fragment key={userId}>
@@ -144,14 +145,12 @@ const ContentEdit = () => {
             {idx === activeUsers.length - 1 ? '' : ', '}
           </Fragment>
         ))}
-      </p>
+      </p> */}
+      <Header/>
       <LexicalComposer initialConfig={editorConfig}>
-        {/* With CollaborationPlugin - we MUST NOT use @lexical/react/LexicalHistoryPlugin */}
         <CollaborationPlugin
           id="lexical/react-rich-collab"
           providerFactory={providerFactory}
-          // Unless you have a way to avoid race condition between 2+ users trying to do bootstrap simultaneously
-          // you should never try to bootstrap on client. It's better to perform bootstrap within Yjs server.
           shouldBootstrap={false}
           username={userProfile.name}
           cursorColor={userProfile.color}
