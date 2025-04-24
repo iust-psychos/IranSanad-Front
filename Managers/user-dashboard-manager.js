@@ -45,3 +45,10 @@ export const deleteDocument = async (id) => {
     method: "DELETE",
   });
 };
+
+export const renameDocument = async (id, name) => {
+  return await apiFetch(`http://iransanad.fiust.ir/api/v1/docs/${id}/`, {
+    method: "PATCH",
+    body: JSON.stringify({ title: name }),
+  });
+};
