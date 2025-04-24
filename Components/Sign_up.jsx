@@ -12,6 +12,8 @@ import TipStyles from "../Styles/Tip_slide.module.css";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
+import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
+
 const SignUp = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -150,7 +152,7 @@ const SignUp = () => {
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
         <div className={styles.InnerBox}>
-        <div className={styles.detailsContainer}>
+          <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
             <div className={styles.Title}>
               ایران
@@ -210,7 +212,7 @@ const SignUp = () => {
                   name="email"
                   value={formData.email}
                   data-tooltip-id="email_tooltip"
-                  style={{direction:'ltr'}}
+                  style={{ direction: "ltr" }}
                 />
                 {errors.email && (
                   <Tooltip
@@ -300,7 +302,7 @@ const SignUp = () => {
                   ایجاد حساب
                 </button>
                 <p className={styles.noAccLink}>
-                  حساب دارید؟
+                  حساب دارید؟&nbsp;
                   <Link to="/login" className={styles.forgetpasswordlink}>
                     وارد شوید
                   </Link>

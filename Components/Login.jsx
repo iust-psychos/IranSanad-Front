@@ -1,6 +1,6 @@
 import "react";
 import styles from "../Styles/Login.module.css";
-import React, { useState,useRef } from "react";
+import React, { useState, useRef } from "react";
 import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
 import InfoIcon from "@mui/icons-material/Info";
@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
+import cookieManager from "../Managers/CookieManager";
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -81,9 +83,9 @@ const Login = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
-      setErrors({});
       let resp = await LoginManager.Login(formData.email, formData.password);
-      console.log(resp);
+      cookieManager.SaveToken(10, resp.data.tokens.access);
+      let token = cookieManager.LoadToken();
     } catch (err) {
       const validationErrors = {};
       console.log(err.message);
@@ -91,6 +93,7 @@ const Login = () => {
         validationErrors[error.path] = error.message;
       });
       setErrors(validationErrors);
+      icon.current.style.top = "35%";
     }
   };
 
@@ -98,7 +101,7 @@ const Login = () => {
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
         <div className={styles.InnerBox}>
-        <div className={styles.detailsContainer}>
+          <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
             <div className={styles.Title}>
               ایران
@@ -129,7 +132,7 @@ const Login = () => {
                   name="email"
                   value={formData.email}
                   data-tooltip-id="email_tooltip"
-                  style={{direction:'ltr'}}
+                  style={{ direction: "ltr" }}
                 />
                 {errors.email && (
                   <Tooltip
@@ -187,10 +190,12 @@ const Login = () => {
                     content={errors.password}
                   />
                 )}
-                <p style={{marginTop:"1%"}}>
+                <p style={{ marginTop: "1%" }}>
                   <Link
                     to="/forgot_password"
-                    state={errors.email? { email: "" }  :{ email: formData.email }}
+                    state={
+                      errors.email ? { email: "" } : { email: formData.email }
+                    }
                     className={styles.forgetpasswordlink}
                   >
                     فراموشی رمز عبور؟
@@ -213,6 +218,6 @@ const Login = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

@@ -1,24 +1,24 @@
 import React, { useState, useRef } from "react";
-import "./user-dashboard.css";
-import { initialDocuments } from "../../Managers/user-dashboard-manager.js";
+import "../styles/user-dashboard.css";
 import { IconLogo, IconPlus, IconSearch, IconPlusFill } from "./Icons.jsx";
 import DocumentOptionsDropdown from "./DocumentOptionsDropdown.jsx";
 import DocumentSortByDropdown from "./DocumentSortByDropdown.jsx";
 import UserProfileDropdown from "./UserProfileDropdown.jsx";
-import { toPersianDigits } from "../../Scripts/persian-number-converter.js";
+import { toPersianDigit } from "../../../Scripts/persian-number-converter.js";
 import { useLoaderData } from "react-router-dom";
+import { toPersianDate } from "../../../Scripts/persian-date-converter.js";
 
 export default function UserDashboard() {
   const searchRef = useRef();
-  const [sortField, setSortField] = useState("last_seen_time");
-  // const fetchedDocuments = useLoaderData();
-  const [documents, setDocuments] = useState(initialDocuments);
+  const [sortField, setSortField] = useState("updated_at");
+  const fetchedDocuments = useLoaderData();
+  const [documents, setDocuments] = useState(fetchedDocuments);
 
   const handleSearch = () => {
     const searchValue = searchRef.current.value;
     setDocuments(
-      initialDocuments.filter((doc) =>
-        doc.name.toLowerCase().includes(searchValue.toLowerCase())
+      fetchedDocuments.filter((doc) =>
+        doc.title.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
   };
@@ -56,7 +56,7 @@ export default function UserDashboard() {
         </button>
       </menu>
 
-      {documents.length === 0 ? (
+      {documents === null || documents.length === 0 ? (
         <section className="not-found">
           <p>
             {`هیچ سندی ${searchRef.current?.value ? "با این مشخصات" : ""} برای
@@ -70,10 +70,10 @@ export default function UserDashboard() {
               <th>نام سند</th>
               <th>مالک سند</th>
               <th>
-                {sortField === "last_modified_time"
+                {sortField === "updated_at"
                   ? "زمان آخرین تغییر"
-                  : sortField === "last_seen_time"
-                  ? "زمان آخرین بازدید"
+                  : sortField === "created_at"
+                  ? "زمان ایجاد"
                   : ""}
               </th>
               <th>
@@ -83,13 +83,13 @@ export default function UserDashboard() {
           </thead>
           <tbody>
             {documents
-              .sort((doc) => doc[sortField])
+              .sort((a, b) => new Date(a[sortField]) - new Date(b[sortField]))
               .reverse()
               .map((doc, index) => (
-                <tr key={doc.id}>
-                  <td>{toPersianDigits(doc.name)}</td>
-                  <td>{doc.owner}</td>
-                  <td>{toPersianDigits(doc[sortField])}</td>
+                <tr key={doc.id} onClick={() => alert("fuck")}>
+                  <td>{toPersianDigit(doc.title)}</td>
+                  <td>{toPersianDigit(doc.owner)}</td>
+                  <td>{toPersianDate(doc[sortField])}</td>
                   <td>
                     <DocumentOptionsDropdown
                       document={doc}

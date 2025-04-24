@@ -1,33 +1,78 @@
-import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import "../Styles/App.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SignUp from "../Components/Sign_up";
 import Login from "../Components/Login";
 import Forgot_password from "../Components/Forgot_password";
-import UserDashboard from "../Components/user-dashboard/UserDashboard";
+import UserDashboard from "../Components/user-dashboard/components/UserDashboard";
 import { userDashboardLoader } from "../Managers/user-dashboard-manager";
 import Loading from "../Components/Loading";
 import UserProfile from "../Components/UserProfile";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import ContentEdit from "../Components/ContentEdit/ContentEdit";
 import EmailVerification from "../Components/EmailVerification";
+import ErrorPage from "../Components/error/ErrorPage";
+import Share from "../Components/Share";
+import { useState, useEffect } from "react";
+import "../Styles/App.css";
+import "react-toastify/dist/ReactToastify.css";
 
-function AppContent() {
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+  },
+  {
+    path: "/profile",
+    element: <UserProfile />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/dashboard",
+    element: <UserDashboard />,
+    loader: userDashboardLoader,
+  },
+  {
+    path: "/EmailVerification",
+    element: <EmailVerification />,
+  },
+  {
+    path: "/contentedit",
+    element: <ContentEdit />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
+  {
+    path: "/forgot_password",
+    element: <Forgot_password />,
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
+  },
+  {
+    path: "/share",
+    element: <Share />,
+  },
+]);
+
+function Root() {
   const [isLoading, setIsLoading] = useState(true);
-  const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname === "/") {
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 3500);
-      return () => clearTimeout(timer);
-    } else {
+    const timer = setTimeout(() => {
       setIsLoading(false);
-    }
-  }, [location.pathname]);
+    }, 3500);
+    return () => clearTimeout(timer);
+  }, []);
 
+  return isLoading ? <Loading /> : null;
+}
+
+export default function App() {
   return (
     <>
       <ToastContainer
@@ -42,31 +87,7 @@ function AppContent() {
         pauseOnHover
         theme="colored"
       />
-      {isLoading && location.pathname === "/" ? (
-        <Loading />
-      ) : (
-        <Routes>
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/dashboard"
-            element={<UserDashboard />}
-            // loader={userDashboardLoader}
-          />
-          <Route path="/EmailVerification" element={<EmailVerification />} />
-          <Route path="/contentedit" element={<ContentEdit />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/forgot_password" element={<Forgot_password />} />
-        </Routes>
-      )}
+      <RouterProvider router={router} />
     </>
-  );
-}
-
-export default function App() {
-  return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
   );
 }
