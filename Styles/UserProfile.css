@@ -146,43 +146,8 @@
     align-items: center;
 }
 
-.user-profile-image-container {
+.user-profile-batch > img {
     margin-left: 5%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* align-items: center; */
-}
-
-.user-profile-image-editors {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: absolute;
-    bottom: 0;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.user-profile-image-editor {
-    margin-bottom: -12%;
-    margin-left: -8%;
-    margin-right: -8%;
-    width: 20px;
-    height: 20px;
-}
-
-.user-profile-image-container img {
-    transition: 0.5s ease-out;
-    border-radius: 50%;
-    width: 64px;
-    height: 64px;
-}
-
-.user-profile-image-container img:hover {
-    opacity: 0.8;
-    scale: 1.1;
 }
 
 .user-profile-titles {
@@ -194,7 +159,6 @@
     font-family: 'Vazir';
     font-weight: bold;
     font-size: 20px;
-    white-space: nowrap;
 }
 
 .user-profile-titles > p {
@@ -202,7 +166,6 @@
     font-family: 'Vazir';
     font-weight: 100;
     font-size: 15px;
-    white-space: nowrap;
 }
 
 .user-profile-info-2 {
@@ -292,5 +255,4 @@
 
 .password-toggle > svg {
     width: 60%;
-    vertical-align: middle;
 }

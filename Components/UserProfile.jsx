@@ -5,18 +5,13 @@ import { toJalaali } from "jalaali-js";
 import axios from "axios";
 import CookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
-import { convertToBase64 } from "../Scripts/base64ImageConverter.js";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { FaEdit } from "react-icons/fa";
-import { TiDelete } from "react-icons/ti";
 
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 const changePasswordAPI =
   "http://iransanad.fiust.ir/api/v1/auth/change_password/";
 const changeUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
-const changeProfileImageAPI = "http://iransanad.fiust.ir/api/v1/auth/profile/";
-const baseAPI = "http://iransanad.fiust.ir";
 
 const initialPassword = {
   old_password: "",
@@ -122,9 +117,6 @@ const UserProfile = () => {
     }));
   };
 
-  const [previewImage, setPreviewImage] = useState(null);
-  const [selectedImageFile, setSelectedImageFile] = useState(null);
-
   const [passwordData, setPasswordData] = useState(initialPassword);
   const handleChangePassword = (event) => {
     const { name, value } = event.target;
@@ -155,10 +147,6 @@ const UserProfile = () => {
       return true;
     }
     return false;
-  };
-
-  const checkChangeProfileImage = () => {
-    return !!selectedImageFile;
   };
 
   const getErrorMessage = (error) => {
@@ -204,7 +192,6 @@ const UserProfile = () => {
   const [edit, setEdit] = useState(true);
   const handleSave = async (event) => {
     event.preventDefault();
-
     if (edit === false && checkChangePassword()) {
       try {
         const response = await axios.post(
@@ -229,8 +216,7 @@ const UserProfile = () => {
         const errorMessage =
           error.response?.data?.detail ||
           error.response?.data?.message ||
-          (error.response?.data?.non_field_errors &&
-            error.response?.data?.non_field_errors[0]) ||
+          error.response?.data?.non_field_errors[0] ||
           "خطا در تغییر رمز عبور";
         showErrorToast(errorMessage);
       }
@@ -256,54 +242,16 @@ const UserProfile = () => {
         );
         console.log(response);
         showSuccessToast("اطلاعات با موفقیت ذخیره شد");
-        setUser((prev) => ({
-          ...prev,
+        setUser({
           username: response.data.username,
           email: response.data.email,
           phone_number: response.data.phone_number,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
-        }));
+        });
       } catch (error) {
         console.log(error);
         showErrorToast(getErrorMessage(error));
-      }
-    }
-
-    if (edit === false && checkChangeProfileImage()) {
-      console.log("in");
-      try {
-        const response = await axios.post(
-          changeProfileImageAPI,
-          {
-            profile_image: selectedImageFile,
-          },
-          {
-            headers: {
-              Authorization: `JWT ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log("response:", response);
-        showSuccessToast("تصویر پروفایل با موفقیت تغییر کرد");
-        setUser((prev) => ({
-          ...prev,
-          profile_image: previewImage, // response.data.profile_image,
-        }));
-
-        if (previewImage) {
-          URL.revokeObjectURL(previewImage);
-        }
-        // setPreviewImage(null);
-
-        setSelectedImageFile(null);
-        console.log(user.profile_image);
-      } catch (error) {
-        console.log(error);
-        showErrorToast(getErrorMessage(error));
-        setPreviewImage(null);
-        setSelectedImageFile(null);
       }
     }
 
@@ -313,43 +261,6 @@ const UserProfile = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showNewPassword2, setShowNewPassword2] = useState(false);
-
-  const handleProfileImageChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const imageUrl = URL.createObjectURL(file);
-    setPreviewImage(imageUrl);
-
-    try {
-      const base64Image = await convertToBase64(file);
-      setSelectedImageFile(base64Image);
-
-      setUserInfo((prev) => ({
-        ...prev,
-        profile_image: base64Image,
-      }));
-
-      // Use the object URL for immediate display
-      setUser((prev) => ({
-        ...prev,
-        profile_image: imageUrl,
-      }));
-    } catch (error) {
-      console.error("Error converting image:", error);
-      showErrorToast("خطا در تبدیل تصویر");
-    }
-  };
-
-  const handleProfileImageRemove = async (event) => {
-    setPreviewImage(null);
-    setUser((prev) => ({
-      ...prev,
-      profile_image: "",
-    }));
-    const default_image = await convertToBase64(userProfileIcon);
-    setSelectedImageFile(default_image);
-  };
 
   return (
     <div className="user-profile">
@@ -367,60 +278,7 @@ const UserProfile = () => {
           <div className="user-profile-area-body-content">
             <div className="user-profile-info-1">
               <div className="user-profile-batch">
-                <div className="user-profile-image-container">
-                  <input
-                    type="file"
-                    id="profile-image-input"
-                    style={{ display: "none" }}
-                    accept="image/*"
-                    onChange={handleProfileImageChange}
-                  />
-                  <img
-                    src={
-                      previewImage ||
-                      (user && user.profile_image
-                        ? user.profile_image.startsWith("blob:")
-                          ? user.profile_image
-                          : baseAPI + user.profile_image
-                        : userProfileIcon)
-                    }
-                    alt="user profile image"
-                  />
-                  <div className="user-profile-image-editors">
-                    <FaEdit
-                      fill="#AE8EE6"
-                      className="user-profile-image-editor"
-                      style={
-                        !edit
-                          ? {
-                              cursor: "pointer",
-                            }
-                          : {
-                              cursor: "initial",
-                            }
-                      }
-                      onClick={() =>
-                        !edit &&
-                        document.getElementById("profile-image-input").click()
-                      }
-                    />
-                    <TiDelete
-                      fill="#AE8EE6"
-                      className="user-profile-image-editor"
-                      style={
-                        !edit
-                          ? {
-                              cursor: "pointer",
-                            }
-                          : {
-                              cursor: "initial",
-                            }
-                      }
-                      onClick={() => !edit && handleProfileImageRemove}
-                    />
-                  </div>
-                </div>
-
+                <img src={userProfileIcon} alt="user profile image" />
                 <div className="user-profile-titles">
                   <h3>
                     {" "}
@@ -451,7 +309,7 @@ const UserProfile = () => {
                   placeholder="نام خود را وارد کنید."
                   autoComplete="on"
                   disabled={edit}
-                  value={userInfo.first_name}
+                  value={`${userInfo.first_name}`}
                   onChange={handleChangeUserInfo}
                 />
               </div>
@@ -464,7 +322,7 @@ const UserProfile = () => {
                   placeholder="نام خانوادگی خود را وارد کنید."
                   autoComplete="on"
                   disabled={edit}
-                  value={userInfo.last_name}
+                  value={`${userInfo.last_name}`}
                   onChange={handleChangeUserInfo}
                 />
               </div>
@@ -492,6 +350,12 @@ const UserProfile = () => {
                   }
                 />
               </div>
+              {/* <div className="user-profile-label-input">
+                <label htmlFor="country">کشور</label>
+                <select name="country" defaultValue={"ایران"} disabled={edit}>
+                  <option value="Iran">ایران</option>
+                </select>
+              </div> */}
               <div className="user-profile-label-input">
                 <label htmlFor="phone_number">شماره تلفن</label>
                 <input
@@ -536,11 +400,7 @@ const UserProfile = () => {
                     <button
                       type="button"
                       className="password-toggle"
-                      onClick={() => {
-                        if (!edit) {
-                          setShowOldPassword(!showOldPassword);
-                        }
-                      }}
+                      onClick={() => setShowOldPassword(!showOldPassword)}
                     >
                       {showOldPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -561,11 +421,7 @@ const UserProfile = () => {
                     <button
                       type="button"
                       className="password-toggle"
-                      onClick={() => {
-                        if (!edit) {
-                          setShowNewPassword(!showNewPassword);
-                        }
-                      }}
+                      onClick={() => setShowNewPassword(!showNewPassword)}
                     >
                       {showNewPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -586,11 +442,7 @@ const UserProfile = () => {
                     <button
                       type="button"
                       className="password-toggle"
-                      onClick={() => {
-                        if (!edit) {
-                          setShowNewPassword2(!showNewPassword2);
-                        }
-                      }}
+                      onClick={() => setShowNewPassword2(!showNewPassword2)}
                     >
                       {showNewPassword2 ? <FaEyeSlash /> : <FaEye />}
                     </button>

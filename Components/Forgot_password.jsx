@@ -14,6 +14,7 @@ import {
 import { Tooltip } from "react-tooltip";
 //connection to back remain
 const Forgot_password = () => {
+  
   const [trueValidationCode, setTrueValidationCode] = useState("");
   const location = useLocation();
   const [email, setEmail] = useState(
@@ -72,14 +73,14 @@ const Forgot_password = () => {
   };
 
   const handleSubmitEmail = async (e) => {
-    console.log("Fuck");
+    console.log('Fuck')
     e.preventDefault();
     try {
       await validationSchemaEmail.validate(email);
       setErrorEmail(null);
       //connection to backend remains
       let respEmail = await getValidationCode(email);
-
+      
       if (respEmail.code == 201) {
         setTrueValidationCode(respEmail.validationCode);
         emailRef.current.classList.add(TipStyles.slideOut);
@@ -155,7 +156,7 @@ const Forgot_password = () => {
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
         <div className={styles.InnerBox}>
-          <div className={styles.detailsContainer}>
+        <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
             <div className={styles.Title}>
               ایران
@@ -189,7 +190,7 @@ const Forgot_password = () => {
                   name="email"
                   value={email}
                   data-tooltip-id="email_tooltip"
-                  style={{ direction: "ltr" }}
+                  style={{direction:'ltr'}}
                 />
                 {errorEmail && (
                   <Tooltip
@@ -199,11 +200,7 @@ const Forgot_password = () => {
                   />
                 )}
               </div>
-              <button
-                type="submit"
-                className={styles.submitBtn}
-                style={{ marginTop: "10%" }}
-              >
+              <button type="submit" className={styles.submitBtn} style={{marginTop:"10%"}}>
                 ارسال کد
               </button>
             </form>
@@ -242,12 +239,10 @@ const Forgot_password = () => {
                   />
                 )}
               </div>
-              <p className={styles.resend}>ارسال دوباره کد</p>
-              <button
-                type="submit"
-                className={styles.submitBtn}
-                style={{ marginTop: "10%" }}
-              >
+                <p className={styles.resend}>
+                  ارسال دوباره کد
+                </p>
+              <button type="submit" className={styles.submitBtn} style={{marginTop:"10%"}}>
                 تایید کد
               </button>
             </form>
@@ -311,11 +306,7 @@ const Forgot_password = () => {
                     content={errorNewPassword.repeatPassword}
                   />
                 )}
-                <button
-                  type="submit"
-                  className={styles.submitBtn}
-                  style={{ marginTop: "10%" }}
-                >
+                <button type="submit" className={styles.submitBtn} style={{marginTop:"10%"}}>
                   تایید
                 </button>
               </div>
