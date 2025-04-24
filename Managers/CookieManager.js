@@ -1,4 +1,4 @@
-import TokenCookieKey from "./constants";
+import TokenCookieKey from './constants';
 
 import Cookies from 'js-cookie';
 const SaveToken = (expire, token) => {
@@ -14,4 +14,4 @@ const RemoveToken = () => {
     Cookies.remove(TokenCookieKey.TokenCookieKey);
 }
 
-export default { SaveToken, LoadToken, RemoveToken };
+export default { SaveToken , LoadToken, RemoveToken };

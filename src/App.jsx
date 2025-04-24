@@ -10,11 +10,15 @@ import { ToastContainer } from "react-toastify";
 import ContentEdit from "../Components/ContentEdit/ContentEdit";
 import EmailVerification from "../Components/EmailVerification";
 import ErrorPage from "../Components/error/ErrorPage";
+import Share from "../Components/Share";
+import { useState, useEffect } from "react";
+import "../Styles/App.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Loading />,
+    element: <Root />,
   },
   {
     path: "/profile",
@@ -48,8 +52,26 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <ErrorPage />,
+  }
+  {
+    path: "/share",
+    element: <Share />,
+  }
   },
 ]);
+
+function Root() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return isLoading ? <Loading /> : null;
+}
 
 export default function App() {
   return (

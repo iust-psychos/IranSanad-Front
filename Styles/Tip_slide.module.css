@@ -22,14 +22,26 @@
 
 .imageContainer {
   width: 92%;
-  height: 70%;
+  aspect-ratio: 16/9; 
   position: relative;
-  object-fit: cover;
   margin-top: 1%;
+  overflow: hidden; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 'cover' */
+  object-position: center; 
+}
+
 .slideContainer {
   height: 90%;
 }
+
 .titleContainer {
   display: block;
   position: relative;
@@ -45,26 +57,32 @@
   /* mix-blend-mode: multiply;  */
   color: #ffffff;
 }
+
 .slideIn {
   animation: slideIn 0.2s ease-in-out;
 }
+
 .slideOut {
   animation: slideOut 0.2s ease-in-out;
 }
+
 .rawText {
   min-height: 90%;
 }
+
 .dotContainer {
   direction: ltr;
   height: 10%;
   width: 55%;
   margin-top:5%;
 }
+
 .svgContainer {
   display: inline;
   width: 5%;
   max-height: 0.9rem;
 }
+
 .tipCircle {
   position: relative;
   cx: 50%;
