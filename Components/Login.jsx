@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
-import cookieManager from '../Managers/CookieManager';
+import cookieManager from "../Managers/CookieManager";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -84,9 +84,8 @@ const Login = () => {
     try {
       await validationSchema.validate(formData, { abortEarly: false });
       let resp = await LoginManager.Login(formData.email, formData.password);
-      cookieManager.SaveToken(10 ,resp.data.tokens.access);
+      cookieManager.SaveToken(10, resp.data.tokens.access);
       let token = cookieManager.LoadToken();
-
     } catch (err) {
       const validationErrors = {};
       console.log(err.message);
