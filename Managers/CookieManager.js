@@ -1,17 +1,22 @@
-import TokenCookieKey from './constants';
+import TokenCookieKey from "./constants";
 
-import Cookies from 'js-cookie';
-const SaveToken = (expire, token) => {
-    Cookies.set(TokenCookieKey.TokenCookieKey , token , {expires: expire});
+const SaveToken = (expire , token) => {
+    const date = new Date();
+    date.setTime(date.getTime() + expire);
+    const expires = `expires=${date.toUTCString()}`;
+  
+    document.cookie = `${TokenCookieKey.TokenCookieKey}=${token}; ${expires}; path=/; Secure; SameSite=Strict`;
 }
 
 const LoadToken = () => {
-    return Cookies.get(TokenCookieKey.TokenCookieKey);
+    const cookies = document.cookie.split('; ');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split('=');
+      if (name === TokenCookieKey.TokenCookieKey) {
+        return value;
+      }
+    }
+    return null;
 }
 
-const RemoveToken = () => {
-
-    Cookies.remove(TokenCookieKey.TokenCookieKey);
-}
-
-export default { SaveToken , LoadToken, RemoveToken };
+export default { SaveToken , LoadToken };

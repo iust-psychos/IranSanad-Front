@@ -1,4 +1,4 @@
-export const toPersianDigit = (str) => {
+export const toPersianDigits = (str) => {
   const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-  return String(str).replace(/\d/g, (d) => persianDigits[d]);
+  return str.replace(/\d/g, (d) => persianDigits[d]);
 };
