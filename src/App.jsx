@@ -38,7 +38,7 @@ const router = createBrowserRouter([
     element: <EmailVerification />,
   },
   {
-    path: "/document/:doc",
+    path: "/document/:doc_uuid",
     element: <ContentEditor />,
   },
   {

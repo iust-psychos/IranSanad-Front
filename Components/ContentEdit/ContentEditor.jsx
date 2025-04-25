@@ -10,6 +10,7 @@ import UserProfileDropdown from "../user-dashboard/components/UserProfileDropdow
 import "./content-editor.css";
 import { IconShare } from "./Icons";
 import Share from "../Share";
+import { useParams } from "react-router-dom";
 
 // interface ActiveUserProfile extends UserProfile {
 //   userId: number;
@@ -27,11 +28,12 @@ const editorConfig = {
 
 const ContentEditor = () => {
   const providerName = "websockets";
-  const [userProfile, setUserProfile] = useState(() => getRandomUserProfile());
-  const containerRef = useRef(null);
+  // const [userProfile, setUserProfile] = useState(() => getRandomUserProfile());
+  // const containerRef = useRef(null);
   const [yjsProvider, setYjsProvider] = useState(null);
   const [connected, setConnected] = useState(false);
-  const [activeUsers, setActiveUsers] = useState([]);
+  // const [activeUsers, setActiveUsers] = useState([]);
+  const { doc_uuid } = useParams();
 
   // const handleAwarenessUpdate = useCallback(() => {
   //   const awareness = yjsProvider.awareness;
@@ -173,10 +175,10 @@ const ContentEditor = () => {
 
       <LexicalComposer initialConfig={editorConfig}>
         <CollaborationPlugin
-          id="سند بدون عنوان"
+          id={doc_uuid}
           providerFactory={providerFactory}
           shouldBootstrap={true}
-          username={userProfile.name}
+          // username={userProfile.name}
           // cursorColor={userProfile.color}
           // cursorsContainerRef={containerRef}
         />

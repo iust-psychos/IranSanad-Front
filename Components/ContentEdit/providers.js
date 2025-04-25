@@ -6,7 +6,7 @@ export function createWebsocketProvider(id, yjsDocMap) {
   const doc = getDocFromMap(id, yjsDocMap);
   const token = CookieManager.LoadToken();
   return new WebsocketProvider(
-    `ws://iransanad.fiust.ir/:8000/ws/save/doc-init/?Authorization=${token}`,
+    `ws://iransanad.fiust.ir/ws/docs/${id}/?Authorization=${token}`,
     id,
     doc,
     {
