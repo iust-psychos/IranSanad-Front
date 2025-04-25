@@ -221,6 +221,12 @@
   padding-right: 2rem;
 }
 
+.user-dashboard-dropdown.dropdown-item a {
+  text-decoration: none;
+  color: inherit;
+  cursor: default;
+}
+
 .user-dashboard-dropdown.dropdown-item:hover {
   background-color: #dedede;
 }

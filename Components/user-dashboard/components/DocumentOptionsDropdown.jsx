@@ -44,7 +44,13 @@ export default function DocumentOptionsDropdown({
                 حذف
               </Menu.Item>
               <Menu.Item className="user-dashboard-dropdown dropdown-item">
-                باز کردن در برگه جدید
+                <a
+                  href={`/document/${document.doc_uuid}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  باز کردن در برگه جدید
+                </a>
               </Menu.Item>
             </Menu.Popup>
           </Menu.Positioner>
