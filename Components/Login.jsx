@@ -1,19 +1,29 @@
 import "react";
 import styles from "../Styles/Login.module.css";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
 import InfoIcon from "@mui/icons-material/Info";
 import Tip_slide from "./Tip_slide";
 import LoginManager from "../Managers/LoginManager";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
 import cookieManager from "../Managers/CookieManager";
+import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [redirectTimeout, setRedirectTimeout] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimeout) clearTimeout(redirectTimeout);
+    };
+  }, [redirectTimeout]);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -86,12 +96,20 @@ const Login = () => {
       let resp = await LoginManager.Login(formData.email, formData.password);
       cookieManager.SaveToken(10, resp.data.tokens.access);
       let token = cookieManager.LoadToken();
+
+      showSuccessToast("ورود موفقیت آمیز!");
+
+      const timeoutId = setTimeout(() => {
+        navigate("/dashboard");
+      }, 3000);
+      setRedirectTimeout(timeoutId);
     } catch (err) {
       const validationErrors = {};
       console.log(err.message);
-      err.inner.forEach((error) => {
-        validationErrors[error.path] = error.message;
-      });
+      // err.inner.forEach((error) => {
+      //   validationErrors[error.path] = error.message;
+      // });
+      showErrorToast(err.message);
       setErrors(validationErrors);
       icon.current.style.top = "35%";
     }
@@ -205,7 +223,7 @@ const Login = () => {
                   ورود
                 </button>
                 <p className={styles.noAccLink}>
-                  حساب ندارید؟
+                  حساب ندارید؟&nbsp;
                   <Link to="/signup" className={styles.forgetpasswordlink}>
                     ثبت نام کنید.
                   </Link>

@@ -271,7 +271,6 @@ const UserProfile = () => {
     }
 
     if (edit === false && checkChangeProfileImage()) {
-      console.log("in");
       try {
         const response = await axios.post(
           changeProfileImageAPI,
@@ -416,7 +415,7 @@ const UserProfile = () => {
                               cursor: "initial",
                             }
                       }
-                      onClick={() => !edit && handleProfileImageRemove}
+                      onClick={() => !edit && handleProfileImageRemove()}
                     />
                   </div>
                 </div>
@@ -449,7 +448,7 @@ const UserProfile = () => {
                   name="first_name"
                   type="text"
                   placeholder="نام خود را وارد کنید."
-                  autoComplete="on"
+                  autoComplete="name"
                   disabled={edit}
                   value={userInfo.first_name}
                   onChange={handleChangeUserInfo}
@@ -462,7 +461,7 @@ const UserProfile = () => {
                   name="last_name"
                   type="text"
                   placeholder="نام خانوادگی خود را وارد کنید."
-                  autoComplete="on"
+                  autoComplete="family-name"
                   disabled={edit}
                   value={userInfo.last_name}
                   onChange={handleChangeUserInfo}
@@ -474,7 +473,7 @@ const UserProfile = () => {
                   id="username"
                   name="username"
                   type="text"
-                  autoComplete="on"
+                  autoComplete="username"
                   disabled={edit}
                   value={userInfo.username}
                   onChange={handleChangeUserInfo}
@@ -499,7 +498,7 @@ const UserProfile = () => {
                   name="phone_number"
                   type="tel"
                   pattern="\+98\d{10}"
-                  autoComplete="on"
+                  autoComplete="tel"
                   disabled={edit}
                   value={userInfo.phone_number}
                   onChange={handleChangeUserInfo}
@@ -528,7 +527,7 @@ const UserProfile = () => {
                       id="old_password"
                       name="old_password"
                       type={showOldPassword ? "text" : "password"}
-                      autoComplete="off"
+                      autoComplete="current-password"
                       disabled={edit}
                       value={passwordData.old_password}
                       onChange={handleChangePassword}
@@ -553,7 +552,7 @@ const UserProfile = () => {
                       id="new_password"
                       name="new_password"
                       type={showNewPassword ? "text" : "password"}
-                      autoComplete="off"
+                      autoComplete="new-password"
                       disabled={edit}
                       value={passwordData.new_password}
                       onChange={handleChangePassword}
@@ -578,7 +577,7 @@ const UserProfile = () => {
                       id="new_password2"
                       name="new_password2"
                       type={showNewPassword2 ? "text" : "password"}
-                      autoComplete="off"
+                      autoComplete="new-password"
                       disabled={edit}
                       value={passwordData.new_password2}
                       onChange={handleChangePassword}

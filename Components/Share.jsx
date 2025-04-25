@@ -9,7 +9,7 @@ import { Select } from "@base-ui-components/react/select";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa";
 
-const Share = () => {
+const Share = ({ onClose }) => {
   const users = [
     {
       name: "کاربر اول",
@@ -52,8 +52,8 @@ const Share = () => {
         ? "همه مجاز به مشاهده سند با پیوند"
         : "همه مجاز به ویرایش سند با پیوند"
       : userAccessLevel === "view"
-      ? "تنها افراد فوق مجاز به مشاهده سند با پیوند"
-      : "تنها افراد فوق مجاز به ویرایش سند با پیوند";
+      ? "تنها افراد فوق مجاز به دسترسی به سند با پیوند"
+      : "تنها افراد فوق مجاز به دسترسی به سند با پیوند";
 
   return (
     <div className="share">
@@ -250,7 +250,11 @@ const Share = () => {
               <GrAttachment />
               رونویس پیوند
             </button>
-            <button type="button" className="share-btn confirm-button">
+            <button
+              type="submit"
+              className="share-btn confirm-button"
+              onClick={onClose}
+            >
               تایید
             </button>
           </div>
