@@ -8,6 +8,10 @@ import { AiOutlineGlobal } from "react-icons/ai";
 import { Select } from "@base-ui-components/react/select";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa";
+import { toast } from "react-toastify";
+
+const postPermissionsAPI =
+  "http://iransanad.fiust.ir/api/v1/docs/permission/permission/";
 
 const Share = ({ onClose }) => {
   const users = [
@@ -54,6 +58,23 @@ const Share = ({ onClose }) => {
       : userAccessLevel === "view"
       ? "تنها افراد فوق مجاز به دسترسی به سند با پیوند"
       : "تنها افراد فوق مجاز به دسترسی به سند با پیوند";
+
+  const documentLink = "this is a sample link!";
+
+  const handleCopyLink = () => {
+    navigator.clipboard
+      .writeText(documentLink)
+      .then(() => {
+        toast.success("پیوند سند رونوشت شد!", {
+          autoClose: 1000,
+        });
+      })
+      .catch((err) => {
+        toast.error("خطا در رونوشت پیوند!", {
+          autoClose: 1000,
+        });
+      });
+  };
 
   return (
     <div className="share">
@@ -250,7 +271,11 @@ const Share = ({ onClose }) => {
             </div>
           </div>
           <div className="share-area-buttons">
-            <button type="button" className="share-btn copy-button">
+            <button
+              type="button"
+              className="share-btn copy-button"
+              onClick={handleCopyLink}
+            >
               <GrAttachment fill="black" />
               رونویس پیوند
             </button>
