@@ -1,10 +1,9 @@
-import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
-import {ContentEditable} from '@lexical/react/LexicalContentEditable';
-import {LexicalErrorBoundary} from '@lexical/react/LexicalErrorBoundary';
-import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 
-import ToolbarPlugin from '../ToolbarPlugin';
-import TreeViewPlugin from '../plugins/TreeViewPlugin';
+import ToolbarPlugin from "../ToolbarPlugin";
 
 function Placeholder() {
   return <div className="editor-placeholder">Enter some rich text...</div>;
@@ -21,7 +20,6 @@ export default function Editor() {
           ErrorBoundary={LexicalErrorBoundary}
         />
         <AutoFocusPlugin />
-        {/* <TreeViewPlugin /> */}
       </div>
     </div>
   );

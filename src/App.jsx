@@ -7,7 +7,7 @@ import { userDashboardLoader } from "../Managers/user-dashboard-manager";
 import Loading from "../Components/Loading";
 import UserProfile from "../Components/UserProfile";
 import { ToastContainer } from "react-toastify";
-import ContentEdit from "../Components/ContentEdit/ContentEdit";
+import ContentEditor from "../Components/ContentEdit/ContentEditor";
 import EmailVerification from "../Components/EmailVerification";
 import Share from "../Components/Share";
 import { useState, useEffect } from "react";
@@ -37,8 +37,8 @@ const router = createBrowserRouter([
     element: <EmailVerification />,
   },
   {
-    path: "/contentedit",
-    element: <ContentEdit />,
+    path: "/document",
+    element: <ContentEditor />,
   },
   {
     path: "/signup",
