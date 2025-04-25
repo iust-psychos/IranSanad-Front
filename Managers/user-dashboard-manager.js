@@ -1,4 +1,3 @@
-import CookieManager from "./CookieManager";
 import { apiFetch } from "../Scripts/api-fetch";
 
 export const initialDocuments = [
@@ -43,5 +42,18 @@ export const userInfoLoader = async () => {
 export const deleteDocument = async (id) => {
   return await apiFetch(`http://iransanad.fiust.ir/api/v1/docs/${id}/`, {
     method: "DELETE",
+  });
+};
+
+export const renameDocument = async (id, name) => {
+  return await apiFetch(`http://iransanad.fiust.ir/api/v1/docs/${id}/`, {
+    method: "PATCH",
+    body: JSON.stringify({ title: name }),
+  });
+};
+
+export const createDocument = async () => {
+  return await apiFetch(`http://iransanad.fiust.ir/api/v1/docs/`, {
+    method: "Post",
   });
 };

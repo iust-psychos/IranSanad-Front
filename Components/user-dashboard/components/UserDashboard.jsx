@@ -5,15 +5,17 @@ import DocumentOptionsDropdown from "./DocumentOptionsDropdown.jsx";
 import DocumentSortByDropdown from "./DocumentSortByDropdown.jsx";
 import UserProfileDropdown from "./UserProfileDropdown.jsx";
 import { toPersianDigit } from "../../../Scripts/persian-number-converter.js";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { toPersianDate } from "../../../Scripts/persian-date-converter.js";
+import { createDocument } from "../../../Managers/user-dashboard-manager.js";
+import constants from "../../../Managers/constants.js";
 
 export default function UserDashboard() {
   const searchRef = useRef();
-  const [sortField, setSortField] = useState("updated_at");
+  const [sortField, setSortField] = useState("last_seen");
   const fetchedDocuments = useLoaderData();
-  console.log(fetchedDocuments);
   const [documents, setDocuments] = useState(fetchedDocuments);
+  const navigate = useNavigate();
 
   const handleSearch = () => {
     const searchValue = searchRef.current.value;
@@ -28,6 +30,24 @@ export default function UserDashboard() {
     if (e.key === "Enter") {
       handleSearch();
     }
+  };
+
+  const handleCreate = async () => {
+    const { doc_uuid } = await createDocument();
+    navigate(`/document/${doc_uuid}`);
+  };
+
+  const sortDocuments = (field) => {
+    return (a, b) => {
+      const dateA = a[field] ? new Date(a[field]) : null;
+      const dateB = b[field] ? new Date(b[field]) : null;
+
+      if (!dateA && !dateB) return 0;
+      if (!dateA) return -1;
+      if (!dateB) return 1;
+
+      return dateA - dateB;
+    };
   };
 
   return (
@@ -51,7 +71,7 @@ export default function UserDashboard() {
           />
         </div>
         <DocumentSortByDropdown updateStateFunction={setSortField} />
-        <button className="menu-button menu-create">
+        <button className="menu-button menu-create" onClick={handleCreate}>
           <IconPlusFill />
           <p>ایجاد یک سند جدید</p>
         </button>
@@ -73,8 +93,8 @@ export default function UserDashboard() {
               <th>
                 {sortField === "updated_at"
                   ? "زمان آخرین تغییر"
-                  : sortField === "created_at"
-                  ? "زمان ایجاد"
+                  : sortField === "last_seen"
+                  ? "زمان آخرین بازدید"
                   : ""}
               </th>
               <th>
@@ -84,13 +104,18 @@ export default function UserDashboard() {
           </thead>
           <tbody>
             {documents
-              .sort((a, b) => new Date(a[sortField]) - new Date(b[sortField]))
+              .sort(sortDocuments(sortField))
               .reverse()
-              .map((doc, index) => (
-                <tr key={doc.id} onClick={() => alert("fuck")}>
+              .map((doc) => (
+                <tr
+                  key={doc.doc_uuid}
+                  onClick={() => navigate(`/document/${doc.doc_uuid}`)}
+                >
                   <td>{toPersianDigit(doc.title)}</td>
-                  <td>{toPersianDigit(doc.owner)}</td>
-                  <td>{toPersianDate(doc[sortField])}</td>
+                  <td>{doc.owner_name === "Me" ? "من" : "--"}</td>
+                  <td>
+                    {doc[sortField] ? toPersianDate(doc[sortField]) : "--"}
+                  </td>
                   <td>
                     <DocumentOptionsDropdown
                       document={doc}

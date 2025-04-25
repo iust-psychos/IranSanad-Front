@@ -9,6 +9,7 @@ import UserProfile from "../Components/UserProfile";
 import { ToastContainer } from "react-toastify";
 import ContentEditor from "../Components/ContentEdit/ContentEditor";
 import EmailVerification from "../Components/EmailVerification";
+import ErrorPage from "../Components/error/ErrorPage";
 import Share from "../Components/Share";
 import { useState, useEffect } from "react";
 import "../Styles/App.css";
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
     element: <EmailVerification />,
   },
   {
-    path: "/document",
+    path: "/document/:doc",
     element: <ContentEditor />,
   },
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: "/forgot_password",
     element: <Forgot_password />,
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
   {
     path: "/share",
