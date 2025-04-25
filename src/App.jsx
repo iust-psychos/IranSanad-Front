@@ -10,7 +10,7 @@ import { ToastContainer } from "react-toastify";
 import ContentEditor from "../Components/ContentEdit/ContentEditor";
 import EmailVerification from "../Components/EmailVerification";
 import ErrorPage from "../Components/error/ErrorPage";
-import ShareModal from "../Components/ShareModal";
+import Share from "../Components/Share";
 import { useState, useEffect } from "react";
 import "../Styles/App.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -55,7 +55,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/share",
-    element: <ShareModal />,
+    element: <Share />,
   },
 ]);
 

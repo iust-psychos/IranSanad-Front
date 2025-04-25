@@ -74,7 +74,7 @@ const Share = ({ onClose }) => {
               <div className="share-access-list-item" key={user.email}>
                 <div className="share-item-user">
                   <div className="share-item-icon">
-                    {!user.img && <FaUser />}
+                    {!user.img && <FaUser fill="black" />}
                   </div>
                   <div className="share-item-name-email">
                     <h2 className="share-item-name">{user.name}</h2>
@@ -97,45 +97,46 @@ const Share = ({ onClose }) => {
                     </>
                   ) : (
                     <>
-                      {" "}
-                      <Select.Root defaultValue={user.access}>
-                        <Select.Trigger className="share-select-trigger">
-                          <Select.Value
-                            placeholder={
-                              user.access === "visitor"
-                                ? "نظاره‌گر"
-                                : "ویراستار"
-                            }
-                            className="share-item-status-label"
-                          />
-                          <HiChevronUpDown className="share-select-icon" />
-                        </Select.Trigger>
-                        <Select.Portal>
-                          <Select.Backdrop />
-                          <Select.Positioner>
-                            <Select.Popup className="share-select-popup">
-                              <Select.Item
-                                value="visitor"
-                                className="share-select-item"
-                              >
-                                <Select.ItemText>نظاره‌گر</Select.ItemText>
-                                <Select.ItemIndicator className="share-item-indicator">
-                                  <FaCheck size={12} />
-                                </Select.ItemIndicator>
-                              </Select.Item>
-                              <Select.Item
-                                value="editor"
-                                className="share-select-item"
-                              >
-                                <Select.ItemText>ویراستار</Select.ItemText>
-                                <Select.ItemIndicator className="share-item-indicator">
-                                  <FaCheck size={12} />
-                                </Select.ItemIndicator>
-                              </Select.Item>
-                            </Select.Popup>
-                          </Select.Positioner>
-                        </Select.Portal>
-                      </Select.Root>{" "}
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Select.Root defaultValue={user.access}>
+                          <Select.Trigger className="share-select-trigger">
+                            <Select.Value
+                              placeholder={
+                                user.access === "visitor"
+                                  ? "نظاره‌گر"
+                                  : "ویراستار"
+                              }
+                              className="share-item-status-label"
+                            />
+                            <HiChevronUpDown className="share-select-icon" />
+                          </Select.Trigger>
+                          <Select.Portal>
+                            <Select.Backdrop />
+                            <Select.Positioner>
+                              <Select.Popup className="share-select-popup">
+                                <Select.Item
+                                  value="visitor"
+                                  className="share-select-item"
+                                >
+                                  <Select.ItemText>نظاره‌گر</Select.ItemText>
+                                  <Select.ItemIndicator className="share-item-indicator">
+                                    <FaCheck size={12} />
+                                  </Select.ItemIndicator>
+                                </Select.Item>
+                                <Select.Item
+                                  value="editor"
+                                  className="share-select-item"
+                                >
+                                  <Select.ItemText>ویراستار</Select.ItemText>
+                                  <Select.ItemIndicator className="share-item-indicator">
+                                    <FaCheck size={12} />
+                                  </Select.ItemIndicator>
+                                </Select.Item>
+                              </Select.Popup>
+                            </Select.Positioner>
+                          </Select.Portal>
+                        </Select.Root>
+                      </div>
                     </>
                   )}
                 </div>
@@ -149,7 +150,7 @@ const Share = ({ onClose }) => {
             <div className="share-access-general-item">
               <div className="share-item-user" style={{ cursor: "default" }}>
                 <div className="share-item-icon">
-                  <AiOutlineGlobal />
+                  <AiOutlineGlobal fill="black" />
                 </div>
                 <div className="share-item-general-title-desc">
                   <div className="share-item-title-status">
@@ -166,7 +167,10 @@ const Share = ({ onClose }) => {
                           }
                           className="share-item-title"
                         />
-                        <TbTriangleInvertedFilled className="share-item-status-tri" />
+                        <TbTriangleInvertedFilled
+                          className="share-item-status-tri"
+                          fill="black"
+                        />
                       </Select.Trigger>
                       <Select.Portal>
                         <Select.Backdrop />
@@ -247,7 +251,7 @@ const Share = ({ onClose }) => {
           </div>
           <div className="share-area-buttons">
             <button type="button" className="share-btn copy-button">
-              <GrAttachment />
+              <GrAttachment fill="black" />
               رونویس پیوند
             </button>
             <button

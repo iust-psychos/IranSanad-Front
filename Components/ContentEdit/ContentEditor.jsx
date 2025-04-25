@@ -9,6 +9,7 @@ import { IconLogo } from "../user-dashboard/components/Icons";
 import UserProfileDropdown from "../user-dashboard/components/UserProfileDropdown";
 import "./content-editor.css";
 import { IconShare } from "./Icons";
+import Share from "../Share";
 
 // interface ActiveUserProfile extends UserProfile {
 //   userId: number;
@@ -71,6 +72,29 @@ const ContentEditor = () => {
     [providerName]
   );
 
+  /* Share Modal */
+  const [showShareModal, setShowShareModal] = useState(false);
+  const shareModalRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        shareModalRef.current &&
+        !shareModalRef.current.contains(event.target)
+      ) {
+        setShowShareModal(false);
+      }
+    };
+
+    if (showShareModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showShareModal]);
+
   return (
     // {/* <p>
     //   <b>Used provider:</b>{' '}
@@ -129,12 +153,24 @@ const ContentEditor = () => {
           autoFocus={false}
           defaultValue="سند بدون عنوان"
         />
-        <button className="menu-button menu-share">
+        <button
+          className="menu-button menu-share"
+          onClick={() => setShowShareModal(true)}
+        >
           <IconShare />
           <p>اشتراک گذاری</p>
         </button>
         <UserProfileDropdown />
       </menu>
+
+      {showShareModal && (
+        <div className="share-modal-overlay">
+          <div ref={shareModalRef}>
+            <Share onClose={() => setShowShareModal(false)} />
+          </div>
+        </div>
+      )}
+
       <LexicalComposer initialConfig={editorConfig}>
         <CollaborationPlugin
           id="سند بدون عنوان"
