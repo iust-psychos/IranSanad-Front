@@ -205,7 +205,7 @@ const ToolbarPlugin = () => {
     { value: "Trebuchet MS", label: "Trebuchet MS" },
   ];
   return (
-    <div className="toolbar">
+    <div className={styles.toolbar}>
       <div className={styles.fontFaimlyDropDown}>
         <select className={styles.fontFaimlyDropDownselect}
           value={fontFamily}

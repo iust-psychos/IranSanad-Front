@@ -1,0 +1,94 @@
+.content-editor * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Vazir";
+  font-size: 62.5%;
+  line-height: 1;
+  outline: 0;
+}
+
+.content-editor {
+  background-color: #e8e3f9;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: repeat(3, min-content);
+}
+
+.content-editor menu.navbar {
+  color: white;
+  padding: 0 2rem;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+  grid-row: 1/2;
+  grid-column: 1/-1;
+  width: 100%;
+  background-color: #bba1ea;
+}
+
+.content-editor .navbar .menu-logo {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.content-editor .navbar .content-name {
+  background-color: rgb(255, 255, 255, 0.5);
+  margin-left: auto;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 0.05rem solid transparent;
+  padding-inline: 0.5rem;
+  padding-block: 0.2rem;
+  width: fit-content;
+}
+
+.content-editor .navbar .content-name:hover {
+  border: 0.05rem solid black;
+}
+
+.content-editor menu.navbar .menu-button {
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.4rem;
+  cursor: pointer;
+  border: none;
+}
+
+.content-editor .navbar .menu-share {
+  background-color: #7f62e0;
+  font-size: 1.3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.content-editor .navbar .menu-profile {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.content-editor .navbar .menu-profile:hover {
+  box-shadow: 0 0 0 4px rgb(222, 222, 222, 0.45);
+  background-color: rgba(222, 222, 222, 0.4);
+  cursor: pointer;
+}
+
+.content-editor .navbar .menu-profile img {
+  width: 3rem;
+  outline: 0;
+}
