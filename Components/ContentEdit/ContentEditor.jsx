@@ -8,6 +8,7 @@ import { createWebsocketProvider } from "./providers";
 import { IconLogo } from "../user-dashboard/components/Icons";
 import UserProfileDropdown from "../user-dashboard/components/UserProfileDropdown";
 import "./content-editor.css";
+import { IconShare } from "./Icons";
 
 // interface ActiveUserProfile extends UserProfile {
 //   userId: number;
@@ -128,6 +129,10 @@ const ContentEditor = () => {
           autoFocus={false}
           defaultValue="سند بدون عنوان"
         />
+        <button className="menu-button menu-share">
+          <IconShare />
+          <p>اشتراک گذاری</p>
+        </button>
         <UserProfileDropdown />
       </menu>
       <LexicalComposer initialConfig={editorConfig}>
