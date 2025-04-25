@@ -3,7 +3,7 @@
     flex-wrap: nowrap; /* Crucial - prevents wrapping */
     overflow-x: auto; /* Allows horizontal scrolling if needed */
     white-space: nowrap; /* Prevents any text wrapping */
-    width: 100%; /* Takes full available width */
+    width: 98.8%; /* Takes full available width */
     
     /* Visual styling */
     background: #f8f9fa;

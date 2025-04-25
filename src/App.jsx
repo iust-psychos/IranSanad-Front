@@ -7,7 +7,7 @@ import { userDashboardLoader } from "../Managers/user-dashboard-manager";
 import Loading from "../Components/Loading";
 import UserProfile from "../Components/UserProfile";
 import { ToastContainer } from "react-toastify";
-import ContentEdit from "../Components/ContentEdit/ContentEdit";
+import ContentEditor from "../Components/ContentEdit/ContentEditor";
 import EmailVerification from "../Components/EmailVerification";
 import ErrorPage from "../Components/error/ErrorPage";
 import Share from "../Components/Share";
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/document/:doc",
-    element: <ContentEdit />,
+    element: <ContentEditor />,
   },
   {
     path: "/signup",
