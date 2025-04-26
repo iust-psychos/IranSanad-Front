@@ -14,6 +14,7 @@ import Share from "../Components/Share";
 import { useState, useEffect } from "react";
 import "../Styles/App.css";
 import "react-toastify/dist/ReactToastify.css";
+import { contentEditorLoader } from "../Managers/content-editor-manager";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
   {
     path: "/document/:doc_uuid",
     element: <ContentEditor />,
+    loader: contentEditorLoader,
   },
   {
     path: "/signup",
