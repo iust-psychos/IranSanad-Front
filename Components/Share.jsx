@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "../Styles/Share.css";
 import { GrAttachment } from "react-icons/gr";
@@ -9,45 +9,119 @@ import { Select } from "@base-ui-components/react/select";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
+import axios from "axios";
+import CookieManager from "../Managers/CookieManager";
 
 const postPermissionsAPI =
-  "http://iransanad.fiust.ir/api/v1/docs/permission/permission/";
+  "http://iransanad.fiust.ir/api/v1/docs/permission/set_permission/";
+const getPermissionsAPI =
+  "http://iransanad.fiust.ir/api/v1/docs/permission/get_permission_list/";
+const checkValidUserAPI = "http://iransanad.fiust.ir/api/v1/auth/user_lookup/";
 
 const Share = ({ onClose }) => {
-  const users = [
-    {
-      name: "کاربر اول",
-      email: "email1@example.com",
-      img: "",
-      access: "owner",
-    },
-    {
-      name: "کاربر دوم",
-      email: "email2@example.com",
-      img: "",
-      access: "editor",
-    },
-    {
-      name: "کاربر سوم",
-      email: "email3@example.com",
-      img: "",
-      access: "visitor",
-    },
-    {
-      name: "کاربر چهارم",
-      email: "email4@example.com",
-      img: "",
-      access: "visitor",
-    },
-    {
-      name: "کاربر پنجم",
-      email: "email5@example.com",
-      img: "",
-      access: "editor",
-    },
-  ];
+  const token = CookieManager.LoadToken();
 
-  const [documentAccessLevel, setDocumentAccessLevel] = useState("restricted");
+  const document = {
+    id: 7,
+    doc_uuid: "693e8841-befc-42fb-932d-cd636b0f1065",
+    title: "سند من",
+    owner: 5,
+    owner_name: "Me",
+    created_at: "2025-04-25T21:51:07.617479+03:30",
+    updated_at: "2025-04-25T21:51:07.625141+03:30",
+    link: "ecfcebdcbiha",
+    is_public: false,
+    last_seen: null,
+  };
+
+  // Search
+  const [searchInput, setSearchInput] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleChangeSearch = (event) => {
+    setSearchInput(event.target.value);
+  };
+
+  const handleSubmitSearch = async (event) => {
+    event.preventDefault();
+    if (!searchInput.trim()) {
+      return;
+    }
+
+    setIsSearching(true);
+
+    const body = isEmailValid(searchInput.trim())
+      ? {
+          email: searchInput.trim(),
+        }
+      : {
+          username: searchInput.trim(),
+        };
+
+    try {
+      const checkUserResponse = await axios.post(checkValidUserAPI, body, {
+        headers: {
+          Authorization: `JWT ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("checkUserResponse: ", checkUserResponse);
+
+      if (checkUserResponse.data) {
+        const permissionResponse = await axios.post(
+          postPermissionsAPI,
+          {
+            document: document.id,
+            permissions: [
+              {
+                user: checkUserResponse.data.user_id,
+                permission: "ReadOnly",
+              },
+            ],
+          },
+          {
+            headers: {
+              Authorization: `JWT ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("2:", permissionResponse);
+
+        const updatedPermissions = await axios.get(
+          `${getPermissionsAPI}${document.id}/`,
+          {
+            headers: {
+              Authorization: `JWT ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("3");
+
+        setPermissionList(updatedPermissions.data);
+        setSearchInput("");
+        toast.success("دسترسی کاربر با موفقیت اضافه شد");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("خطا در اضافه کردن کاربر");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const [documentAccessLevel, setDocumentAccessLevel] = useState(
+    document.is_public ? "public" : "restricted"
+  );
   const [userAccessLevel, setUserAccessLevel] = useState("view");
 
   const generalDescriptionText =
@@ -59,11 +133,30 @@ const Share = ({ onClose }) => {
       ? "تنها افراد فوق مجاز به دسترسی به سند با پیوند"
       : "تنها افراد فوق مجاز به دسترسی به سند با پیوند";
 
-  const documentLink = "this is a sample link!";
+  const [permissionList, setPermissionList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${getPermissionsAPI}${document.id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `JWT ${token}`,
+        },
+      })
+      .then((response) => {
+        setPermissionList(response.data);
+        console.log("permissionList:\n", response);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  const handleSubmit = () => {
+    onClose();
+  };
 
   const handleCopyLink = () => {
     navigator.clipboard
-      .writeText(documentLink)
+      .writeText(document.link)
       .then(() => {
         toast.success("پیوند سند رونوشت شد!", {
           autoClose: 1000,
@@ -79,31 +172,45 @@ const Share = ({ onClose }) => {
   return (
     <div className="share">
       <div className="share-area">
-        <div className="share-area-title">اشتراک گذاری "نام فایل"</div>
+        <div className="share-area-title">اشتراک گذاری "{document.title}"</div>
         <div className="share-area-search">
-          <div className="share-area-search-input">
+          <form
+            className="share-area-search-input"
+            onSubmit={handleSubmitSearch}
+          >
             <input
               type="search"
               placeholder="نام کاربری یا ایمیل افراد را وارد کنید"
+              value={searchInput}
+              onChange={handleChangeSearch}
+              disabled={isSearching}
             />
-          </div>
+            {isSearching && <span>در حال جستجو...</span>}
+          </form>
         </div>
         <div className="share-access-list">
           <h1 className="share-access-title">افراد دارای دسترسی</h1>
           <div className="share-access-list-items">
-            {users.map((user) => (
-              <div className="share-access-list-item" key={user.email}>
+            {permissionList.map((permissionItem) => (
+              <div
+                className="share-access-list-item"
+                key={permissionItem.user.email}
+              >
                 <div className="share-item-user">
                   <div className="share-item-icon">
-                    {!user.img && <FaUser fill="black" />}
+                    {!permissionItem.user.img && <FaUser fill="black" />}
                   </div>
                   <div className="share-item-name-email">
-                    <h2 className="share-item-name">{user.name}</h2>
-                    <p className="share-item-email">{user.email}</p>
+                    <h2 className="share-item-name">
+                      {permissionItem.user.username}
+                    </h2>
+                    <p className="share-item-email">
+                      {permissionItem.user.email}
+                    </p>
                   </div>
                 </div>
                 <div className="share-item-status">
-                  {user.access === "owner" ? (
+                  {permissionItem.access_level === "Owner" ? (
                     <>
                       <p
                         className="share-item-status-label"
@@ -119,11 +226,11 @@ const Share = ({ onClose }) => {
                   ) : (
                     <>
                       <div onClick={(e) => e.stopPropagation()}>
-                        <Select.Root defaultValue={user.access}>
+                        <Select.Root defaultValue={permissionItem.access_level}>
                           <Select.Trigger className="share-select-trigger">
                             <Select.Value
                               placeholder={
-                                user.access === "visitor"
+                                permissionItem.access_level === "visitor"
                                   ? "نظاره‌گر"
                                   : "ویراستار"
                               }
@@ -282,7 +389,7 @@ const Share = ({ onClose }) => {
             <button
               type="submit"
               className="share-btn confirm-button"
-              onClick={onClose}
+              onClick={handleSubmit}
             >
               تایید
             </button>
