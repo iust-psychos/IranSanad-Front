@@ -5,10 +5,6 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 
 import ToolbarPlugin from "../ToolbarPlugin";
 
-function Placeholder() {
-  return <div className="editor-placeholder">Enter some rich text...</div>;
-}
-
 export default function Editor() {
   return (
     <div className="editor-container">
@@ -16,7 +12,6 @@ export default function Editor() {
       <div className="editor-inner">
         <RichTextPlugin
           contentEditable={<ContentEditable className="editor-input" />}
-          placeholder={<Placeholder />}
           ErrorBoundary={LexicalErrorBoundary}
         />
         <AutoFocusPlugin />
