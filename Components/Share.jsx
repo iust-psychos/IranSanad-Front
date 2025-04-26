@@ -13,6 +13,7 @@ import axios from "axios";
 import CookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 
+const baseAPI = "http://iransanad.fiust.ir";
 const postPermissionsAPI =
   "http://iransanad.fiust.ir/api/v1/docs/permission/set_permission/";
 const getPermissionsAPI =
@@ -185,9 +186,8 @@ const Share = ({ onClose }) => {
             },
           }
         );
+        showSuccessToast("تغییرات با موفقیت اعمال شد!");
       }
-
-      showSuccessToast("تغییرات با موفقیت اعمال شد!");
     } catch (error) {
       console.log(error);
       showErrorToast("خطا در اعمال تغییرات!");
@@ -240,8 +240,16 @@ const Share = ({ onClose }) => {
               >
                 <div className="share-item-user">
                   <div className="share-item-icon">
-                    {permissionItem.user.img ? (
-                      permissionItem.user.img
+                    {permissionItem.user.profile_image ? (
+                      <img
+                        src={baseAPI + permissionItem.user.profile_image}
+                        alt="user profile image"
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          borderRadius: "50%",
+                        }}
+                      />
                     ) : (
                       <FaUser fill="black" />
                     )}
@@ -256,7 +264,7 @@ const Share = ({ onClose }) => {
                   </div>
                 </div>
                 <div className="share-item-status">
-                  {permissionItem.access_level === 4 ? (
+                  {permissionItem.access_level === "Owner" ? (
                     <>
                       <p
                         className="share-item-status-label"
@@ -280,7 +288,7 @@ const Share = ({ onClose }) => {
                         <Select.Trigger className="share-select-trigger">
                           <Select.Value
                             placeholder={
-                              permissionItem.access_level === 1
+                              permissionItem.access_level === "ReadOnly"
                                 ? "نظاره‌گر"
                                 : "ویراستار"
                             }
