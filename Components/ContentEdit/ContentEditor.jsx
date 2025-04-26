@@ -10,7 +10,11 @@ import UserProfileDropdown from "../user-dashboard/components/UserProfileDropdow
 import "./content-editor.css";
 import { IconShare } from "./Icons";
 import Share from "../Share";
+import { useParams } from "react-router-dom";
+import { ListNode, ListItemNode } from "@lexical/list";
+import { useLoaderData } from "react-router-dom";
 import ReactDOM from "react-dom";
+
 
 // interface ActiveUserProfile extends UserProfile {
 //   userId: number;
@@ -19,20 +23,21 @@ import ReactDOM from "react-dom";
 const editorConfig = {
   editorState: null,
   namespace: "React.js Collab Demo",
-  nodes: [],
-  onError(error) {
-    throw error;
-  },
+  nodes: [ListNode, ListItemNode],
+  onError: (error) => console.error(error),
   theme: ExampleTheme,
 };
 
 const ContentEditor = () => {
+  const nameRef = useRef();
   const providerName = "websockets";
-  const [userProfile, setUserProfile] = useState(() => getRandomUserProfile());
-  const containerRef = useRef(null);
+  // const [userProfile, setUserProfile] = useState(() => getRandomUserProfile());
+  // const containerRef = useRef(null);
   const [yjsProvider, setYjsProvider] = useState(null);
   const [connected, setConnected] = useState(false);
-  const [activeUsers, setActiveUsers] = useState([]);
+  // const [activeUsers, setActiveUsers] = useState([]);
+  const { doc_uuid } = useParams();
+  const doc = useLoaderData();
 
   // const handleAwarenessUpdate = useCallback(() => {
   //   const awareness = yjsProvider.awareness;
@@ -152,8 +157,11 @@ const ContentEditor = () => {
           type="text"
           className="content-name"
           autoFocus={false}
-          defaultValue="سند بدون عنوان"
+          defaultValue={doc.title}
+          ref={nameRef}
+          onBlur={() => renameDocument(doc.document_id, nameRef.current.value)}
         />
+
         <button
           className="menu-button menu-share"
           onClick={() => setShowShareModal(true)}
@@ -176,13 +184,14 @@ const ContentEditor = () => {
 
       <LexicalComposer initialConfig={editorConfig}>
         <CollaborationPlugin
-          id="سند بدون عنوان"
+          id={doc_uuid}
           providerFactory={providerFactory}
           shouldBootstrap={true}
-          username={userProfile.name}
+          // username={userProfile.name}
           // cursorColor={userProfile.color}
           // cursorsContainerRef={containerRef}
         />
+
         <Editor />
       </LexicalComposer>
     </div>

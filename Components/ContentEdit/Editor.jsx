@@ -2,12 +2,11 @@ import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 
 import ToolbarPlugin from "../ToolbarPlugin";
-
-function Placeholder() {
-  return <div className="editor-placeholder">Enter some rich text...</div>;
-}
 
 export default function Editor() {
   return (
@@ -16,10 +15,14 @@ export default function Editor() {
       <div className="editor-inner">
         <RichTextPlugin
           contentEditable={<ContentEditable className="editor-input" />}
-          placeholder={<Placeholder />}
           ErrorBoundary={LexicalErrorBoundary}
         />
         <AutoFocusPlugin />
+        <HistoryPlugin />
+
+        <ListPlugin />
+
+        <OnChangePlugin onChange={() => {}} />
       </div>
     </div>
   );
