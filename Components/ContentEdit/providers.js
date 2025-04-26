@@ -5,8 +5,10 @@ import CookieManager from "../../Managers/CookieManager";
 export function createWebsocketProvider(id, yjsDocMap) {
   const doc = getDocFromMap(id, yjsDocMap);
   const token = CookieManager.LoadToken();
+  const socketUrl = `ws://iransanad.fiust.ir/ws/docs/${id}/?Authorization=${token}`;
+  console.log(socketUrl);
   return new WebsocketProvider(
-    `ws://iransanad.fiust.ir/ws/docs/${id}/?Authorization=${token}`,
+    socketUrl,
     id,
     doc,
     {
