@@ -25,10 +25,13 @@ import { createCommand, COMMAND_PRIORITY_EDITOR } from "lexical";
 export const TEXT_DIRECTION_COMMAND = createCommand("TEXT_DIRECTION_COMMAND");
 export const FONT_FAMILY_COMMAND = createCommand("FONT_FAMILY_COMMAND");
 
-export const INCREASE_FONT_SIZE_COMMAND = createCommand('INCREASE_FONT_SIZE_COMMAND');
-export const DECREASE_FONT_SIZE_COMMAND = createCommand('DECREASE_FONT_SIZE_COMMAND');
-export const FONT_SIZE_COMMAND = createCommand('FONT_SIZE_COMMAND');
-
+export const INCREASE_FONT_SIZE_COMMAND = createCommand(
+  "INCREASE_FONT_SIZE_COMMAND"
+);
+export const DECREASE_FONT_SIZE_COMMAND = createCommand(
+  "DECREASE_FONT_SIZE_COMMAND"
+);
+export const FONT_SIZE_COMMAND = createCommand("FONT_SIZE_COMMAND");
 
 const ToolbarPlugin = () => {
   const [editor] = useLexicalComposerContext();
@@ -41,10 +44,12 @@ const ToolbarPlugin = () => {
   const [alignment, setAlignment] = React.useState("left");
   const [textDirection, setTextDirection] = React.useState("ltr");
   const [fontFamily, setFontFamily] = React.useState("Arial");
-  const [fontSize, setFontSize] = React.useState('14px');
+  const [fontSize, setFontSize] = React.useState("14px");
 
   // Common font sizes (matches Word's default sizes)
-  const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
+  const fontSizes = [
+    8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72,
+  ];
   const minSize = 8;
   const maxSize = 72;
   const updateToolbar = React.useCallback(() => {
@@ -98,7 +103,7 @@ const ToolbarPlugin = () => {
           const selection = $getSelection();
           if ($isRangeSelection(selection)) {
             $patchStyleText(selection, {
-              'font-size': size,
+              "font-size": size,
             });
           }
         });
@@ -205,9 +210,10 @@ const ToolbarPlugin = () => {
     { value: "Trebuchet MS", label: "Trebuchet MS" },
   ];
   return (
-    <div className={styles.toolbar}>
+    <div className="toolbar">
       <div className={styles.fontFaimlyDropDown}>
-        <select className={styles.fontFaimlyDropDownselect}
+        <select
+          className={styles.fontFaimlyDropDownselect}
           value={fontFamily}
           onChange={(e) =>
             editor.dispatchCommand(FONT_FAMILY_COMMAND, e.target.value)
@@ -244,10 +250,12 @@ const ToolbarPlugin = () => {
           </svg> */}
           -
         </button>
-        
+
         <select
           value={fontSize}
-          onChange={(e) => editor.dispatchCommand(FONT_SIZE_COMMAND, e.target.value)}
+          onChange={(e) =>
+            editor.dispatchCommand(FONT_SIZE_COMMAND, e.target.value)
+          }
           className={styles.fontSizeDropDownselect}
           aria-label="Font size"
           title="Font Size"
@@ -258,7 +266,7 @@ const ToolbarPlugin = () => {
             </option>
           ))}
         </select>
-        
+
         <button
           onClick={() => editor.dispatchCommand(INCREASE_FONT_SIZE_COMMAND)}
           className="toolbar-item"
@@ -272,7 +280,7 @@ const ToolbarPlugin = () => {
           +
         </button>
       </div>
-<div className={styles.toolbardivider}></div>
+      <div className={styles.toolbardivider}></div>
       <button
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")}
         className={`toolbar-item spaced ${isBold ? "active" : ""}`}
