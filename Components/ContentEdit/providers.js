@@ -10,7 +10,7 @@ export function createWebsocketProvider(id, yjsDocMap) {
     `?Authorization=${token}`,
     doc,
     {
-      connect: false,
+      connect: true,
     }
   );
   return provider;
