@@ -95,7 +95,7 @@
 
 /* Share Modal */
 .share-modal-overlay {
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   right: 0;
@@ -104,7 +104,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 10;
 }
 
 .content-editor .toolbar {

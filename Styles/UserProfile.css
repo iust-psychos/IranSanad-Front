@@ -294,3 +294,28 @@
     width: 60%;
     vertical-align: middle;
 }
+
+@media screen and (max-width: 768px) {
+    .user-profile-area-body {
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .user-profile-info-2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        align-content: center;
+        gap: 10px;
+        margin: 2.5% 0;
+    }
+
+    .user-profile-info-3-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        align-content: center;
+        gap: 10px;
+        margin: 2.5% 0;
+    }
+}
