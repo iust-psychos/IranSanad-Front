@@ -6,15 +6,17 @@ import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
 import Tip_slide from "./Tip_slide";
 import * as yup from "yup";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
-  getValidationCode,
+  sendValidationCode,
   sendNewPassword,
+  verify,
+  resendCode,
 } from "../Managers/ForgotPasswordManager";
 import { Tooltip } from "react-tooltip";
 //connection to back remain
 const Forgot_password = () => {
-  const [trueValidationCode, setTrueValidationCode] = useState("");
+  //const [trueValidationCode, setTrueValidationCode] = useState("");
   const location = useLocation();
   const [email, setEmail] = useState(
     location.state ? location.state.email : ""
@@ -24,6 +26,8 @@ const Forgot_password = () => {
     newPassword: "",
     repeatPassword: "",
   });
+
+  const navigate = useNavigate();
 
   const [errorEmail, setErrorEmail] = useState(null);
   const [errorValidationCode, setErrorValidationCode] = useState("");
@@ -72,16 +76,12 @@ const Forgot_password = () => {
   };
 
   const handleSubmitEmail = async (e) => {
-    console.log("Fuck");
     e.preventDefault();
     try {
       await validationSchemaEmail.validate(email);
       setErrorEmail(null);
-      //connection to backend remains
-      let respEmail = await getValidationCode(email);
-
-      if (respEmail.code == 201) {
-        setTrueValidationCode(respEmail.validationCode);
+      let respEmail = await sendValidationCode(email);
+      if (respEmail.status == 200) {
         emailRef.current.classList.add(TipStyles.slideOut);
         emailRef.current.addEventListener(
           "animationend",
@@ -105,9 +105,8 @@ const Forgot_password = () => {
 
     try {
       await validationSchemaCode.validate(validationCode);
-      if (validationCode != trueValidationCode) {
-        throw new Error("کد وارد شده نادرست است");
-      } else {
+      let respCode = await verify(email, validationCode);
+      if (respCode.status == 200) {
         setErrorValidationCode(null);
         validationCodeRef.current.classList.add(TipStyles.slideOut);
         validationCodeRef.current.addEventListener(
@@ -119,6 +118,8 @@ const Forgot_password = () => {
           },
           { once: true }
         );
+      } else {
+        throw new Error(respCode.data.code);
       }
     } catch (err) {
       setErrorValidationCode(err.message);
@@ -134,13 +135,13 @@ const Forgot_password = () => {
       });
       setErrorNewPassword({});
       let resp = await sendNewPassword(
+        validationCode,
         email,
         newPassword.newPassword,
         newPassword.repeatPassword
       );
-      console.log(resp);
-      if (resp.code == 201) {
-        console.log("here we must route to dashboard");
+      if (resp.status == 201) {
+        navigate("/login");
       }
     } catch (err) {
       const validationErrors = {};
