@@ -11,6 +11,7 @@ import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import CookieManager from "../Managers/CookieManager";
+import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 
 const postPermissionsAPI =
   "http://iransanad.fiust.ir/api/v1/docs/permission/set_permission/";
@@ -150,8 +151,49 @@ const Share = ({ onClose }) => {
       .catch((error) => console.log(error));
   }, []);
 
-  const handleSubmit = () => {
-    onClose();
+  const [modifiedPermissionList, setModifiedPermissionList] = useState({});
+
+  const handlePermissionChange = (userId, newPermission) => {
+    setModifiedPermissionList((prev) => ({
+      ...prev,
+      [userId]: newPermission,
+    }));
+
+    console.log(newPermission);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const body = Object.entries(modifiedPermissionList).map(
+        ([userId, permission]) => ({
+          user: parseInt(userId),
+          permission: permission,
+        })
+      );
+
+      if (body.length > 0) {
+        await axios.post(
+          postPermissionsAPI,
+          {
+            document: document.id,
+            permissions: body,
+          },
+          {
+            headers: {
+              Authorization: `JWT ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+
+      showSuccessToast("تغییرات با موفقیت اعمال شد!");
+    } catch (error) {
+      console.log(error);
+      showErrorToast("خطا در اعمال تغییرات!");
+    } finally {
+      onClose();
+    }
   };
 
   const handleCopyLink = () => {
@@ -198,7 +240,11 @@ const Share = ({ onClose }) => {
               >
                 <div className="share-item-user">
                   <div className="share-item-icon">
-                    {!permissionItem.user.img && <FaUser fill="black" />}
+                    {permissionItem.user.img ? (
+                      permissionItem.user.img
+                    ) : (
+                      <FaUser fill="black" />
+                    )}
                   </div>
                   <div className="share-item-name-email">
                     <h2 className="share-item-name">
@@ -210,7 +256,7 @@ const Share = ({ onClose }) => {
                   </div>
                 </div>
                 <div className="share-item-status">
-                  {permissionItem.access_level === "Owner" ? (
+                  {permissionItem.access_level === 4 ? (
                     <>
                       <p
                         className="share-item-status-label"
@@ -225,46 +271,49 @@ const Share = ({ onClose }) => {
                     </>
                   ) : (
                     <>
-                      <div onClick={(e) => e.stopPropagation()}>
-                        <Select.Root defaultValue={permissionItem.access_level}>
-                          <Select.Trigger className="share-select-trigger">
-                            <Select.Value
-                              placeholder={
-                                permissionItem.access_level === "visitor"
-                                  ? "نظاره‌گر"
-                                  : "ویراستار"
-                              }
-                              className="share-item-status-label"
-                            />
-                            <HiChevronUpDown className="share-select-icon" />
-                          </Select.Trigger>
-                          <Select.Portal>
-                            <Select.Backdrop />
-                            <Select.Positioner>
-                              <Select.Popup className="share-select-popup">
-                                <Select.Item
-                                  value="visitor"
-                                  className="share-select-item"
-                                >
-                                  <Select.ItemText>نظاره‌گر</Select.ItemText>
-                                  <Select.ItemIndicator className="share-item-indicator">
-                                    <FaCheck size={12} />
-                                  </Select.ItemIndicator>
-                                </Select.Item>
-                                <Select.Item
-                                  value="editor"
-                                  className="share-select-item"
-                                >
-                                  <Select.ItemText>ویراستار</Select.ItemText>
-                                  <Select.ItemIndicator className="share-item-indicator">
-                                    <FaCheck size={12} />
-                                  </Select.ItemIndicator>
-                                </Select.Item>
-                              </Select.Popup>
-                            </Select.Positioner>
-                          </Select.Portal>
-                        </Select.Root>
-                      </div>
+                      <Select.Root
+                        defaultValue={permissionItem.access_level}
+                        onValueChange={(value) =>
+                          handlePermissionChange(permissionItem.user.id, value)
+                        }
+                      >
+                        <Select.Trigger className="share-select-trigger">
+                          <Select.Value
+                            placeholder={
+                              permissionItem.access_level === 1
+                                ? "نظاره‌گر"
+                                : "ویراستار"
+                            }
+                            className="share-item-status-label"
+                          />
+                          <HiChevronUpDown className="share-select-icon" />
+                        </Select.Trigger>
+                        <Select.Portal container={document.body}>
+                          <Select.Backdrop />
+                          <Select.Positioner>
+                            <Select.Popup className="share-select-popup">
+                              <Select.Item
+                                value="ReadOnly"
+                                className="share-select-item"
+                              >
+                                <Select.ItemText>نظاره‌گر</Select.ItemText>
+                                <Select.ItemIndicator className="share-item-indicator">
+                                  <FaCheck size={12} />
+                                </Select.ItemIndicator>
+                              </Select.Item>
+                              <Select.Item
+                                value="Write"
+                                className="share-select-item"
+                              >
+                                <Select.ItemText>ویراستار</Select.ItemText>
+                                <Select.ItemIndicator className="share-item-indicator">
+                                  <FaCheck size={12} />
+                                </Select.ItemIndicator>
+                              </Select.Item>
+                            </Select.Popup>
+                          </Select.Positioner>
+                        </Select.Portal>
+                      </Select.Root>
                     </>
                   )}
                 </div>
