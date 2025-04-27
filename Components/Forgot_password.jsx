@@ -81,22 +81,22 @@ const Forgot_password = () => {
       await validationSchemaEmail.validate(email);
       setErrorEmail(null);
       let respEmail = await sendValidationCode(email);
-      if (respEmail.status == 200) {
-        emailRef.current.classList.add(TipStyles.slideOut);
-        emailRef.current.addEventListener(
-          "animationend",
-          () => {
-            validationCodeRef.current.classList.add(TipStyles.slideIn);
-            emailRef.current.style.display = "none";
-            validationCodeRef.current.style.display = "block";
-          },
-          { once: true }
-        );
-      } else {
-        throw new Error("متاسفانه برای ما مشکلی پیش آمده");
-      }
+      emailRef.current.classList.add(TipStyles.slideOut);
+      emailRef.current.addEventListener(
+        "animationend",
+        () => {
+          validationCodeRef.current.classList.add(TipStyles.slideIn);
+          emailRef.current.style.display = "none";
+          validationCodeRef.current.style.display = "block";
+        },
+        { once: true }
+      );
     } catch (err) {
-      setErrorEmail(err.message);
+      if (err.name == "AxiosError") {
+        setErrorEmail(err.response.data.email[0]);
+      } else {
+        setErrorEmail(err.message);
+      }
     }
   };
 
@@ -106,23 +106,23 @@ const Forgot_password = () => {
     try {
       await validationSchemaCode.validate(validationCode);
       let respCode = await verify(email, validationCode);
-      if (respCode.status == 200) {
-        setErrorValidationCode(null);
-        validationCodeRef.current.classList.add(TipStyles.slideOut);
-        validationCodeRef.current.addEventListener(
-          "animationend",
-          () => {
-            newPasswordRef.current.classList.add(TipStyles.slideIn);
-            validationCodeRef.current.style.display = "none";
-            newPasswordRef.current.style.display = "block";
-          },
-          { once: true }
-        );
-      } else {
-        throw new Error(respCode.data.code);
-      }
+      setErrorValidationCode(null);
+      validationCodeRef.current.classList.add(TipStyles.slideOut);
+      validationCodeRef.current.addEventListener(
+        "animationend",
+        () => {
+          newPasswordRef.current.classList.add(TipStyles.slideIn);
+          validationCodeRef.current.style.display = "none";
+          newPasswordRef.current.style.display = "block";
+        },
+        { once: true }
+      );
     } catch (err) {
-      setErrorValidationCode(err.message);
+      if (err.name == "AxiosError") {
+        setErrorValidationCode(err.response.data.code[0]);
+      } else {
+        setErrorValidationCode(err.message);
+      }
     }
   };
 
@@ -140,14 +140,18 @@ const Forgot_password = () => {
         newPassword.newPassword,
         newPassword.repeatPassword
       );
-      if (resp.status == 201) {
-        navigate("/login");
-      }
+      navigate("/login");
     } catch (err) {
       const validationErrors = {};
-      err.inner.forEach((error) => {
-        validationErrors[error.path] = error.message;
-      });
+      if (err.name == "AxiosError") {
+        validationErrors.newPassword = err.response.data.new_password[0];
+        validationErrors.repeatPassword = err.response.data.new_password2[0];
+        setErrorNewPassword(validationErrors);
+      } else {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+      }
 
       setErrorNewPassword(validationErrors);
     }
