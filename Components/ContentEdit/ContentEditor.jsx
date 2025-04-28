@@ -15,7 +15,6 @@ import { ListNode, ListItemNode } from "@lexical/list";
 import { useLoaderData } from "react-router-dom";
 import ReactDOM from "react-dom";
 
-
 // interface ActiveUserProfile extends UserProfile {
 //   userId: number;
 // }
@@ -176,7 +175,10 @@ const ContentEditor = () => {
         ReactDOM.createPortal(
           <div className="share-modal-overlay">
             <div ref={shareModalRef}>
-              <Share onClose={() => setShowShareModal(false)} />
+              <Share
+                onClose={() => setShowShareModal(false)}
+                doc_uuid={doc_uuid}
+              />
             </div>
           </div>,
           document.body
