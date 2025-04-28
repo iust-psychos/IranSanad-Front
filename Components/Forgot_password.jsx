@@ -6,15 +6,17 @@ import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
 import Tip_slide from "./Tip_slide";
 import * as yup from "yup";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
-  getValidationCode,
+  sendValidationCode,
   sendNewPassword,
+  verify,
+  resendCode,
 } from "../Managers/ForgotPasswordManager";
 import { Tooltip } from "react-tooltip";
 //connection to back remain
 const Forgot_password = () => {
-  const [trueValidationCode, setTrueValidationCode] = useState("");
+  //const [trueValidationCode, setTrueValidationCode] = useState("");
   const location = useLocation();
   const [email, setEmail] = useState(
     location.state ? location.state.email : ""
@@ -24,6 +26,8 @@ const Forgot_password = () => {
     newPassword: "",
     repeatPassword: "",
   });
+
+  const navigate = useNavigate();
 
   const [errorEmail, setErrorEmail] = useState(null);
   const [errorValidationCode, setErrorValidationCode] = useState("");
@@ -72,31 +76,27 @@ const Forgot_password = () => {
   };
 
   const handleSubmitEmail = async (e) => {
-    console.log("Fuck");
     e.preventDefault();
     try {
       await validationSchemaEmail.validate(email);
       setErrorEmail(null);
-      //connection to backend remains
-      let respEmail = await getValidationCode(email);
-
-      if (respEmail.code == 201) {
-        setTrueValidationCode(respEmail.validationCode);
-        emailRef.current.classList.add(TipStyles.slideOut);
-        emailRef.current.addEventListener(
-          "animationend",
-          () => {
-            validationCodeRef.current.classList.add(TipStyles.slideIn);
-            emailRef.current.style.display = "none";
-            validationCodeRef.current.style.display = "block";
-          },
-          { once: true }
-        );
-      } else {
-        throw new Error("متاسفانه برای ما مشکلی پیش آمده");
-      }
+      let respEmail = await sendValidationCode(email);
+      emailRef.current.classList.add(TipStyles.slideOut);
+      emailRef.current.addEventListener(
+        "animationend",
+        () => {
+          validationCodeRef.current.classList.add(TipStyles.slideIn);
+          emailRef.current.style.display = "none";
+          validationCodeRef.current.style.display = "block";
+        },
+        { once: true }
+      );
     } catch (err) {
-      setErrorEmail(err.message);
+      if (err.name == "AxiosError") {
+        setErrorEmail(err.response.data.email[0]);
+      } else {
+        setErrorEmail(err.message);
+      }
     }
   };
 
@@ -105,23 +105,24 @@ const Forgot_password = () => {
 
     try {
       await validationSchemaCode.validate(validationCode);
-      if (validationCode != trueValidationCode) {
-        throw new Error("کد وارد شده نادرست است");
-      } else {
-        setErrorValidationCode(null);
-        validationCodeRef.current.classList.add(TipStyles.slideOut);
-        validationCodeRef.current.addEventListener(
-          "animationend",
-          () => {
-            newPasswordRef.current.classList.add(TipStyles.slideIn);
-            validationCodeRef.current.style.display = "none";
-            newPasswordRef.current.style.display = "block";
-          },
-          { once: true }
-        );
-      }
+      let respCode = await verify(email, validationCode);
+      setErrorValidationCode(null);
+      validationCodeRef.current.classList.add(TipStyles.slideOut);
+      validationCodeRef.current.addEventListener(
+        "animationend",
+        () => {
+          newPasswordRef.current.classList.add(TipStyles.slideIn);
+          validationCodeRef.current.style.display = "none";
+          newPasswordRef.current.style.display = "block";
+        },
+        { once: true }
+      );
     } catch (err) {
-      setErrorValidationCode(err.message);
+      if (err.name == "AxiosError") {
+        setErrorValidationCode(err.response.data.code[0]);
+      } else {
+        setErrorValidationCode(err.message);
+      }
     }
   };
 
@@ -134,19 +135,23 @@ const Forgot_password = () => {
       });
       setErrorNewPassword({});
       let resp = await sendNewPassword(
+        validationCode,
         email,
         newPassword.newPassword,
         newPassword.repeatPassword
       );
-      console.log(resp);
-      if (resp.code == 201) {
-        console.log("here we must route to dashboard");
-      }
+      navigate("/login");
     } catch (err) {
       const validationErrors = {};
-      err.inner.forEach((error) => {
-        validationErrors[error.path] = error.message;
-      });
+      if (err.name == "AxiosError") {
+        validationErrors.newPassword = err.response.data.new_password[0];
+        validationErrors.repeatPassword = err.response.data.new_password2[0];
+        setErrorNewPassword(validationErrors);
+      } else {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+      }
 
       setErrorNewPassword(validationErrors);
     }

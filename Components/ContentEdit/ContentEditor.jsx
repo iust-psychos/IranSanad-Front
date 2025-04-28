@@ -30,36 +30,36 @@ const editorConfig = {
 const ContentEditor = () => {
   const nameRef = useRef();
   const providerName = "websockets";
-  // const [userProfile, setUserProfile] = useState(() => getRandomUserProfile());
-  // const containerRef = useRef(null);
+  const [userProfile, setUserProfile] = useState(() => getRandomUserProfile());
+  const containerRef = useRef(null);
   const [yjsProvider, setYjsProvider] = useState(null);
   const [connected, setConnected] = useState(false);
-  // const [activeUsers, setActiveUsers] = useState([]);
+  const [activeUsers, setActiveUsers] = useState([]);
   const { doc_uuid } = useParams();
   const doc = useLoaderData();
 
-  // const handleAwarenessUpdate = useCallback(() => {
-  //   const awareness = yjsProvider.awareness;
-  //   setActiveUsers(
-  //     Array.from(awareness.getStates().entries()).map(
-  //       ([userId, { color, name }]) => ({
-  //         color,
-  //         name,
-  //         userId,
-  //       })
-  //     )
-  //   );
-  // }, [yjsProvider]);
+  const handleAwarenessUpdate = useCallback(() => {
+    const awareness = yjsProvider.awareness;
+    setActiveUsers(
+      Array.from(awareness.getStates().entries()).map(
+        ([userId, { color, name }]) => ({
+          color,
+          name,
+          userId,
+        })
+      )
+    );
+  }, [yjsProvider]);
 
-  // useEffect(() => {
-  //   if (yjsProvider == null) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (yjsProvider == null) {
+      return;
+    }
 
-  //   yjsProvider.awareness.on("update", handleAwarenessUpdate);
+    yjsProvider.awareness.on("update", handleAwarenessUpdate);
 
-  //   return () => yjsProvider.awareness.off("update", handleAwarenessUpdate);
-  // }, [yjsProvider, handleAwarenessUpdate]);
+    return () => yjsProvider.awareness.off("update", handleAwarenessUpdate);
+  }, [yjsProvider, handleAwarenessUpdate]);
 
   const providerFactory = useCallback(
     (id, yjsDocMap) => {
@@ -189,9 +189,9 @@ const ContentEditor = () => {
           id={doc_uuid}
           providerFactory={providerFactory}
           shouldBootstrap={true}
-          // username={userProfile.name}
-          // cursorColor={userProfile.color}
-          // cursorsContainerRef={containerRef}
+          username="Test"
+          cursorColor="Red"
+          cursorsContainerRef={containerRef}
         />
 
         <Editor />
