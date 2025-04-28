@@ -295,10 +295,46 @@
     vertical-align: middle;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 550px) {
+    .user-profile-area {
+        width: 75%;
+    }
+
+    .user-profile-area-header > h2 {
+        font-size: 18px;
+    }
+    
+    .user-profile-area-header > p {
+        font-size: 0.7rem;
+    }
+
     .user-profile-area-body {
         overflow-y: scroll;
         overflow-x: hidden;
+    }
+
+    .user-profile-area-body::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    .user-profile-area-body::-webkit-scrollbar-thumb {
+        background: #AE8EE6;
+        border-radius: 3px;
+    }
+    
+    .user-profile-titles > h3 {
+        font-size: 16px;
+    }
+    
+    .user-profile-titles > p {
+        font-size: 11px;
+    }
+
+    .user-profile-info-1 > button {
+        border-radius: 5px;
+        width: 55px;
+        height: 27px;
+        font-size: 13px;
     }
 
     .user-profile-info-2 {
@@ -317,5 +353,35 @@
         align-content: center;
         gap: 10px;
         margin: 2.5% 0;
+    }
+}
+
+/* Small Device */
+@media screen and (max-width: 320px) {
+    .user-profile-area {
+        width: 86%;
+    }
+
+    .user-profile-area-header > h2 {
+        font-size: 15px;
+    }
+    
+    .user-profile-area-header > p {
+        font-size: 0.65rem;
+    }
+
+    .user-profile-titles > h3 {
+        font-size: 14px;
+    }
+    
+    .user-profile-titles > p {
+        font-size: 10px;
+    }
+
+    .user-profile-info-1 > button {
+        border-radius: 5px;
+        width: 45px;
+        height: 22px;
+        font-size: 11px;
     }
 }
