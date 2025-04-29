@@ -7,7 +7,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import Tip_slide from "./Tip_slide";
 import SignupManager from "../Managers/SignupManager";
 import * as yup from "yup";
-import { Link, useAsyncError } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TipStyles from "../Styles/Tip_slide.module.css";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -21,6 +21,7 @@ const SignUp = () => {
     repeatpassword: "",
     username: "",
   });
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [trueValidationCode, setTrueValidationCode] = useState("");
   const [validationCode, setValidationCode] = useState("");
@@ -41,6 +42,7 @@ const SignUp = () => {
   const validationCodeRef = useRef(null);
   const iconContainer = useRef(null);
 
+  const validationSchemaCode = yup.string().required("کد نمیتواند خالی باشد");
   const validationSchema = yup.object().shape({
     username: yup.string().required("نام کاربری اجباری است."),
     email: yup
@@ -102,14 +104,9 @@ const SignUp = () => {
     try {
       await validationSchema.validate(formData, { abortEarly: false });
       setErrors({});
-      let resp = await SignupManager.Signup(
-        formData.username,
-        formData.email,
-        formData.repeatpassword,
-        formData.password
-      );
-      //etiher in sign up we get the code,or we use another api for it
-      //it must be assigned to setTrueValidationCode
+      await SignupManager.sendValidationCode(formData.email);
+      showSuccessToast("کد احراز هویت شما به ایمیل داده شده ارسال شد");
+
       signupRef.current.classList.add(TipStyles.slideOut);
       signupRef.current.addEventListener(
         "animationend",
@@ -121,12 +118,15 @@ const SignUp = () => {
         { once: true }
       );
     } catch (err) {
-      const validationErrors = {};
-      console.log(err);
-      err.inner.forEach((error) => {
-        validationErrors[error.path] = error.message;
-      });
-      setErrors(validationErrors);
+      if (err.name == "AxiosError") {
+        showErrorToast(err.response.data.email[0]);
+      } else {
+        const validationErrors = {};
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        setErrors(validationErrors);
+      }
     }
   };
   const handleChangeCode = (e) => {
@@ -135,16 +135,29 @@ const SignUp = () => {
 
   const handleSubmitCode = async (e) => {
     e.preventDefault();
-
     try {
       await validationSchemaCode.validate(validationCode);
-      if (validationCode != trueValidationCode) {
-        throw new Error("کد وارد شده نادرست است");
-      } else {
-        setErrorValidationCode(null);
-      }
+      await SignupManager.verify_code(formData.email, validationCode);
+      setErrorValidationCode(null);
+      showSuccessToast("تایید هویت شما موفقیت آمیز بود");
+      await SignupManager.Signup(
+        formData.username,
+        formData.email,
+        formData.repeatpassword,
+        formData.password
+      );
+      cookieManager.SaveToken(10, resp.data.tokens.access);
+      cookieManager.LoadToken();
+      navigate("/dashboard");
+      
     } catch (err) {
-      setErrorValidationCode(err.message);
+      if (err.name == "AxiosError") {
+        console.log(err)
+        showErrorToast(err.response.data.code[0]);
+      } else {
+        console.log(err)
+        setErrorValidationCode(err.message);
+      }
     }
   };
 

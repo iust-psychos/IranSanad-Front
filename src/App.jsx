@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate, Outlet} from "react-router-dom";
 import SignUp from "../Components/Sign_up";
 import Login from "../Components/Login";
 import Forgot_password from "../Components/Forgot_password";
@@ -15,6 +15,19 @@ import { useState, useEffect } from "react";
 import "../Styles/App.css";
 import "react-toastify/dist/ReactToastify.css";
 import { contentEditorLoader } from "../Managers/content-editor-manager";
+import cookieManager from "../Managers/CookieManager"
+
+const isAuthenticated = cookieManager.LoadToken() ? true : false ;
+
+const ProtectedRoute = ({ isAuthenticated, redirectPath = '/login', children }) => {
+  console.log(isAuthenticated)
+  if (!isAuthenticated) {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return children ? children : <Outlet />;
+};
+
 
 const router = createBrowserRouter([
   {
@@ -22,26 +35,8 @@ const router = createBrowserRouter([
     element: <Root />,
   },
   {
-    path: "/profile",
-    element: <UserProfile />,
-  },
-  {
     path: "/login",
     element: <Login />,
-  },
-  {
-    path: "/dashboard",
-    element: <UserDashboard />,
-    loader: userDashboardLoader,
-  },
-  {
-    path: "/EmailVerification",
-    element: <EmailVerification />,
-  },
-  {
-    path: "/document/:doc_uuid",
-    element: <ContentEditor />,
-    loader: contentEditorLoader,
   },
   {
     path: "/signup",
@@ -52,12 +47,36 @@ const router = createBrowserRouter([
     element: <Forgot_password />,
   },
   {
-    path: "*",
-    element: <ErrorPage />,
+    path: "/EmailVerification",
+    element: <EmailVerification />,
+  },
+  // Protected routes group
+  {
+    element: <ProtectedRoute isAuthenticated={isAuthenticated} />,
+    children: [
+      {
+        path: "/profile",
+        element: <UserProfile />,
+      },
+      {
+        path: "/dashboard",
+        element: <UserDashboard />,
+        loader: isAuthenticated ? userDashboardLoader : null,
+      },
+      {
+        path: "/document/:doc_uuid",
+        element: <ContentEditor />,
+        loader: isAuthenticated ? contentEditorLoader : null,
+      },
+      {
+        path: "/share",
+        element: <Share />,
+      },
+    ],
   },
   {
-    path: "/share",
-    element: <Share />,
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
 
@@ -70,8 +89,8 @@ function Root() {
     }, 3500);
     return () => clearTimeout(timer);
   }, []);
-
-  return isLoading ? <Loading /> : null;
+  
+  return isLoading ? <Loading /> : <Navigate to = '/dashboard'/>;
 }
 
 export default function App() {

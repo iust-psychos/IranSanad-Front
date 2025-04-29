@@ -7,6 +7,7 @@ import { Input } from "@base-ui-components/react/input";
 import Tip_slide from "./Tip_slide";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 import {
   sendValidationCode,
   sendNewPassword,
@@ -14,9 +15,8 @@ import {
   resendCode,
 } from "../Managers/ForgotPasswordManager";
 import { Tooltip } from "react-tooltip";
-//connection to back remain
+
 const Forgot_password = () => {
-  //const [trueValidationCode, setTrueValidationCode] = useState("");
   const location = useLocation();
   const [email, setEmail] = useState(
     location.state ? location.state.email : ""
@@ -80,7 +80,8 @@ const Forgot_password = () => {
     try {
       await validationSchemaEmail.validate(email);
       setErrorEmail(null);
-      let respEmail = await sendValidationCode(email);
+      await sendValidationCode(email);
+      showSuccessToast("کد احراز هویت شما به ایمیل داده شده ارسال شد")
       emailRef.current.classList.add(TipStyles.slideOut);
       emailRef.current.addEventListener(
         "animationend",
@@ -93,7 +94,7 @@ const Forgot_password = () => {
       );
     } catch (err) {
       if (err.name == "AxiosError") {
-        setErrorEmail(err.response.data.email[0]);
+        showErrorToast(err.response.data.email[0]);
       } else {
         setErrorEmail(err.message);
       }
@@ -105,8 +106,9 @@ const Forgot_password = () => {
 
     try {
       await validationSchemaCode.validate(validationCode);
-      let respCode = await verify(email, validationCode);
+      await verify(email, validationCode);
       setErrorValidationCode(null);
+      showSuccessToast("تایید هویت شما موفقیت آمیز بود")
       validationCodeRef.current.classList.add(TipStyles.slideOut);
       validationCodeRef.current.addEventListener(
         "animationend",
@@ -119,7 +121,7 @@ const Forgot_password = () => {
       );
     } catch (err) {
       if (err.name == "AxiosError") {
-        setErrorValidationCode(err.response.data.code[0]);
+        showErrorToast(err.response.data.code[0]);
       } else {
         setErrorValidationCode(err.message);
       }
@@ -134,12 +136,13 @@ const Forgot_password = () => {
         abortEarly: false,
       });
       setErrorNewPassword({});
-      let resp = await sendNewPassword(
+      await sendNewPassword(
         validationCode,
         email,
         newPassword.newPassword,
         newPassword.repeatPassword
       );
+      showSuccessToast("رمز عبور شما با موفقیت تغییر یافت")
       navigate("/login");
     } catch (err) {
       const validationErrors = {};
