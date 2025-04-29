@@ -7,6 +7,7 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { richTextActions, richTextOptions } from "./rich-text-actions";
 
 import {
   $getSelection,
@@ -25,6 +26,34 @@ import {
 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
+
+  const onAction = (id) => {
+    switch (id) {
+      case richTextActions.Bold:
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+        break;
+      case richTextActions.Italics:
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
+        break;
+      case richTextActions.Underline:
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
+        break;
+      case richTextActions.Strikethrough:
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
+        break;
+      case richTextActions.LeftAlign:
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
+        break;
+      case richTextActions.CenterAlign:
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
+        break;
+      case richTextActions.RightAlign:
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
+        break;
+      default:
+        break;
+    }
+  };
 
   const [isBold, setBold] = useState(false);
   const [isItalic, setItalic] = useState(false);
@@ -78,7 +107,12 @@ function ToolbarPlugin() {
 
   return (
     <div className="toolbar">
-      {/* Bold */}
+      {richTextOptions.map(({ id, icon, label }) => (
+        <button aria-label={label} onClick={() => onAction(id)}>
+          {icon}
+        </button>
+      ))}
+      {/* Bold
       <button
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")}
         className={isBold ? "active" : ""}
@@ -166,7 +200,6 @@ function ToolbarPlugin() {
         </svg>
       </button>
 
-      {/* Font Family Dropdown */}
       <select
         value={fontFamily}
         onChange={(e) => {
@@ -189,7 +222,6 @@ function ToolbarPlugin() {
         ))}
       </select>
 
-      {/* Font Size Controls */}
       <div className="font-size-controls">
         <button
           onClick={() => {
@@ -245,7 +277,6 @@ function ToolbarPlugin() {
         </button>
       </div>
 
-      {/* Text Alignment */}
       <button
         onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left")}
         aria-label="Align Left"
@@ -291,14 +322,14 @@ function ToolbarPlugin() {
         aria-label="Align Right"
       >
         <svg
-          width="23"
+          width="20"
           height="17"
-          viewBox="0 0 23 17"
+          viewBox="0 0 20 17"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M4.00037 8.5H18.9996M8.49962 16H14.5004M1 1H22"
+            d="M19 8.5H9.4M19 1H1M19 16H1"
             stroke="black"
             stroke-width="1.5"
             stroke-miterlimit="10"
@@ -307,7 +338,6 @@ function ToolbarPlugin() {
         </svg>
       </button>
 
-      {/* Text Direction */}
       <button
         onClick={() => {
           // Left-to-right direction
@@ -362,7 +392,6 @@ function ToolbarPlugin() {
         </svg>
       </button>
 
-      {/* Unordered (Bullet) List */}
       <button
         onClick={() =>
           editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)
@@ -383,7 +412,6 @@ function ToolbarPlugin() {
         </svg>
       </button>
 
-      {/* Ordered (Numbered) List */}
       <button
         onClick={() =>
           editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)
@@ -422,7 +450,7 @@ function ToolbarPlugin() {
             fill="black"
           />
         </svg>
-      </button>
+      </button> */}
     </div>
   );
 }
