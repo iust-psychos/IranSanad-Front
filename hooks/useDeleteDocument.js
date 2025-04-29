@@ -6,7 +6,7 @@ export function useDeleteDocument(updateStateFunction, document) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => deleteDocument(document.id),
+    mutationFn: () => deleteDocument(document.doc_uuid),
 
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ["documents"] });

@@ -12,3 +12,140 @@ export const IconShare = () => (
     />
   </svg>
 );
+export const IconDivider = () => (
+  <svg
+    width="1"
+    height="38"
+    viewBox="0 0 1 38"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <line
+      x1="0.5"
+      y1="2.18557e-08"
+      x2="0.499998"
+      y2="38"
+      stroke="black"
+      stroke-opacity="0.5"
+    />
+  </svg>
+);
+export const IconBold = () => (
+  <svg
+    width="14"
+    height="16"
+    viewBox="0 0 14 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M7.85936 15.5C11.6496 15.5 14 13.847 14 11.2071C14 9.22111 12.2291 7.7354 9.81746 7.57877V7.49513C10.741 7.37764 11.5845 6.98512 12.1957 6.3884C12.8068 5.79167 13.1455 5.03002 13.1505 4.24088C13.1505 1.94465 11.0593 0.5 7.72619 0.5H0V15.5H7.85936ZM3.71642 2.83881H6.76874C8.50186 2.83881 9.49891 3.52464 9.49891 4.73054C9.49891 5.99878 8.36689 6.73783 6.3854 6.73783H3.71642V2.83881ZM3.71642 13.1612V8.80596H6.82993C9.02018 8.80596 10.2134 9.55414 10.2134 10.9577C10.2134 12.3917 9.05618 13.1612 6.91631 13.1612H3.71642Z"
+      fill="black"
+    />
+  </svg>
+);
+export const IconItalics = () => (
+  <svg
+    width="13"
+    height="18"
+    viewBox="0 0 13 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M5.4 1.5H8.7M8.7 1.5H12M8.7 1.5L4.3 16.5M4.3 16.5H1M4.3 16.5H7.6"
+      stroke="black"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+export const IconUnderline = () => (
+  <svg
+    width="15"
+    height="18"
+    viewBox="0 0 15 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M11.8333 1.5V7.92857C11.8333 9.06521 11.3768 10.1553 10.5641 10.959C9.75147 11.7628 8.64927 12.2143 7.5 12.2143C6.35073 12.2143 5.24853 11.7628 4.43587 10.959C3.62321 10.1553 3.16667 9.06521 3.16667 7.92857V1.5M1 16.5H14"
+      stroke="black"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+export const IconStrikethrough = () => (
+  <svg
+    width="17"
+    height="18"
+    viewBox="0 0 17 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M1 9H16M12.0717 1.5H6.89C6.08518 1.50023 5.30669 1.78678 4.6938 2.30841C4.0809 2.83004 3.67358 3.5527 3.5447 4.34714C3.41582 5.14157 3.57379 5.95594 3.99034 6.64458C4.40689 7.33321 5.05486 7.85118 5.81833 8.10583L8.5 9M3.5 16.5H10.11C10.6968 16.5 11.2736 16.3477 11.7839 16.0579C12.2942 15.7682 12.7205 15.3509 13.0212 14.847C13.3219 14.3431 13.4866 13.7697 13.4993 13.183C13.5119 12.5963 13.372 12.0164 13.0933 11.5"
+      stroke="black"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+export const IconLeftAlign = () => (
+  <svg
+    width="20"
+    height="17"
+    viewBox="0 0 20 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M1 8.5H10.6M1 16H19M1 1H19"
+      stroke="black"
+      stroke-width="1.5"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+    />
+  </svg>
+);
+export const IconCenterAlign = () => (
+  <svg
+    width="23"
+    height="17"
+    viewBox="0 0 23 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4.00037 8.5H18.9996M8.49962 16H14.5004M1 1H22"
+      stroke="black"
+      stroke-width="1.5"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+    />
+  </svg>
+);
+export const IconRightAlign = () => (
+  <svg
+    width="20"
+    height="17"
+    viewBox="0 0 20 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M19 8.5H9.4M19 1H1M19 16H1"
+      stroke="black"
+      stroke-width="1.5"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+    />
+  </svg>
+);

@@ -6,7 +6,7 @@ export function useRenameDocument(updateStateFunction, document) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (newName) => renameDocument(document.id, newName),
+    mutationFn: (newName) => renameDocument(document.doc_uuid, newName),
 
     onMutate: async (newName) => {
       await queryClient.cancelQueries({ queryKey: ["documents"] });
