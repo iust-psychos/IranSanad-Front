@@ -98,6 +98,7 @@ const Login = () => {
       let token = cookieManager.LoadToken();
 
       showSuccessToast("ورود موفقیت آمیز!");
+      navigate("/dashboard");
 
       const timeoutId = setTimeout(() => {
         navigate("/dashboard");
