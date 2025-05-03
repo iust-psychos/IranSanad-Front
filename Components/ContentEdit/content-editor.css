@@ -6,20 +6,24 @@
   line-height: 1;
   outline: 0;
 }
-.content-editor {
-  font-size: 10px;
-}
 
 .content-editor {
   background-color: #e8e3f9;
-  height: 100vh;
+  /* width: 100vw; */
+  /* height: 100vh; */
   display: grid;
-  grid-template-rows: repeat(3, min-content);
+  grid-template-rows: auto 1fr;
+  /* grid-template-columns: repeat(1, minmax(fit-content, 1fr)); */
+  /* min-height: 0;
+  min-width: 0; */
+  /* width: 100vw; */
+  /* overflow: hidden; */
+  /* overflow: auto; */
 }
 
 .content-editor menu.navbar {
   color: white;
-  padding: 0 2rem;
+  padding: 0 3rem;
 
   display: flex;
   flex-direction: row;
@@ -28,8 +32,9 @@
   gap: 1.2rem;
   grid-row: 1/2;
   grid-column: 1/-1;
-  width: 100%;
+  /* width: 100vw; */
   background-color: #bba1ea;
+  /* position: fixed; */
 }
 
 .content-editor .navbar .menu-logo {
@@ -42,7 +47,7 @@
   background-color: rgb(255, 255, 255, 0.5);
   margin-left: auto;
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.4rem;
   font-weight: 500;
   border: 0.05rem solid transparent;
   padding-inline: 0.5rem;
@@ -63,7 +68,7 @@
 
 .content-editor .navbar .menu-share {
   background-color: #7f62e0;
-  font-size: 1rem;
+  font-size: 1.4rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -74,7 +79,7 @@
 .content-editor .navbar .menu-profile {
   background: none;
   border: none;
-  padding: 0;
+  padding: ;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +96,7 @@
 }
 
 .content-editor .navbar .menu-profile img {
-  width: 3rem;
+  width: 4rem;
   outline: 0;
 }
 
@@ -109,10 +114,17 @@
   z-index: 10;
 }
 
+.content-editor .editor-inner {
+  grid-row: 2;
+  overflow: auto;
+  margin: 0 3rem 3rem 3rem;
+  /* min-width: 0; */
+}
+
 .content-editor .toolbar {
   display: flex;
-  width: 90%;
-
+  /* width: 90vw; */
+  /* width: fit-content; */
   background-color: #f2f2f2;
   border-radius: 999px;
   padding: 0.5rem 1rem;
@@ -127,7 +139,16 @@
 .content-editor .toolbar button {
   border: none;
   border-radius: 0.2rem;
-  padding: 0.4rem 0.6rem;
+  padding: 0.4rem 0.5rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.content-editor .toolbar svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
 }
 
 .content-editor .toolbar button:hover {
@@ -135,15 +156,14 @@
 }
 
 .content-editor .editor-input {
-  width: 55rem;
-  height: 80vh;
+  width: 1020px;
+  height: 1320px;
   margin-left: auto;
   margin-top: 1rem;
   margin-right: auto;
-  padding: 1rem;
+  padding: 3rem;
   background: #ffffff;
   outline: none;
-  overflow: auto;
   font-size: 1.2em;
 }
 

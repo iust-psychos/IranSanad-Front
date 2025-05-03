@@ -1,4 +1,9 @@
-import { createBrowserRouter, RouterProvider, Navigate, Outlet} from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import SignUp from "../Components/Sign_up";
 import Login from "../Components/Login";
 import Forgot_password from "../Components/Forgot_password";
@@ -15,19 +20,17 @@ import { useState, useEffect } from "react";
 import "../Styles/App.css";
 import "react-toastify/dist/ReactToastify.css";
 import { contentEditorLoader } from "../Managers/content-editor-manager";
-import cookieManager from "../Managers/CookieManager"
+import cookieManager from "../Managers/CookieManager";
 
-const isAuthenticated = cookieManager.LoadToken() ? true : false ;
-
-const ProtectedRoute = ({ isAuthenticated, redirectPath = '/login', children }) => {
-  console.log(isAuthenticated)
+const ProtectedRoute = ({ redirectPath = "/login", children }) => {
+  const isAuthenticated = cookieManager.LoadToken() ? true : false;
+  console.log(isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to={redirectPath} replace />;
   }
 
   return children ? children : <Outlet />;
 };
-
 
 const router = createBrowserRouter([
   {
@@ -52,7 +55,7 @@ const router = createBrowserRouter([
   },
   // Protected routes group
   {
-    element: <ProtectedRoute isAuthenticated={isAuthenticated} />,
+    element: <ProtectedRoute />,
     children: [
       {
         path: "/profile",
@@ -61,12 +64,12 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <UserDashboard />,
-        loader: isAuthenticated ? userDashboardLoader : null,
+        loader: userDashboardLoader,
       },
       {
         path: "/document/:doc_uuid",
         element: <ContentEditor />,
-        loader: isAuthenticated ? contentEditorLoader : null,
+        loader: contentEditorLoader,
       },
       {
         path: "/share",
@@ -82,15 +85,14 @@ const router = createBrowserRouter([
 
 function Root() {
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 3500);
     return () => clearTimeout(timer);
   }, []);
-  
-  return isLoading ? <Loading /> : <Navigate to = '/dashboard'/>;
+
+  return isLoading ? <Loading /> : <Navigate to="/dashboard" />;
 }
 
 export default function App() {

@@ -18,6 +18,14 @@ const ContentEditor = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   const shareModalRef = useRef(null);
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      renameDocument(doc_uuid, nameRef.current.value);
+      nameRef.current.blur();
+      editor.focus();
+    }
+  };
+
   return (
     <div className="content-editor">
       <menu className="navbar">
@@ -30,6 +38,7 @@ const ContentEditor = () => {
           autoFocus={false}
           defaultValue={doc.title}
           ref={nameRef}
+          onKeyDown={handleKeyDown}
           onBlur={() => renameDocument(doc_uuid, nameRef.current.value)}
         />
 
