@@ -17,7 +17,7 @@ const ContentEditor = () => {
   /* Share Modal */
   const [showShareModal, setShowShareModal] = useState(false);
   const shareModalRef = useRef(null);
-
+  
   return (
     <div className="content-editor">
       <menu className="navbar">

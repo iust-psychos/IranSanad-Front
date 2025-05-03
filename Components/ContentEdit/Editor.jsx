@@ -14,7 +14,8 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { ListNode, ListItemNode } from "@lexical/list";
 import ToolbarPlugin from "./ToolbarPlugin";
 import theme from "./theme";
-
+import axios from "axios";
+import CookieManager from "../../Managers/CookieManager";
 const editorConfig = {
   editorState: null,
   namespace: "Editor-1",
@@ -29,6 +30,7 @@ export default function Editor({ doc_uuid }) {
   const [yjsProvider, setYjsProvider] = useState(null);
   const [connected, setConnected] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
+  const [userInfo , setUserInfo] = useState(null);
 
   const handleAwarenessUpdate = useCallback(() => {
     const awareness = yjsProvider.awareness;
@@ -43,6 +45,21 @@ export default function Editor({ doc_uuid }) {
     );
   }, [yjsProvider]);
 
+  const handleGetUserInformation = async () => {
+    let token = CookieManager.LoadToken();
+    let response = await axios.get("http://iransanad.fiust.ir/api/v1/auth/info/" , {
+      headers: {
+        Authorization: `JWT ${token}`
+      }
+    });
+    console.log(response);
+    return response.data;
+  };
+  useEffect(() => {
+    if (userInfo === null) {
+        let raw_userinfo = handleGetUserInformation().then(resp => setUserInfo(resp.data));
+    }
+  },[setUserInfo]);
   useEffect(() => {
     if (yjsProvider == null) {
       return;
@@ -91,7 +108,7 @@ export default function Editor({ doc_uuid }) {
             id={doc_uuid}
             providerFactory={providerFactory}
             shouldBootstrap={true}
-            username="Test"
+            username="TEST"
             cursorColor="Red"
             cursorsContainerRef={containerRef}
           />
