@@ -1,4 +1,9 @@
-import { createBrowserRouter, RouterProvider, Navigate, Outlet} from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import SignUp from "../Components/Sign_up";
 import Login from "../Components/Login";
 import Forgot_password from "../Components/Forgot_password";
@@ -15,19 +20,23 @@ import { useState, useEffect } from "react";
 import "../Styles/App.css";
 import "react-toastify/dist/ReactToastify.css";
 import { contentEditorLoader } from "../Managers/content-editor-manager";
-import cookieManager from "../Managers/CookieManager"
+import cookieManager from "../Managers/CookieManager";
+import Landing from "../Components/Landing";
 
-const isAuthenticated = cookieManager.LoadToken() ? true : false ;
+const isAuthenticated = cookieManager.LoadToken() ? true : false;
 
-const ProtectedRoute = ({ isAuthenticated, redirectPath = '/login', children }) => {
-  console.log(isAuthenticated)
+const ProtectedRoute = ({
+  isAuthenticated,
+  redirectPath = "/login",
+  children,
+}) => {
+  console.log(isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to={redirectPath} replace />;
   }
 
   return children ? children : <Outlet />;
 };
-
 
 const router = createBrowserRouter([
   {
@@ -49,6 +58,10 @@ const router = createBrowserRouter([
   {
     path: "/EmailVerification",
     element: <EmailVerification />,
+  },
+  {
+    path: "/landing",
+    element: <Landing />,
   },
   // Protected routes group
   {
@@ -89,8 +102,8 @@ function Root() {
     }, 3500);
     return () => clearTimeout(timer);
   }, []);
-  
-  return isLoading ? <Loading /> : <Navigate to = '/dashboard'/>;
+
+  return isLoading ? <Loading /> : <Navigate to="/landing" />;
 }
 
 export default function App() {
