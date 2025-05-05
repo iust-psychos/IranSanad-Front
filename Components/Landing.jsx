@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HeroBanner from "../src/Images/LandingPage/combined_hero.svg";
 import Service1 from "../src/Images/LandingPage/service1.svg";
 import Service2 from "../src/Images/LandingPage/service2.svg";
@@ -17,10 +17,14 @@ const Landing = () => {
   const [ref3, ratio3] = useVisibilityRatio();
   const [ref4, ratio4] = useVisibilityRatio();
 
+  const [ref5, ratio5] = useVisibilityRatio();
+
   const scale1 = 0.9 + ratio1 * 0.1;
   const scale2 = 0.9 + ratio2 * 0.1;
   const scale3 = 0.9 + ratio3 * 0.1;
   const scale4 = 0.9 + ratio4 * 0.1;
+
+  const scale5 = 0.9 + ratio5 * 0.1;
 
   const nav = useNavigate();
 
@@ -181,6 +185,38 @@ const Landing = () => {
           </div>
         </div>
       </div>
+      <motion.div
+        className="landing-footer"
+        ref={ref5}
+        style={{ scale: scale5 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      >
+        <div className="landing-footer-contact">
+          <h1 className="landing-footer-title">ارتباط با ما</h1>
+          <ul className="landing-footer-list">
+            <li className="landing-footer-list-item">IranSanad@gmail.com</li>
+            <li className="landing-footer-list-item">۰۲۱-۷۷۷۷۷۷۷۷</li>
+            <li className="landing-footer-list-item">
+              تهران، خیابان رسالت، خیابان هنگام، خیابان دانشگاه علم و صنعت
+              ایران، دانشگاه علم و صنعت ایران، دانشکده مهندسی کامپیوتر
+            </li>
+          </ul>
+        </div>
+        <div className="landing-footer-navigate">
+          <h1 className="landing-footer-title">لینک‌ها مفید</h1>
+          <ul className="landing-footer-list">
+            <li className="landing-footer-list-item">
+              <Link to="/signup">ثبت نام</Link>
+            </li>
+            <li className="landing-footer-list-item">
+              <Link to="/login">ورود</Link>
+            </li>
+            <li className="landing-footer-list-item">
+              <Link to="/dashboard">داشبورد</Link>
+            </li>
+          </ul>
+        </div>
+      </motion.div>
     </div>
   );
 };
