@@ -103,7 +103,7 @@ function Root() {
     return () => clearTimeout(timer);
   }, []);
 
-  return isLoading ? <Loading /> : <Navigate to="/dashboard" />;
+  return isLoading ? <Loading /> : <Navigate to="/landing" />;
 }
 
 export default function App() {
