@@ -6,6 +6,7 @@ import Service2 from "../src/Images/LandingPage/service2.svg";
 import Service3 from "../src/Images/LandingPage/service3.svg";
 import Service4 from "../src/Images/LandingPage/service4.svg";
 import Join from "../src/Images/LandingPage/join.svg";
+import { MdEmail, MdPhoneEnabled, MdLocationPin } from "react-icons/md";
 import AnimatedSVG from "./AnimatedSVG";
 import "../Styles/Landing.css";
 import { motion } from "framer-motion";
@@ -38,9 +39,9 @@ const Landing = () => {
 
   return (
     <div className="landing">
-      <div className="landing-navbar">
+      {/* <div className="landing-navbar">
         به دلیل مشکلات فنی نوبار در حال حاضر در دسترس نیست...
-      </div>
+      </div> */}
       <div className="landing-hero">
         <div className="landing-hero-text">
           <h1 className="landing-hero-header">
@@ -194,9 +195,15 @@ const Landing = () => {
         <div className="landing-footer-contact">
           <h1 className="landing-footer-title">ارتباط با ما</h1>
           <ul className="landing-footer-list">
-            <li className="landing-footer-list-item">IranSanad@gmail.com</li>
-            <li className="landing-footer-list-item">۰۲۱-۷۷۷۷۷۷۷۷</li>
             <li className="landing-footer-list-item">
+              <MdEmail /> IranSanad@gmail.com
+            </li>
+            <li className="landing-footer-list-item">
+              <MdPhoneEnabled /> ۰۲۱-۷۷۷۷۷۷۷۷
+            </li>
+            <li className="landing-footer-list-item">
+              {" "}
+              <MdLocationPin />
               تهران، خیابان رسالت، خیابان هنگام، خیابان دانشگاه علم و صنعت
               ایران، دانشگاه علم و صنعت ایران، دانشکده مهندسی کامپیوتر
             </li>

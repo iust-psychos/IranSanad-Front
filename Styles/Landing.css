@@ -107,6 +107,11 @@
 
 .landing-join-title {
     color: #AE8EE6;
+    margin-bottom: 1%;
+}
+
+.landing-join-text {
+    margin-top: 1%;
 }
 
 .landing-join-body {
@@ -146,7 +151,7 @@
 .landing-footer {
     display: flex;
     flex-direction: column;
-    background-color: #AE8EE6;
+    background-color: whitesmoke;
     border: 1px solid black;
     border-radius: 40px;
     padding: 2% 3%;
@@ -156,7 +161,7 @@
 .landing-footer-title {
     font-size: 22px;
     font-family: 'Vazir';
-    margin-bottom: 2%;
+    margin-bottom: 20px;
 }
 
 .landing-footer-contact {
@@ -164,7 +169,7 @@
 }
 
 .landing-footer-navigate {
-    margin: 1% 0;
+    margin: 2% 0;
 }
 
 .landing-footer-list {
@@ -172,8 +177,15 @@
 }
 
 .landing-footer-list-item {
-    margin: 1% 0;
-    max-width: 50%;
+    font-family: 'Vazir';
+    margin: 10px 0;
+}
+
+.landing-footer-list-item > svg {
+    vertical-align: middle;
+    width: 22px;
+    height: 22px;
+    fill: #AE8EE6;
 }
 
 .landing-footer-list-item a {
