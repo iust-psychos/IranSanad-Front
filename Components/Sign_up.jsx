@@ -13,7 +13,8 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
-
+import { RingLoader } from "react-spinners";
+import CookieManager from "../Managers/CookieManager.js";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -22,25 +23,15 @@ const SignUp = () => {
     username: "",
   });
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const [trueValidationCode, setTrueValidationCode] = useState("");
   const [validationCode, setValidationCode] = useState("");
   const [errorValidationCode, setErrorValidationCode] = useState("");
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [passFieldType, setPassFieldType] = useState("password");
-  const [showPassIcon, setShowPassIcon] = useState(
-    <RemoveRedEyeIcon
-      sx={{
-        position: "absolute",
-        top: "44.3%",
-        left: "21%",
-      }}
-    />
-  );
 
   const signupRef = useRef(null);
   const validationCodeRef = useRef(null);
-  const iconContainer = useRef(null);
 
   const validationSchemaCode = yup.string().required("کد نمیتواند خالی باشد");
   const validationSchema = yup.object().shape({
@@ -60,8 +51,8 @@ const SignUp = () => {
     repeatpassword: yup
       .string()
       .required("تکرار رمز عبور اجباری است")
-      .matches(
-        `${formData.repeatpassword}`,
+      .oneOf(
+        [yup.ref("password"), null],
         "تکرار رمز وارد شده با رمز تطابق ندارد"
       ),
   });
@@ -70,32 +61,10 @@ const SignUp = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleShowPassword = (e) => {
+  const togglePasswordVisibility = (e) => {
     e.preventDefault();
-    if (!showPassword) {
-      setShowPassIcon(
-        <RemoveRedEyeIcon
-          sx={{
-            position: "absolute",
-            top: "44.3%",
-            left: "21%",
-          }}
-        />
-      );
-      setPassFieldType("password");
-    } else {
-      setShowPassIcon(
-        <VisibilityOffIcon
-          sx={{
-            position: "absolute",
-            top: "44.3%",
-            left: "21%",
-          }}
-        />
-      );
-      setPassFieldType("text");
-    }
     setShowPassword(!showPassword);
+    setPassFieldType(showPassword ? "password" : "text");
   };
 
   const handleSubmit = async (e) => {
@@ -104,10 +73,12 @@ const SignUp = () => {
     try {
       await validationSchema.validate(formData, { abortEarly: false });
       setErrors({});
-      await SignupManager.sendValidationCode(formData.email);
+      setLoading(true);
+      await SignupManager.sendValidationCode(formData.email, formData.username);
       showSuccessToast("کد احراز هویت شما به ایمیل داده شده ارسال شد");
 
       signupRef.current.classList.add(TipStyles.slideOut);
+
       signupRef.current.addEventListener(
         "animationend",
         () => {
@@ -119,7 +90,7 @@ const SignUp = () => {
       );
     } catch (err) {
       if (err.name == "AxiosError") {
-        showErrorToast(err.response.data.email[0]);
+        showErrorToast(err.response.data.message);
       } else {
         const validationErrors = {};
         err.inner.forEach((error) => {
@@ -127,8 +98,11 @@ const SignUp = () => {
         });
         setErrors(validationErrors);
       }
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleChangeCode = (e) => {
     setValidationCode(e.target.value);
   };
@@ -137,33 +111,51 @@ const SignUp = () => {
     e.preventDefault();
     try {
       await validationSchemaCode.validate(validationCode);
-      await SignupManager.verify_code(formData.email, validationCode);
       setErrorValidationCode(null);
-      showSuccessToast("تایید هویت شما موفقیت آمیز بود");
-      await SignupManager.Signup(
+      setLoading(true);
+      const resp = await SignupManager.Signup(
         formData.username,
         formData.email,
         formData.repeatpassword,
-        formData.password
+        formData.password,
+        validationCode
       );
-      cookieManager.SaveToken(10, resp.data.tokens.access);
-      cookieManager.LoadToken();
+      console.log(resp);
+      showSuccessToast("حساب کاربری شما با موفقیت ایجاد شد");
+      CookieManager.SaveToken(10, resp.data.tokens.access);
+      CookieManager.LoadToken();
       navigate("/dashboard");
-      
     } catch (err) {
       if (err.name == "AxiosError") {
-        console.log(err)
-        showErrorToast(err.response.data.code[0]);
+        showErrorToast(err.response.data.message);
       } else {
-        console.log(err)
         setErrorValidationCode(err.message);
       }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async (e) => {
+    try {
+      setLoading(true);
+      await SignupManager.resendCode(formData.email);
+      showSuccessToast("کد احراز هویت شما به ایمیل داده شده دوباره ارسال شد");
+    } catch (err) {
+      showErrorToast("متاسفانه برای ما مشکلی پیش آمده،لطفا بعدا تلاش کنید");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
+        {loading && (
+          <div className={styles.loaderContainer}>
+            <RingLoader color="#bba1ea" size="5rem" />
+          </div>
+        )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
@@ -235,33 +227,23 @@ const SignUp = () => {
                   />
                 )}
               </div>
-              <div className={styles.password}>
-                <label className={styles.inputsBoxLabels} htmlFor="password">
-                  رمز عبور
-                </label>
-                <span ref={iconContainer} onClick={handleShowPassword}>
-                  {showPassIcon}
-                </span>
-                <InfoIcon
-                  sx={{
-                    position: "absolute",
-                    top: "38%",
-                    color: "#D4D4D4",
-                    width: "20px",
-                    height: "20px",
-                    left: "20%",
-                  }}
-                  data-tooltip-id="passwordPrequesties_tooltip"
-                />
-                <Tooltip
-                  id="passwordPrequesties_tooltip"
-                  className={styles.passwordPrequesties}
-                  content={
-                    "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
-                  }
-                  place="right-start"
-                />
-                <br />
+
+              <label className={styles.inputsBoxLabels} htmlFor="password">
+                رمز عبور
+              </label>
+              <InfoIcon
+                className={styles.infoIcon}
+                data-tooltip-id="passwordPrequesties_tooltip"
+              />
+              <Tooltip
+                id="passwordPrequesties_tooltip"
+                className={styles.passwordPrequesties}
+                content={
+                  "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
+                }
+                place="left-end"
+              />
+              <div className={styles.passwordInputWrapper}>
                 <Input
                   className={
                     !errors.password
@@ -275,21 +257,34 @@ const SignUp = () => {
                   value={formData.password}
                   data-tooltip-id="password_tooltip"
                 />
-                <br />
-                {errors.password && (
-                  <Tooltip
-                    id="password_tooltip"
-                    className={styles.errors}
-                    content={errors.password}
-                  />
-                )}
-                <label
-                  className={styles.inputsBoxLabels}
-                  htmlFor="repeatpassword"
+                <button
+                  type="button"
+                  className={styles.togglePasswordButton}
+                  onClick={togglePasswordVisibility}
                 >
-                  تکرار رمز عبور
-                </label>
-                <br />
+                  {showPassword ? (
+                    <VisibilityOffIcon className={styles.passwordIcon} />
+                  ) : (
+                    <RemoveRedEyeIcon className={styles.passwordIcon} />
+                  )}
+                </button>
+              </div>
+
+              {errors.password && (
+                <Tooltip
+                  id="password_tooltip"
+                  className={styles.errors}
+                  content={errors.password}
+                />
+              )}
+              <label
+                className={styles.inputsBoxLabels}
+                htmlFor="repeatpassword"
+              >
+                تکرار رمز عبور
+              </label>
+              <br />
+              <div className={styles.passwordInputWrapper}>
                 <Input
                   className={
                     !errors.repeatpassword
@@ -303,24 +298,35 @@ const SignUp = () => {
                   value={formData.repeatpassword}
                   data-tooltip-id="repeatpassword_tooltip"
                 />
-                <br />
-                {errors.repeatpassword && (
-                  <Tooltip
-                    id="repeatpassword_tooltip"
-                    className={styles.errors}
-                    content={errors.repeatpassword}
-                  />
-                )}
-                <button type="submit" className={styles.submitBtn}>
-                  ایجاد حساب
+                <button
+                  type="button"
+                  className={styles.togglePasswordButton}
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <VisibilityOffIcon className={styles.passwordIcon} />
+                  ) : (
+                    <RemoveRedEyeIcon className={styles.passwordIcon} />
+                  )}
                 </button>
-                <p className={styles.noAccLink}>
-                  حساب دارید؟&nbsp;
-                  <Link to="/login" className={styles.forgetpasswordlink}>
-                    وارد شوید
-                  </Link>
-                </p>
               </div>
+              <br />
+              {errors.repeatpassword && (
+                <Tooltip
+                  id="repeatpassword_tooltip"
+                  className={styles.errors}
+                  content={errors.repeatpassword}
+                />
+              )}
+              <button type="submit" className={styles.submitBtn}>
+                ایجاد حساب
+              </button>
+              <p className={styles.noAccLink}>
+                حساب دارید؟&nbsp;
+                <Link to="/login" className={styles.forgetpasswordlink}>
+                  وارد شوید
+                </Link>
+              </p>
             </form>
             <form
               onSubmit={handleSubmitCode}
@@ -357,6 +363,10 @@ const SignUp = () => {
                   />
                 )}
               </div>
+              <p className={styles.resend} onClick={handleResendCode}>
+                ارسال دوباره کد
+              </p>
+              <br />
               <button type="submit" className={styles.submitBtn}>
                 تایید کد
               </button>
