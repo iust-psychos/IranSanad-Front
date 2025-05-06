@@ -30,6 +30,7 @@ const ProtectedRoute = ({
   redirectPath = "/login",
   children,
 }) => {
+
   console.log(isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to={redirectPath} replace />;
@@ -65,7 +66,7 @@ const router = createBrowserRouter([
   },
   // Protected routes group
   {
-    element: <ProtectedRoute isAuthenticated={isAuthenticated} />,
+    element: <ProtectedRoute />,
     children: [
       {
         path: "/profile",
@@ -74,12 +75,12 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <UserDashboard />,
-        loader: isAuthenticated ? userDashboardLoader : null,
+        loader: userDashboardLoader,
       },
       {
         path: "/document/:doc_uuid",
         element: <ContentEditor />,
-        loader: isAuthenticated ? contentEditorLoader : null,
+        loader: contentEditorLoader,
       },
       {
         path: "/share",
@@ -95,7 +96,6 @@ const router = createBrowserRouter([
 
 function Root() {
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -104,6 +104,7 @@ function Root() {
   }, []);
 
   return isLoading ? <Loading /> : <Navigate to="/landing" />;
+
 }
 
 export default function App() {

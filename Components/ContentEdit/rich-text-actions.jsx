@@ -1,11 +1,18 @@
 import {
   IconBold,
   IconCenterAlign,
+  IconCode,
+  IconHighlight,
   IconItalics,
+  IconJustify,
   IconLeftAlign,
+  IconRedo,
   IconRightAlign,
   IconStrikethrough,
+  IconSubscript,
+  IconSuperscript,
   IconUnderline,
+  IconUndo,
 } from "./Icons";
 
 export const richTextActions = {
@@ -34,10 +41,34 @@ export const richTextOptions = [
     icon: <IconUnderline />,
     label: "Underline",
   },
+  { id: richTextActions.Divider },
+  {
+    id: richTextActions.Highlight,
+    icon: <IconHighlight />,
+    label: "Highlight",
+  },
   {
     id: richTextActions.Strikethrough,
     icon: <IconStrikethrough />,
     label: "Strikethrough",
+  },
+  {
+    id: richTextActions.Superscript,
+    icon: <IconSuperscript />,
+    label: "Superscript",
+  },
+  {
+    id: richTextActions.Subscript,
+    icon: <IconSubscript />,
+    label: "Subscript",
+  },
+  {
+    id: richTextActions.Code,
+    icon: <IconCode />,
+    label: "Code",
+  },
+  {
+    id: richTextActions.Divider,
   },
   {
     id: richTextActions.RightAlign,
@@ -53,5 +84,23 @@ export const richTextOptions = [
     id: richTextActions.LeftAlign,
     icon: <IconLeftAlign />,
     label: "Align Left",
+  },
+  {
+    id: richTextActions.JustifyAlign,
+    icon: <IconJustify />,
+    label: "Justify Align",
+  },
+  {
+    id: richTextActions.Divider,
+  },
+  {
+    id: richTextActions.Redo,
+    icon: <IconRedo />,
+    label: "Redo",
+  },
+  {
+    id: richTextActions.Undo,
+    icon: <IconUndo />,
+    label: "Undo",
   },
 ];

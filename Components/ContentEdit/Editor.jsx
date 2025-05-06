@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { HeadingNode } from "@lexical/rich-text";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
@@ -23,7 +23,7 @@ const editorConfig = {
   nodes: [HeadingNode, CodeHighlightNode, CodeNode, ListNode, ListItemNode],
 };
 
-export default function Editor({ doc_uuid }) {
+const Editor = ({ doc_uuid }) => {
   const providerName = "websockets";
   const containerRef = useRef(null);
   const [yjsProvider, setYjsProvider] = useState(null);
@@ -71,32 +71,31 @@ export default function Editor({ doc_uuid }) {
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
+      <ToolbarPlugin />
       <div className="editor-container">
-        <ToolbarPlugin />
-        <div className="editor-inner">
-          <RichTextPlugin
-            contentEditable={<ContentEditable className="editor-input" />}
-            ErrorBoundary={LexicalErrorBoundary}
-          />
+        <RichTextPlugin
+          contentEditable={<ContentEditable className="editor-input" />}
+          ErrorBoundary={LexicalErrorBoundary}
+        />
 
-          <AutoFocusPlugin />
+        <AutoFocusPlugin />
 
-          <HistoryPlugin />
+        <HistoryPlugin />
 
-          <ListPlugin />
+        <ListPlugin />
 
-          <OnChangePlugin onChange={() => {}} />
+        <OnChangePlugin onChange={() => {}} />
 
-          <CollaborationPlugin
-            id={doc_uuid}
-            providerFactory={providerFactory}
-            shouldBootstrap={true}
-            username="Test"
-            cursorColor="Red"
-            cursorsContainerRef={containerRef}
-          />
-        </div>
+        <CollaborationPlugin
+          id={doc_uuid}
+          providerFactory={providerFactory}
+          shouldBootstrap={true}
+          username="Test"
+          cursorColor="Red"
+          cursorsContainerRef={containerRef}
+        />
       </div>
     </LexicalComposer>
   );
-}
+};
+export default Editor;
