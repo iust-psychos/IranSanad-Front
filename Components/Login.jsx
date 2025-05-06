@@ -13,9 +13,11 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
 import cookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
+import { RingLoader } from "react-spinners";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [redirectTimeout, setRedirectTimeout] = useState(null);
 
   useEffect(() => {
@@ -29,18 +31,9 @@ const Login = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [passFieldType, setPassFieldType] = useState("password");
-  const [showPassIcon, setShowPassIcon] = useState(
-    <RemoveRedEyeIcon
-      sx={{
-        position: "absolute",
-        top: "39%",
-        left: "21%",
-      }}
-    />
-  );
-  const iconContainer = useRef(null);
+
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -60,32 +53,10 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleShowPassword = (e) => {
+  const togglePasswordVisibility = (e) => {
     e.preventDefault();
-    if (!showPassword) {
-      setShowPassIcon(
-        <RemoveRedEyeIcon
-          sx={{
-            position: "absolute",
-            top: "39%",
-            left: "21%",
-          }}
-        />
-      );
-      setPassFieldType("password");
-    } else {
-      setShowPassIcon(
-        <VisibilityOffIcon
-          sx={{
-            position: "absolute",
-            top: "39%",
-            left: "21%",
-          }}
-        />
-      );
-      setPassFieldType("text");
-    }
     setShowPassword(!showPassword);
+    setPassFieldType(showPassword ? "password" : "text");
   };
 
   const handleSubmit = async (e) => {
@@ -93,6 +64,7 @@ const Login = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
+      setLoading(true);
       let resp = await LoginManager.Login(formData.email, formData.password);
       cookieManager.SaveToken(10, resp.data.tokens.access);
       let token = cookieManager.LoadToken();
@@ -105,20 +77,28 @@ const Login = () => {
       }, 3000);
       setRedirectTimeout(timeoutId);
     } catch (err) {
-      const validationErrors = {};
-      console.log(err.message);
-      // err.inner.forEach((error) => {
-      //   validationErrors[error.path] = error.message;
-      // });
-      showErrorToast(err.message);
-      setErrors(validationErrors);
-      icon.current.style.top = "35%";
+      if (err.name == "AxiosError") {
+        showErrorToast(err.response.data.non_field_errors[0]);
+      } else {
+        const validationErrors = {};
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        setErrors(validationErrors);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
+        {loading && (
+          <div className={styles.loaderContainer}>
+            <RingLoader color="#bba1ea" size="5rem" />
+          </div>
+        )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
@@ -161,19 +141,12 @@ const Login = () => {
                   />
                 )}
               </div>
-              <div className={styles.password}>
+              <div className={styles.passwordContainer}>
                 <label className={styles.inputsBoxLabels} htmlFor="password">
                   رمز عبور
                 </label>
                 <InfoIcon
-                  sx={{
-                    position: "absolute",
-                    top: "30%",
-                    color: "#D4D4D4",
-                    width: "20px",
-                    height: "20px",
-                    left: "20%",
-                  }}
+                  className={styles.infoIcon}
                   data-tooltip-id="passwordPrequesties_tooltip"
                 />
                 <Tooltip
@@ -185,22 +158,32 @@ const Login = () => {
                   place="right-start"
                 />
                 <br />
-                <span ref={iconContainer} onClick={handleShowPassword}>
-                  {showPassIcon}
-                </span>
-                <Input
-                  className={
-                    !errors.password
-                      ? styles.inputField
-                      : styles.inputFieldError
-                  }
-                  onChange={handleChange}
-                  type={passFieldType}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  data-tooltip-id="password_tooltip"
-                />
+                <div className={styles.passwordInputWrapper}>
+                  <Input
+                    className={
+                      !errors.password
+                        ? styles.inputField
+                        : styles.inputFieldError
+                    }
+                    onChange={handleChange}
+                    type={passFieldType}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    data-tooltip-id="password_tooltip"
+                  />
+                  <button
+                    type="button"
+                    className={styles.togglePasswordButton}
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? (
+                      <VisibilityOffIcon className={styles.passwordIcon} />
+                    ) : (
+                      <RemoveRedEyeIcon className={styles.passwordIcon} />
+                    )}
+                  </button>
+                </div>
                 <br />
                 {errors.password && (
                   <Tooltip

@@ -15,9 +15,13 @@ import {
   resendCode,
 } from "../Managers/ForgotPasswordManager";
 import { Tooltip } from "react-tooltip";
+import { RingLoader } from "react-spinners";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const Forgot_password = () => {
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState(
     location.state ? location.state.email : ""
   );
@@ -26,6 +30,8 @@ const Forgot_password = () => {
     newPassword: "",
     repeatPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [passFieldType, setPassFieldType] = useState("password");
 
   const navigate = useNavigate();
 
@@ -56,18 +62,17 @@ const Forgot_password = () => {
     repeatPassword: yup
       .string()
       .required("تکرار رمز عبور اجباری است")
-      .matches(
-        `${newPassword.newPassword}`,
-        "تکرار رمز وارد شده با رمز تطابق ندارد"
-      ),
+      .oneOf([yup.ref('newPassword'), null], "تکرار رمز وارد شده با رمز تطابق ندارد"),
   });
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
   };
+  
   const handleChangeCode = (e) => {
     setValidationCode(e.target.value);
   };
+  
   const handleChangePassword = (e) => {
     setNewPassword({
       ...newPassword,
@@ -75,13 +80,20 @@ const Forgot_password = () => {
     });
   };
 
+  const togglePasswordVisibility = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+    setPassFieldType(showPassword ? "password" : "text");
+  };
+
   const handleSubmitEmail = async (e) => {
     e.preventDefault();
     try {
       await validationSchemaEmail.validate(email);
       setErrorEmail(null);
+      setLoading(true);
       await sendValidationCode(email);
-      showSuccessToast("کد احراز هویت شما به ایمیل داده شده ارسال شد")
+      showSuccessToast("کد احراز هویت شما به ایمیل داده شده ارسال شد");
       emailRef.current.classList.add(TipStyles.slideOut);
       emailRef.current.addEventListener(
         "animationend",
@@ -98,6 +110,8 @@ const Forgot_password = () => {
       } else {
         setErrorEmail(err.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,9 +120,10 @@ const Forgot_password = () => {
 
     try {
       await validationSchemaCode.validate(validationCode);
+      setLoading(true);
       await verify(email, validationCode);
       setErrorValidationCode(null);
-      showSuccessToast("تایید هویت شما موفقیت آمیز بود")
+      showSuccessToast("تایید هویت شما موفقیت آمیز بود");
       validationCodeRef.current.classList.add(TipStyles.slideOut);
       validationCodeRef.current.addEventListener(
         "animationend",
@@ -125,6 +140,8 @@ const Forgot_password = () => {
       } else {
         setErrorValidationCode(err.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -136,13 +153,14 @@ const Forgot_password = () => {
         abortEarly: false,
       });
       setErrorNewPassword({});
+      setLoading(true);
       await sendNewPassword(
         validationCode,
         email,
         newPassword.newPassword,
         newPassword.repeatPassword
       );
-      showSuccessToast("رمز عبور شما با موفقیت تغییر یافت")
+      showSuccessToast("رمز عبور شما با موفقیت تغییر یافت");
       navigate("/login");
     } catch (err) {
       const validationErrors = {};
@@ -157,11 +175,19 @@ const Forgot_password = () => {
       }
 
       setErrorNewPassword(validationErrors);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
+        {loading && (
+          <div className={styles.loaderContainer}>
+            <RingLoader color="#bba1ea" size="5rem" />
+          </div>
+        )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
@@ -265,24 +291,37 @@ const Forgot_password = () => {
               ref={newPasswordRef}
               style={{ display: "none" }}
             >
-              <div className={styles.password}>
+              <div className={styles.passwordContainer}>
                 <label className={styles.inputsBoxLabels} htmlFor="newPassword">
                   رمز عبور جدید
                 </label>
                 <br />
-                <Input
-                  className={
-                    !errorNewPassword.newPassword
-                      ? styles.inputField
-                      : styles.inputFieldError
-                  }
-                  onChange={handleChangePassword}
-                  type="Password"
-                  id="newPassword"
-                  name="newPassword"
-                  value={newPassword.newPassword}
-                  data-tooltip-id="password_tooltip"
-                />
+                <div className={styles.passwordInputWrapper}>
+                  <Input
+                    className={
+                      !errorNewPassword.newPassword
+                        ? styles.inputField
+                        : styles.inputFieldError
+                    }
+                    onChange={handleChangePassword}
+                    type={passFieldType}
+                    id="newPassword"
+                    name="newPassword"
+                    value={newPassword.newPassword}
+                    data-tooltip-id="password_tooltip"
+                  />
+                  <button
+                    type="button"
+                    className={styles.togglePasswordButton}
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? (
+                      <VisibilityOffIcon className={styles.passwordIcon} />
+                    ) : (
+                      <RemoveRedEyeIcon className={styles.passwordIcon} />
+                    )}
+                  </button>
+                </div>
                 <br />
                 {errorNewPassword.newPassword && (
                   <Tooltip
@@ -298,19 +337,32 @@ const Forgot_password = () => {
                   تکرار رمز عبور جدید
                 </label>
                 <br />
-                <Input
-                  className={
-                    !errorNewPassword.repeatPassword
-                      ? styles.inputField
-                      : styles.inputFieldError
-                  }
-                  onChange={handleChangePassword}
-                  type="Password"
-                  id="repeatPassword"
-                  name="repeatPassword"
-                  value={newPassword.repeatPassword}
-                  data-tooltip-id="repeatPassword_tooltip"
-                />
+                <div className={styles.passwordInputWrapper}>
+                  <Input
+                    className={
+                      !errorNewPassword.repeatPassword
+                        ? styles.inputField
+                        : styles.inputFieldError
+                    }
+                    onChange={handleChangePassword}
+                    type={passFieldType}
+                    id="repeatPassword"
+                    name="repeatPassword"
+                    value={newPassword.repeatPassword}
+                    data-tooltip-id="repeatPassword_tooltip"
+                  />
+                  <button
+                    type="button"
+                    className={styles.togglePasswordButton}
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? (
+                      <VisibilityOffIcon className={styles.passwordIcon} />
+                    ) : (
+                      <RemoveRedEyeIcon className={styles.passwordIcon} />
+                    )}
+                  </button>
+                </div>
                 <br />
                 {errorNewPassword.repeatPassword && (
                   <Tooltip

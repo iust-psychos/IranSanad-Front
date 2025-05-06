@@ -29,14 +29,14 @@ const Tip_slide = ({ text_list, className ,interval}) => {
     slideToIndex(index);
   };
 
-  // ⏲️ Auto-slide every 5 seconds
+
   useEffect(() => {
     const interval = setInterval(() => {
       const nextIndex = (currentIndex + 1) % text_list.length;
       slideToIndex(nextIndex);
     }, slide_interval);
 
-    return () => clearInterval(interval); // Clean up
+    return () => clearInterval(interval);
   }, [currentIndex,]);
 
   const currentTip = text_list[currentIndex];
@@ -55,7 +55,7 @@ const Tip_slide = ({ text_list, className ,interval}) => {
         </div>
       </div>
       <div className={styles.dotContainer}>
-        {text_list.map((item, index) => (
+        {text_list.map((item) => (
           <svg
             className={styles.svgContainer}
             key={item.id}
