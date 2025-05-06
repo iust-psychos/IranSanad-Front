@@ -22,7 +22,6 @@ const ContentEditor = () => {
     if (e.key === "Enter") {
       renameDocument(doc_uuid, nameRef.current.value);
       nameRef.current.blur();
-      editor.focus();
     }
   };
 
@@ -64,7 +63,7 @@ const ContentEditor = () => {
           </div>,
           document.body
         )}
-
+      <div className="fix-scrollbar"></div>
       <Editor doc_uuid={doc_uuid} />
     </div>
   );
