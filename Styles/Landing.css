@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     background-color: #E8E3F9;
-    /* height: 100vh; */
     gap: 5%;
 }
 
@@ -17,14 +16,13 @@
 .landing-hero-header {
     font-size: 30px;
     font-family: 'Vazir';
-    /* margin-bottom: 2%; */
     color: #AE8EE6;
 }
 
 .landing-hero-body {
     font-size: 16px;
     font-family: 'Vazir';
-    /* margin-top: 2%; */
+    line-height: 1.5;
 }
 
 .landing-hero-image {
@@ -96,6 +94,48 @@
     border-radius: 10px;
     padding: 2%;
     background-color: #E8E3F9;
+}
+
+.landing-services-grid-item-body > p {
+    line-height: 1.5;
+}
+
+.landing-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    padding: 5%;
+    gap: 10px;
+}
+
+.landing-stats-item {
+    background: whitesmoke;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5% 2%;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 5px;
+}
+
+.landing-stats-item > svg {
+    grid-column: 2; 
+    grid-row: 1 / span 2;
+    height: 70%; 
+    width: auto;
+}
+
+.landing-stats-item-number {
+    font-family: 'Vazir';
+    font-size: 30px;
+}
+
+.landing-stats-item-desc {
+    font-family: 'Vazir';
+    font-size: 18px;
 }
 
 .landing-join {
@@ -213,7 +253,7 @@
     }
     
     .landing-hero-text {
-        width: 40%;
+        width: 45%;
     }
 
     .landing-hero-button {
@@ -251,6 +291,12 @@
         grid-area: col3;
     }
 
+    .landing-stats {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(1, 1fr);
+        width: 100%;
+    }
+
     .landing-join-body {
         flex-direction: row;
         gap: 5%;
@@ -264,6 +310,10 @@
     .landing-join-body-content {
         width: 50%;
         margin-top: 1%;
+    }
+
+    .landing-join-body-content-text {
+        line-height: 1.5;
     }
 
     .landing-footer {
