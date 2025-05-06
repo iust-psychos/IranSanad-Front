@@ -14,7 +14,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 import { RingLoader } from "react-spinners";
-
+import CookieManager from "../Managers/CookieManager.js";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -51,7 +51,10 @@ const SignUp = () => {
     repeatpassword: yup
       .string()
       .required("تکرار رمز عبور اجباری است")
-      .oneOf([yup.ref('password'), null], "تکرار رمز وارد شده با رمز تطابق ندارد"),
+      .oneOf(
+        [yup.ref("password"), null],
+        "تکرار رمز وارد شده با رمز تطابق ندارد"
+      ),
   });
 
   const handleChange = (e) => {
@@ -71,7 +74,7 @@ const SignUp = () => {
       await validationSchema.validate(formData, { abortEarly: false });
       setErrors({});
       setLoading(true);
-      await SignupManager.sendValidationCode(formData.email);
+      await SignupManager.sendValidationCode(formData.email, formData.username);
       showSuccessToast("کد احراز هویت شما به ایمیل داده شده ارسال شد");
 
       signupRef.current.classList.add(TipStyles.slideOut);
@@ -87,7 +90,7 @@ const SignUp = () => {
       );
     } catch (err) {
       if (err.name == "AxiosError") {
-        showErrorToast(err.response.data.email[0]);
+        showErrorToast(err.response.data.message);
       } else {
         const validationErrors = {};
         err.inner.forEach((error) => {
@@ -108,27 +111,38 @@ const SignUp = () => {
     e.preventDefault();
     try {
       await validationSchemaCode.validate(validationCode);
-      setLoading(true);
-      await SignupManager.verify_code(formData.email, validationCode);
       setErrorValidationCode(null);
-      showSuccessToast("تایید هویت شما موفقیت آمیز بود");
-      await SignupManager.Signup(
+      setLoading(true);
+      const resp = await SignupManager.Signup(
         formData.username,
         formData.email,
         formData.repeatpassword,
-        formData.password
+        formData.password,
+        validationCode
       );
-      cookieManager.SaveToken(10, resp.data.tokens.access);
-      cookieManager.LoadToken();
+      console.log(resp);
+      showSuccessToast("حساب کاربری شما با موفقیت ایجاد شد");
+      CookieManager.SaveToken(10, resp.data.tokens.access);
+      CookieManager.LoadToken();
       navigate("/dashboard");
     } catch (err) {
       if (err.name == "AxiosError") {
-        console.log(err);
-        showErrorToast(err.response.data.code[0]);
+        showErrorToast(err.response.data.message);
       } else {
-        console.log(err);
         setErrorValidationCode(err.message);
       }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async (e) => {
+    try {
+      setLoading(true);
+      await SignupManager.resendCode(formData.email);
+      showSuccessToast("کد احراز هویت شما به ایمیل داده شده دوباره ارسال شد");
+    } catch (err) {
+      showErrorToast("متاسفانه برای ما مشکلی پیش آمده،لطفا بعدا تلاش کنید");
     } finally {
       setLoading(false);
     }
@@ -214,106 +228,105 @@ const SignUp = () => {
                 )}
               </div>
 
-                <label className={styles.inputsBoxLabels} htmlFor="password">
-                  رمز عبور
-                </label>
-                <InfoIcon
-                  className={styles.infoIcon}
-                  data-tooltip-id="passwordPrequesties_tooltip"
-                />
-                <Tooltip
-                  id="passwordPrequesties_tooltip"
-                  className={styles.passwordPrequesties}
-                  content={
-                    "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
+              <label className={styles.inputsBoxLabels} htmlFor="password">
+                رمز عبور
+              </label>
+              <InfoIcon
+                className={styles.infoIcon}
+                data-tooltip-id="passwordPrequesties_tooltip"
+              />
+              <Tooltip
+                id="passwordPrequesties_tooltip"
+                className={styles.passwordPrequesties}
+                content={
+                  "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
+                }
+                place="left-end"
+              />
+              <div className={styles.passwordInputWrapper}>
+                <Input
+                  className={
+                    !errors.password
+                      ? styles.inputField
+                      : styles.inputFieldError
                   }
-                  place="left-end"
+                  onChange={handleChange}
+                  type={passFieldType}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  data-tooltip-id="password_tooltip"
                 />
-                <div className={styles.passwordInputWrapper}>
-                  <Input
-                    className={
-                      !errors.password
-                        ? styles.inputField
-                        : styles.inputFieldError
-                    }
-                    onChange={handleChange}
-                    type={passFieldType}
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    data-tooltip-id="password_tooltip"
-                  />
-                  <button
-                    type="button"
-                    className={styles.togglePasswordButton}
-                    onClick={togglePasswordVisibility}
-                  >
-                    {showPassword ? (
-                      <VisibilityOffIcon className={styles.passwordIcon} />
-                    ) : (
-                      <RemoveRedEyeIcon className={styles.passwordIcon} />
-                    )}
-                  </button>
-                </div>
-
-                {errors.password && (
-                  <Tooltip
-                    id="password_tooltip"
-                    className={styles.errors}
-                    content={errors.password}
-                  />
-                )}
-                <label
-                  className={styles.inputsBoxLabels}
-                  htmlFor="repeatpassword"
+                <button
+                  type="button"
+                  className={styles.togglePasswordButton}
+                  onClick={togglePasswordVisibility}
                 >
-                  تکرار رمز عبور
-                </label>
-                <br />
-                <div className={styles.passwordInputWrapper}>
-                  <Input
-                    className={
-                      !errors.repeatpassword
-                        ? styles.inputField
-                        : styles.inputFieldError
-                    }
-                    onChange={handleChange}
-                    type={passFieldType}
-                    id="repeatpassword"
-                    name="repeatpassword"
-                    value={formData.repeatpassword}
-                    data-tooltip-id="repeatpassword_tooltip"
-                  />
-                  <button
-                    type="button"
-                    className={styles.togglePasswordButton}
-                    onClick={togglePasswordVisibility}
-                  >
-                    {showPassword ? (
-                      <VisibilityOffIcon className={styles.passwordIcon} />
-                    ) : (
-                      <RemoveRedEyeIcon className={styles.passwordIcon} />
-                    )}
-                  </button>
-                </div>
-                <br />
-                {errors.repeatpassword && (
-                  <Tooltip
-                    id="repeatpassword_tooltip"
-                    className={styles.errors}
-                    content={errors.repeatpassword}
-                  />
-                )}
-                <button type="submit" className={styles.submitBtn}>
-                  ایجاد حساب
+                  {showPassword ? (
+                    <VisibilityOffIcon className={styles.passwordIcon} />
+                  ) : (
+                    <RemoveRedEyeIcon className={styles.passwordIcon} />
+                  )}
                 </button>
-                <p className={styles.noAccLink}>
-                  حساب دارید؟&nbsp;
-                  <Link to="/login" className={styles.forgetpasswordlink}>
-                    وارد شوید
-                  </Link>
-                </p>
+              </div>
 
+              {errors.password && (
+                <Tooltip
+                  id="password_tooltip"
+                  className={styles.errors}
+                  content={errors.password}
+                />
+              )}
+              <label
+                className={styles.inputsBoxLabels}
+                htmlFor="repeatpassword"
+              >
+                تکرار رمز عبور
+              </label>
+              <br />
+              <div className={styles.passwordInputWrapper}>
+                <Input
+                  className={
+                    !errors.repeatpassword
+                      ? styles.inputField
+                      : styles.inputFieldError
+                  }
+                  onChange={handleChange}
+                  type={passFieldType}
+                  id="repeatpassword"
+                  name="repeatpassword"
+                  value={formData.repeatpassword}
+                  data-tooltip-id="repeatpassword_tooltip"
+                />
+                <button
+                  type="button"
+                  className={styles.togglePasswordButton}
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <VisibilityOffIcon className={styles.passwordIcon} />
+                  ) : (
+                    <RemoveRedEyeIcon className={styles.passwordIcon} />
+                  )}
+                </button>
+              </div>
+              <br />
+              {errors.repeatpassword && (
+                <Tooltip
+                  id="repeatpassword_tooltip"
+                  className={styles.errors}
+                  content={errors.repeatpassword}
+                />
+              )}
+              <button type="submit" className={styles.submitBtn}>
+                ایجاد حساب
+              </button>
+              <p className={styles.noAccLink}>
+                حساب دارید؟&nbsp;
+                <Link to="/login" className={styles.forgetpasswordlink}>
+                  وارد شوید
+                </Link>
+              </p>
             </form>
             <form
               onSubmit={handleSubmitCode}
@@ -350,6 +363,10 @@ const SignUp = () => {
                   />
                 )}
               </div>
+              <p className={styles.resend} onClick={handleResendCode}>
+                ارسال دوباره کد
+              </p>
+              <br />
               <button type="submit" className={styles.submitBtn}>
                 تایید کد
               </button>

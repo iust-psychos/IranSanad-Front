@@ -11,7 +11,7 @@ import * as yup from "yup";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
-import cookieManager from "../Managers/CookieManager";
+import CookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 import { RingLoader } from "react-spinners";
 
@@ -66,11 +66,10 @@ const Login = () => {
       await validationSchema.validate(formData, { abortEarly: false });
       setLoading(true);
       let resp = await LoginManager.Login(formData.email, formData.password);
-      cookieManager.SaveToken(10, resp.data.tokens.access);
-      let token = cookieManager.LoadToken();
+      CookieManager.SaveToken(10, resp.data.tokens.access);
+      let token = CookieManager.LoadToken();
 
       showSuccessToast("ورود موفقیت آمیز!");
-      navigate("/dashboard");
 
       const timeoutId = setTimeout(() => {
         navigate("/dashboard");
@@ -193,7 +192,7 @@ const Login = () => {
                     content={errors.password}
                   />
                 )}
-                <p style={{ paddingBottom: "-1%" }}>
+                <p style={{ paddingBottom: "1%" }}>
                   <Link
                     to="/forgot_password"
                     state={

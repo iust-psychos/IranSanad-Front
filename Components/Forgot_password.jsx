@@ -63,19 +63,20 @@ const Forgot_password = () => {
     repeatPassword: yup
       .string()
       .required("تکرار رمز عبور اجباری است")
-      .oneOf([yup.ref('newPassword'), null], "تکرار رمز وارد شده با رمز تطابق ندارد"),
+      .oneOf(
+        [yup.ref("newPassword"), null],
+        "تکرار رمز وارد شده با رمز تطابق ندارد"
+      ),
   });
-
-  
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
   };
-  
+
   const handleChangeCode = (e) => {
     setValidationCode(e.target.value);
   };
-  
+
   const handleChangePassword = (e) => {
     setNewPassword({
       ...newPassword,
@@ -148,19 +149,17 @@ const Forgot_password = () => {
     }
   };
 
-  const handleResendCode = async(e) => {
+  const handleResendCode = async (e) => {
     try {
-      setLoading(true)
+      setLoading(true);
       await resendCode(email);
-      showSuccessToast("کد احراز هویت شما به ایمیل داده شده ارسال شد");
+      showSuccessToast("کد احراز هویت شما به ایمیل داده شده دوباره ارسال شد");
+    } catch (err) {
+      showErrorToast("متاسفانه برای ما مشکلی پیش آمده،لطفا بعدا تلاش کنید");
+    } finally {
+      setLoading(false);
     }
-    catch (err) {
-      showErrorToast("متاسفانه برای ما مشکلی پیش آمده،لطفا بعدا تلاش کنید")
-    }
-    finally {
-      setLoading(false)
-    }
-  }
+  };
 
   const handleSubmitNewPassword = async (e) => {
     e.preventDefault();
@@ -208,10 +207,7 @@ const Forgot_password = () => {
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
-            <div className={styles.Title}>
-              ایران
-              سند
-            </div>
+            <div className={styles.Title}>ایران سند</div>
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
@@ -292,8 +288,10 @@ const Forgot_password = () => {
                   />
                 )}
               </div>
-              <p className={styles.resend} onClick={handleResendCode}>ارسال دوباره کد</p>
-              <br/>
+              <p className={styles.resend} onClick={handleResendCode}>
+                ارسال دوباره کد
+              </p>
+              <br />
               <button
                 type="submit"
                 className={styles.submitBtn}
