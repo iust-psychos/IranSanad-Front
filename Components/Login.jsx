@@ -192,7 +192,7 @@ const Login = () => {
                     content={errors.password}
                   />
                 )}
-                <p style={{ paddingBottom: "1%" }}>
+                <p style={{ marginTop: "3%" }}>
                   <Link
                     to="/forgot_password"
                     state={

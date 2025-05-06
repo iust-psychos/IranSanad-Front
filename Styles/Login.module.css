@@ -185,7 +185,7 @@ button {
     z-index: 9999;
 }
 *:focus {
-    outline: none; /* temp fox to infoIcon focus outline problem*/
+    outline: none; /* temp fix to infoIcon focus outline problem*/
 }
 
 .passwordInputWrapper {
