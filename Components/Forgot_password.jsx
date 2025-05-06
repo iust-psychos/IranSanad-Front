@@ -8,6 +8,7 @@ import Tip_slide from "./Tip_slide";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
+import InfoIcon from "@mui/icons-material/Info";
 import {
   sendValidationCode,
   sendNewPassword,
@@ -64,6 +65,8 @@ const Forgot_password = () => {
       .required("تکرار رمز عبور اجباری است")
       .oneOf([yup.ref('newPassword'), null], "تکرار رمز وارد شده با رمز تطابق ندارد"),
   });
+
+  
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -145,6 +148,20 @@ const Forgot_password = () => {
     }
   };
 
+  const handleResendCode = async(e) => {
+    try {
+      setLoading(true)
+      await resendCode(email);
+      showSuccessToast("کد احراز هویت شما به ایمیل داده شده ارسال شد");
+    }
+    catch (err) {
+      showErrorToast("متاسفانه برای ما مشکلی پیش آمده،لطفا بعدا تلاش کنید")
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+
   const handleSubmitNewPassword = async (e) => {
     e.preventDefault();
 
@@ -193,7 +210,6 @@ const Forgot_password = () => {
             <img src="../Images/" className={styles.ImageTitle} />
             <div className={styles.Title}>
               ایران
-              <br />
               سند
             </div>
             <Tip_slide
@@ -276,7 +292,8 @@ const Forgot_password = () => {
                   />
                 )}
               </div>
-              <p className={styles.resend}>ارسال دوباره کد</p>
+              <p className={styles.resend} onClick={handleResendCode}>ارسال دوباره کد</p>
+              <br/>
               <button
                 type="submit"
                 className={styles.submitBtn}
@@ -295,6 +312,18 @@ const Forgot_password = () => {
                 <label className={styles.inputsBoxLabels} htmlFor="newPassword">
                   رمز عبور جدید
                 </label>
+                <InfoIcon
+                  className={styles.infoIcon}
+                  data-tooltip-id="passwordPrequesties_tooltip"
+                />
+                <Tooltip
+                  id="passwordPrequesties_tooltip"
+                  className={styles.passwordPrequestiesLogin}
+                  content={
+                    "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
+                  }
+                  place="left-end"
+                />
                 <br />
                 <div className={styles.passwordInputWrapper}>
                   <Input

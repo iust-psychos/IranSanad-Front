@@ -75,7 +75,7 @@
     top:12%;
     font-size: 16px;
     font-weight: 700;
-    color :rgba(255, 255, 255, 1)
+    color :rgba(255, 255, 255, 1);
 }
 
 .formBox {
@@ -168,6 +168,7 @@ button {
     color: #C7B5FF;
     font-weight: 100;
     display: block;
+    cursor: pointer;
     
 }
 
@@ -187,15 +188,11 @@ button {
     outline: none; /* temp fox to infoIcon focus outline problem*/
 }
 
-.passwordContainer {
-  position: relative;
-}
-
 .passwordInputWrapper {
-  position: relative;
-  width: 100%;
-}
-
+    position: relative;
+    width: 100%;
+  }
+  
 .togglePasswordButton {
   position: absolute;
   right: 73%;

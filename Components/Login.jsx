@@ -141,6 +141,7 @@ const Login = () => {
                   />
                 )}
               </div>
+              <br />
               <div className={styles.passwordContainer}>
                 <label className={styles.inputsBoxLabels} htmlFor="password">
                   رمز عبور
@@ -155,7 +156,7 @@ const Login = () => {
                   content={
                     "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
                   }
-                  place="right-start"
+                  place="left-end"
                 />
                 <br />
                 <div className={styles.passwordInputWrapper}>
@@ -184,7 +185,7 @@ const Login = () => {
                     )}
                   </button>
                 </div>
-                <br />
+
                 {errors.password && (
                   <Tooltip
                     id="password_tooltip"
@@ -192,7 +193,7 @@ const Login = () => {
                     content={errors.password}
                   />
                 )}
-                <p style={{ marginTop: "1%" }}>
+                <p style={{ paddingBottom: "-1%" }}>
                   <Link
                     to="/forgot_password"
                     state={

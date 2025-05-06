@@ -213,7 +213,7 @@ const SignUp = () => {
                   />
                 )}
               </div>
-              <div className={styles.passwordContainer}>
+
                 <label className={styles.inputsBoxLabels} htmlFor="password">
                   رمز عبور
                 </label>
@@ -227,9 +227,8 @@ const SignUp = () => {
                   content={
                     "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
                   }
-                  place="right-start"
+                  place="left-end"
                 />
-                <br />
                 <div className={styles.passwordInputWrapper}>
                   <Input
                     className={
@@ -256,7 +255,7 @@ const SignUp = () => {
                     )}
                   </button>
                 </div>
-                <br />
+
                 {errors.password && (
                   <Tooltip
                     id="password_tooltip"
@@ -314,7 +313,7 @@ const SignUp = () => {
                     وارد شوید
                   </Link>
                 </p>
-              </div>
+
             </form>
             <form
               onSubmit={handleSubmitCode}
