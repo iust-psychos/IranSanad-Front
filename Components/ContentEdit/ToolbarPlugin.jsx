@@ -115,7 +115,7 @@ function ToolbarPlugin() {
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
         break;
       case richTextActions.Highlight:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "hightlight");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "highlight");
         break;
       case richTextActions.Code:
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");

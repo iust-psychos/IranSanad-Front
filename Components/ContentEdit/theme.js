@@ -32,5 +32,6 @@ export default {
     underlineStrikethrough: "editor-text-underlineStrikethrough",
     italic: "editor-text-italic",
     code: "editor-code",
+    highlight: "editor-highlight",
   },
 };

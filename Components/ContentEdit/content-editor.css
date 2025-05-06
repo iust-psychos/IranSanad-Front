@@ -209,3 +209,7 @@
   background-color: #eee;
   border: 1px solid #ccc;
 }
+
+.content-editor .editor-input .editor-highlight {
+  background-color: #ffff00;
+}
