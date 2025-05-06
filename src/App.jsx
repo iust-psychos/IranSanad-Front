@@ -21,9 +21,16 @@ import "../Styles/App.css";
 import "react-toastify/dist/ReactToastify.css";
 import { contentEditorLoader } from "../Managers/content-editor-manager";
 import cookieManager from "../Managers/CookieManager";
+import Landing from "../Components/Landing";
 
-const ProtectedRoute = ({ redirectPath = "/login", children }) => {
-  const isAuthenticated = cookieManager.LoadToken() ? true : false;
+const isAuthenticated = cookieManager.LoadToken() ? true : false;
+
+const ProtectedRoute = ({
+  isAuthenticated,
+  redirectPath = "/login",
+  children,
+}) => {
+
   console.log(isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to={redirectPath} replace />;
@@ -52,6 +59,10 @@ const router = createBrowserRouter([
   {
     path: "/EmailVerification",
     element: <EmailVerification />,
+  },
+  {
+    path: "/landing",
+    element: <Landing />,
   },
   // Protected routes group
   {
@@ -92,7 +103,8 @@ function Root() {
     return () => clearTimeout(timer);
   }, []);
 
-  return isLoading ? <Loading /> : <Navigate to="/dashboard" />;
+  return isLoading ? <Loading /> : <Navigate to="/landing" />;
+
 }
 
 export default function App() {

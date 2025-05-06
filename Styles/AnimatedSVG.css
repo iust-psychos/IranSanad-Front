@@ -1,0 +1,11 @@
+.hero-svg-main {
+    position: relative;
+    z-index: 1;
+}
+  
+.hero-svg-overlay {
+    position: absolute;
+    top: 40px;
+    left: 100px;
+    z-index: 2;
+} 
