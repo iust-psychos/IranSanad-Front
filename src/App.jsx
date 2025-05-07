@@ -30,7 +30,6 @@ const ProtectedRoute = ({
   redirectPath = "/login",
   children,
 }) => {
-
   console.log(isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to={redirectPath} replace />;
@@ -66,7 +65,7 @@ const router = createBrowserRouter([
   },
   // Protected routes group
   {
-    element: <ProtectedRoute />,
+    element: <ProtectedRoute isAuthenticated={isAuthenticated} />,
     children: [
       {
         path: "/profile",
@@ -104,7 +103,6 @@ function Root() {
   }, []);
 
   return isLoading ? <Loading /> : <Navigate to="/landing" />;
-
 }
 
 export default function App() {

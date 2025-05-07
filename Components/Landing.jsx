@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import HeroBanner from "../src/Images/LandingPage/combined_hero.svg";
+import { useVisibilityRatio } from "../hooks/useVisibilityRatio";
+import "../Styles/Landing.css";
 import Service1 from "../src/Images/LandingPage/service1.svg";
 import Service2 from "../src/Images/LandingPage/service2.svg";
 import Service3 from "../src/Images/LandingPage/service3.svg";
 import Service4 from "../src/Images/LandingPage/service4.svg";
 import Join from "../src/Images/LandingPage/join.svg";
+import { MdEmail, MdPhoneEnabled, MdLocationPin } from "react-icons/md";
+import { FaUserLarge } from "react-icons/fa6";
+import { IoIosDocument } from "react-icons/io";
+import { TbLanguage } from "react-icons/tb";
+import { IoMdFlag } from "react-icons/io";
 import AnimatedSVG from "./AnimatedSVG";
-import "../Styles/Landing.css";
-import { motion } from "framer-motion";
-import { useVisibilityRatio } from "../hooks/useVisibilityRatio";
+import CountUp from "react-countup";
+import { toPersianDigit } from "../Scripts/persian-number-converter";
+// import { useInView } from "react-intersection-observer";
 
 const Landing = () => {
   const [ref1, ratio1] = useVisibilityRatio();
@@ -36,11 +43,26 @@ const Landing = () => {
     }, 500);
   };
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // const { ref, inView } = useInView({
+  //   triggerOnce: false,
+  //   threshold: 0.5,
+  // });
+
   return (
     <div className="landing">
-      <div className="landing-navbar">
+      {/* <div className="landing-navbar">
         به دلیل مشکلات فنی نوبار در حال حاضر در دسترس نیست...
-      </div>
+      </div> */}
       <div className="landing-hero">
         <div className="landing-hero-text">
           <h1 className="landing-hero-header">
@@ -59,10 +81,10 @@ const Landing = () => {
             شروع کنید 🚀
           </button>
         </div>
-        <img className="landing-hero-image" src={HeroBanner} alt="hero image" />
-        {/* <div style={{ position: "relative", width: "50%", height: "auto" }}>
-          <AnimatedSVG width="100%" height="100%" className="hero-svg-main" />
-        </div> */}
+        <AnimatedSVG
+          width={isMobile ? "100%" : "50%"}
+          className="landing-hero-image"
+        />
       </div>
       <div className="landing-services">
         <h1 className="landing-services-title">خدمات ایران‌سند</h1>
@@ -149,6 +171,63 @@ const Landing = () => {
           </motion.div>
         </div>
       </div>
+      <div className="landing-stats">
+        <div
+          className="landing-stats-item"
+          // ref={ref}
+        >
+          <h1 className="landing-stats-item-number">
+            {/* {inView ? ( */}
+            <CountUp
+              end={100000}
+              duration={5}
+              separator=","
+              formattingFn={toPersianDigit}
+            />
+            {/* ) : (
+              "۱۰۰۰۰۰"
+            )} */}
+          </h1>
+          <p className="landing-stats-item-desc">کاربر فعال</p>
+          <FaUserLarge />
+        </div>
+        <div className="landing-stats-item">
+          <h1 className="landing-stats-item-number">
+            <CountUp
+              end={200000}
+              duration={5}
+              separator=","
+              formattingFn={toPersianDigit}
+            />
+          </h1>
+          <p className="landing-stats-item-desc">سند منتشر شده</p>
+          <IoIosDocument />
+        </div>
+        <div className="landing-stats-item">
+          <h1 className="landing-stats-item-number">
+            <CountUp
+              end={15}
+              duration={3}
+              separator=","
+              formattingFn={toPersianDigit}
+            />
+          </h1>
+          <p className="landing-stats-item-desc">زبان تحت پوشش</p>
+          <TbLanguage />
+        </div>
+        <div className="landing-stats-item">
+          <h1 className="landing-stats-item-number">
+            <CountUp
+              end={19}
+              duration={3}
+              separator=","
+              formattingFn={toPersianDigit}
+            />
+          </h1>
+          <p className="landing-stats-item-desc">کشور تحت سرویس</p>
+          <IoMdFlag />
+        </div>
+      </div>
       <div className="landing-join">
         <h1 className="landing-join-title">ثبت نام کنید</h1>
         <p className="landing-join-text">
@@ -194,9 +273,15 @@ const Landing = () => {
         <div className="landing-footer-contact">
           <h1 className="landing-footer-title">ارتباط با ما</h1>
           <ul className="landing-footer-list">
-            <li className="landing-footer-list-item">IranSanad@gmail.com</li>
-            <li className="landing-footer-list-item">۰۲۱-۷۷۷۷۷۷۷۷</li>
             <li className="landing-footer-list-item">
+              <MdEmail /> IranSanad@gmail.com
+            </li>
+            <li className="landing-footer-list-item">
+              <MdPhoneEnabled /> ۰۲۱-۷۷۷۷۷۷۷۷
+            </li>
+            <li className="landing-footer-list-item">
+              {" "}
+              <MdLocationPin />
               تهران، خیابان رسالت، خیابان هنگام، خیابان دانشگاه علم و صنعت
               ایران، دانشگاه علم و صنعت ایران، دانشکده مهندسی کامپیوتر
             </li>
