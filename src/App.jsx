@@ -22,15 +22,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { contentEditorLoader } from "../Managers/content-editor-manager";
 import cookieManager from "../Managers/CookieManager";
 import Landing from "../Components/Landing";
-
-const isAuthenticated = cookieManager.LoadToken() ? true : false;
+import { isAuthenticated } from "../Utilities/Auth/AuthManager";
 
 const ProtectedRoute = ({
   isAuthenticated,
   redirectPath = "/login",
   children,
 }) => {
-  console.log(isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to={redirectPath} replace />;
   }
@@ -74,12 +72,12 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <UserDashboard />,
-        loader: isAuthenticated ? userDashboardLoader : null,
+        loader: userDashboardLoader,
       },
       {
         path: "/document/:doc_uuid",
         element: <ContentEditor />,
-        loader: isAuthenticated ? contentEditorLoader : null,
+        loader: contentEditorLoader,
       },
       {
         path: "/share",
@@ -95,7 +93,6 @@ const router = createBrowserRouter([
 
 function Root() {
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);

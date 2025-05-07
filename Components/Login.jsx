@@ -112,7 +112,6 @@ const Login = () => {
       // });
       showErrorToast(err.message);
       setErrors(validationErrors);
-      icon.current.style.top = "35%";
     }
   };
 
@@ -137,7 +136,7 @@ const Login = () => {
 
             <form onSubmit={handleSubmit} className={styles.inputsBox}>
               <div>
-                <label className={styles.inputsBoxLabels} htmlFor="username">
+                <label className={styles.inputsBoxLabels} htmlFor="email">
                   ایمیل
                 </label>
                 <br />
@@ -220,7 +219,7 @@ const Login = () => {
                     فراموشی رمز عبور؟
                   </Link>
                 </p>
-                <button type="submit" className={styles.submitBtn}>
+                <button type="submit" name="login" className={styles.submitBtn}>
                   ورود
                 </button>
                 <p className={styles.noAccLink}>
