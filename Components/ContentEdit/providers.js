@@ -13,12 +13,20 @@ export function createWebsocketProvider(id, yjsDocMap) {
     doc.load();
   }
 
-  return new WebsocketProvider(
+  const wsProvider = new WebsocketProvider(
     `ws://iransanad.fiust.ir/ws/docs/${id}`,
     `?Authorization=${token}`,
     doc,
     {
-      connect: false,
+      connect: true,
     }
   );
+
+  wsProvider.on("status", (event) => {
+    console.log(event.status);
+  });
+
+  wsProvider.on("sync", (event) => {
+    console.log(event.valueOf());
+  });
 }

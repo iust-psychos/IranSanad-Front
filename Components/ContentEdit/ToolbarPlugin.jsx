@@ -1,11 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
@@ -70,7 +63,7 @@ function ToolbarPlugin() {
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         (payLoad) => {
-          setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
+          updateToolbar();
           return false;
         },
         COMMAND_PRIORITY_LOW
