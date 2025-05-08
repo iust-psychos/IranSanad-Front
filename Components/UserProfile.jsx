@@ -540,6 +540,7 @@ const UserProfile = () => {
                           setShowOldPassword(!showOldPassword);
                         }
                       }}
+                      data-testid="old_password"
                     >
                       {showOldPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -565,6 +566,7 @@ const UserProfile = () => {
                           setShowNewPassword(!showNewPassword);
                         }
                       }}
+                      data-testid="new_password"
                     >
                       {showNewPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
@@ -590,6 +592,7 @@ const UserProfile = () => {
                           setShowNewPassword2(!showNewPassword2);
                         }
                       }}
+                      data-testid="new_password2"
                     >
                       {showNewPassword2 ? <FaEyeSlash /> : <FaEye />}
                     </button>
