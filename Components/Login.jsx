@@ -106,11 +106,11 @@ const Login = () => {
       setRedirectTimeout(timeoutId);
     } catch (err) {
       const validationErrors = {};
-      console.log(err.message);
-      // err.inner.forEach((error) => {
-      //   validationErrors[error.path] = error.message;
-      // });
-      showErrorToast(err.message);
+      err.inner.forEach((error) => {
+        console.log(error);
+        validationErrors[error.path] = error.message;
+      });
+      showErrorToast();
       setErrors(validationErrors);
     }
   };
@@ -182,6 +182,8 @@ const Login = () => {
                     "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
                   }
                   place="right-start"
+                  role="validation-tooltip"
+                  data-testid="emailTooltip"
                 />
                 <br />
                 <span ref={iconContainer} onClick={handleShowPassword}>
@@ -193,6 +195,7 @@ const Login = () => {
                       ? styles.inputField
                       : styles.inputFieldError
                   }
+                  data-testid="password-info-icon"
                   onChange={handleChange}
                   type={passFieldType}
                   id="password"
@@ -206,6 +209,7 @@ const Login = () => {
                     id="password_tooltip"
                     className={styles.errors}
                     content={errors.password}
+                    data-testid="password-tooltip"
                   />
                 )}
                 <p style={{ marginTop: "1%" }}>
