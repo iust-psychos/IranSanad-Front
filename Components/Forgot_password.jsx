@@ -6,17 +6,23 @@ import { login_slides } from "../Scripts/mock_data";
 import { Input } from "@base-ui-components/react/input";
 import Tip_slide from "./Tip_slide";
 import * as yup from "yup";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
+import InfoIcon from "@mui/icons-material/Info";
 import {
-  getValidationCode,
+  sendValidationCode,
   sendNewPassword,
+  verify,
+  resendCode,
 } from "../Managers/ForgotPasswordManager";
 import { Tooltip } from "react-tooltip";
-//connection to back remain
+import { RingLoader } from "react-spinners";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
 const Forgot_password = () => {
-  
-  const [trueValidationCode, setTrueValidationCode] = useState("");
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState(
     location.state ? location.state.email : ""
   );
@@ -25,6 +31,10 @@ const Forgot_password = () => {
     newPassword: "",
     repeatPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [passFieldType, setPassFieldType] = useState("password");
+
+  const navigate = useNavigate();
 
   const [errorEmail, setErrorEmail] = useState(null);
   const [errorValidationCode, setErrorValidationCode] = useState("");
@@ -53,8 +63,8 @@ const Forgot_password = () => {
     repeatPassword: yup
       .string()
       .required("تکرار رمز عبور اجباری است")
-      .matches(
-        `${newPassword.newPassword}`,
+      .oneOf(
+        [yup.ref("newPassword"), null],
         "تکرار رمز وارد شده با رمز تطابق ندارد"
       ),
   });
@@ -62,9 +72,11 @@ const Forgot_password = () => {
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
   };
+
   const handleChangeCode = (e) => {
     setValidationCode(e.target.value);
   };
+
   const handleChangePassword = (e) => {
     setNewPassword({
       ...newPassword,
@@ -72,32 +84,38 @@ const Forgot_password = () => {
     });
   };
 
+  const togglePasswordVisibility = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+    setPassFieldType(showPassword ? "password" : "text");
+  };
+
   const handleSubmitEmail = async (e) => {
-    console.log('Fuck')
     e.preventDefault();
     try {
       await validationSchemaEmail.validate(email);
       setErrorEmail(null);
-      //connection to backend remains
-      let respEmail = await getValidationCode(email);
-      
-      if (respEmail.code == 201) {
-        setTrueValidationCode(respEmail.validationCode);
-        emailRef.current.classList.add(TipStyles.slideOut);
-        emailRef.current.addEventListener(
-          "animationend",
-          () => {
-            validationCodeRef.current.classList.add(TipStyles.slideIn);
-            emailRef.current.style.display = "none";
-            validationCodeRef.current.style.display = "block";
-          },
-          { once: true }
-        );
-      } else {
-        throw new Error("متاسفانه برای ما مشکلی پیش آمده");
-      }
+      setLoading(true);
+      await sendValidationCode(email);
+      showSuccessToast("کد احراز هویت شما به ایمیل داده شده ارسال شد");
+      emailRef.current.classList.add(TipStyles.slideOut);
+      emailRef.current.addEventListener(
+        "animationend",
+        () => {
+          validationCodeRef.current.classList.add(TipStyles.slideIn);
+          emailRef.current.style.display = "none";
+          validationCodeRef.current.style.display = "block";
+        },
+        { once: true }
+      );
     } catch (err) {
-      setErrorEmail(err.message);
+      if (err.name == "AxiosError") {
+        showErrorToast(err.response.data.email[0]);
+      } else {
+        setErrorEmail(err.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,23 +124,40 @@ const Forgot_password = () => {
 
     try {
       await validationSchemaCode.validate(validationCode);
-      if (validationCode != trueValidationCode) {
-        throw new Error("کد وارد شده نادرست است");
-      } else {
-        setErrorValidationCode(null);
-        validationCodeRef.current.classList.add(TipStyles.slideOut);
-        validationCodeRef.current.addEventListener(
-          "animationend",
-          () => {
-            newPasswordRef.current.classList.add(TipStyles.slideIn);
-            validationCodeRef.current.style.display = "none";
-            newPasswordRef.current.style.display = "block";
-          },
-          { once: true }
-        );
-      }
+      setLoading(true);
+      await verify(email, validationCode);
+      setErrorValidationCode(null);
+      showSuccessToast("تایید هویت شما موفقیت آمیز بود");
+      validationCodeRef.current.classList.add(TipStyles.slideOut);
+      validationCodeRef.current.addEventListener(
+        "animationend",
+        () => {
+          newPasswordRef.current.classList.add(TipStyles.slideIn);
+          validationCodeRef.current.style.display = "none";
+          newPasswordRef.current.style.display = "block";
+        },
+        { once: true }
+      );
     } catch (err) {
-      setErrorValidationCode(err.message);
+      if (err.name == "AxiosError") {
+        showErrorToast(err.response.data.code[0]);
+      } else {
+        setErrorValidationCode(err.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async (e) => {
+    try {
+      setLoading(true);
+      await resendCode(email);
+      showSuccessToast("کد احراز هویت شما به ایمیل داده شده دوباره ارسال شد");
+    } catch (err) {
+      showErrorToast("متاسفانه برای ما مشکلی پیش آمده،لطفا بعدا تلاش کنید");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -134,35 +169,45 @@ const Forgot_password = () => {
         abortEarly: false,
       });
       setErrorNewPassword({});
-      let resp = await sendNewPassword(
+      setLoading(true);
+      await sendNewPassword(
+        validationCode,
         email,
         newPassword.newPassword,
         newPassword.repeatPassword
       );
-      console.log(resp);
-      if (resp.code == 201) {
-        console.log("here we must route to dashboard");
-      }
+      showSuccessToast("رمز عبور شما با موفقیت تغییر یافت");
+      navigate("/login");
     } catch (err) {
       const validationErrors = {};
-      err.inner.forEach((error) => {
-        validationErrors[error.path] = error.message;
-      });
+      if (err.name == "AxiosError") {
+        validationErrors.newPassword = err.response.data.new_password[0];
+        validationErrors.repeatPassword = err.response.data.new_password2[0];
+        setErrorNewPassword(validationErrors);
+      } else {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+      }
 
       setErrorNewPassword(validationErrors);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
+        {loading && (
+          <div className={styles.loaderContainer}>
+            <RingLoader color="#bba1ea" size="5rem" />
+          </div>
+        )}
         <div className={styles.InnerBox}>
-        <div className={styles.detailsContainer}>
+          <div className={styles.detailsContainer}>
             <img src="../Images/" className={styles.ImageTitle} />
-            <div className={styles.Title}>
-              ایران
-              <br />
-              سند
-            </div>
+            <div className={styles.Title}>ایران سند</div>
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
@@ -190,7 +235,7 @@ const Forgot_password = () => {
                   name="email"
                   value={email}
                   data-tooltip-id="email_tooltip"
-                  style={{direction:'ltr'}}
+                  style={{ direction: "ltr" }}
                 />
                 {errorEmail && (
                   <Tooltip
@@ -200,7 +245,11 @@ const Forgot_password = () => {
                   />
                 )}
               </div>
-              <button type="submit" className={styles.submitBtn} style={{marginTop:"10%"}}>
+              <button
+                type="submit"
+                className={styles.submitBtn}
+                style={{ marginTop: "10%" }}
+              >
                 ارسال کد
               </button>
             </form>
@@ -239,10 +288,15 @@ const Forgot_password = () => {
                   />
                 )}
               </div>
-                <p className={styles.resend}>
-                  ارسال دوباره کد
-                </p>
-              <button type="submit" className={styles.submitBtn} style={{marginTop:"10%"}}>
+              <p className={styles.resend} onClick={handleResendCode}>
+                ارسال دوباره کد
+              </p>
+              <br />
+              <button
+                type="submit"
+                className={styles.submitBtn}
+                style={{ marginTop: "10%" }}
+              >
                 تایید کد
               </button>
             </form>
@@ -252,24 +306,49 @@ const Forgot_password = () => {
               ref={newPasswordRef}
               style={{ display: "none" }}
             >
-              <div className={styles.password}>
+              <div className={styles.passwordContainer}>
                 <label className={styles.inputsBoxLabels} htmlFor="newPassword">
                   رمز عبور جدید
                 </label>
-                <br />
-                <Input
-                  className={
-                    !errorNewPassword.newPassword
-                      ? styles.inputField
-                      : styles.inputFieldError
-                  }
-                  onChange={handleChangePassword}
-                  type="Password"
-                  id="newPassword"
-                  name="newPassword"
-                  value={newPassword.newPassword}
-                  data-tooltip-id="password_tooltip"
+                <InfoIcon
+                  className={styles.infoIcon}
+                  data-tooltip-id="passwordPrequesties_tooltip"
                 />
+                <Tooltip
+                  id="passwordPrequesties_tooltip"
+                  className={styles.passwordPrequestiesLogin}
+                  content={
+                    "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
+                  }
+                  place="left-end"
+                />
+                <br />
+                <div className={styles.passwordInputWrapper}>
+                  <Input
+                    className={
+                      !errorNewPassword.newPassword
+                        ? styles.inputField
+                        : styles.inputFieldError
+                    }
+                    onChange={handleChangePassword}
+                    type={passFieldType}
+                    id="newPassword"
+                    name="newPassword"
+                    value={newPassword.newPassword}
+                    data-tooltip-id="password_tooltip"
+                  />
+                  <button
+                    type="button"
+                    className={styles.togglePasswordButton}
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? (
+                      <VisibilityOffIcon className={styles.passwordIcon} />
+                    ) : (
+                      <RemoveRedEyeIcon className={styles.passwordIcon} />
+                    )}
+                  </button>
+                </div>
                 <br />
                 {errorNewPassword.newPassword && (
                   <Tooltip
@@ -285,19 +364,32 @@ const Forgot_password = () => {
                   تکرار رمز عبور جدید
                 </label>
                 <br />
-                <Input
-                  className={
-                    !errorNewPassword.repeatPassword
-                      ? styles.inputField
-                      : styles.inputFieldError
-                  }
-                  onChange={handleChangePassword}
-                  type="Password"
-                  id="repeatPassword"
-                  name="repeatPassword"
-                  value={newPassword.repeatPassword}
-                  data-tooltip-id="repeatPassword_tooltip"
-                />
+                <div className={styles.passwordInputWrapper}>
+                  <Input
+                    className={
+                      !errorNewPassword.repeatPassword
+                        ? styles.inputField
+                        : styles.inputFieldError
+                    }
+                    onChange={handleChangePassword}
+                    type={passFieldType}
+                    id="repeatPassword"
+                    name="repeatPassword"
+                    value={newPassword.repeatPassword}
+                    data-tooltip-id="repeatPassword_tooltip"
+                  />
+                  <button
+                    type="button"
+                    className={styles.togglePasswordButton}
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? (
+                      <VisibilityOffIcon className={styles.passwordIcon} />
+                    ) : (
+                      <RemoveRedEyeIcon className={styles.passwordIcon} />
+                    )}
+                  </button>
+                </div>
                 <br />
                 {errorNewPassword.repeatPassword && (
                   <Tooltip
@@ -306,7 +398,11 @@ const Forgot_password = () => {
                     content={errorNewPassword.repeatPassword}
                   />
                 )}
-                <button type="submit" className={styles.submitBtn} style={{marginTop:"10%"}}>
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  style={{ marginTop: "10%" }}
+                >
                   تایید
                 </button>
               </div>
