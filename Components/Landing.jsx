@@ -70,9 +70,8 @@ const Landing = () => {
             <br className="landing-hero-header-br" /> ساده، هوشمند، قدرتمند
           </h1>
           <p className="landing-hero-body">
-            با ایران‌سند، اسناد خود را به صورت آنلاین ایجاد، ویرایش و مدیریت
-            کنید! <br /> ✨ همکاری در لحظه، ذخیره‌سازی ابری و ابزارهای پیشرفته
-            ...
+            با ایران‌سند، اسناد خود را به صورت برخط ایجاد، ویرایش و مدیریت کنید!{" "}
+            <br /> ✨ همکاری در لحظه، ذخیره‌سازی ابری و ابزارهای پیشرفته ...
           </p>
           <button
             className="landing-hero-button"
@@ -99,14 +98,14 @@ const Landing = () => {
             <img
               className="landing-services-grid-item-img"
               src={Service4}
-              alt="ویرایش آنلاین اسناد"
+              alt="ویرایش برخط اسناد"
             />
             <h2 className="landing-services-grid-item-title">
               ویرایش آنلاین اسناد
             </h2>
             <div className="landing-services-grid-item-body">
               <p>
-                ویرایش همزمان اسناد به صورت آنلاین با قابلیت ذخیره‌سازی خودکار و
+                ویرایش همزمان اسناد به صورت برخط با قابلیت ذخیره‌سازی خودکار و
                 تاریخچه تغییرات
               </p>
             </div>
@@ -125,7 +124,7 @@ const Landing = () => {
             <h2 className="landing-services-grid-item-title">همکاری تیمی</h2>
             <div className="landing-services-grid-item-body">
               <p>
-                امکان کار تیمی روی اسناد با تعیین سطوح دسترسی مختلف برای هر عضو
+                امکان کار تیمی روی اسناد با تعیین سطح دسترسی مختلف برای هر عضو
                 تیم
               </p>
             </div>
@@ -225,7 +224,7 @@ const Landing = () => {
               formattingFn={toPersianDigit}
             />
           </h1>
-          <p className="landing-stats-item-desc">کشور تحت سرویس</p>
+          <p className="landing-stats-item-desc">کشور تحت پوشش</p>
           <img src={CountryIcon} className="landing-stats-item-icon" />
         </div>
       </div>
@@ -282,13 +281,13 @@ const Landing = () => {
             <li className="landing-footer-list-item">
               {" "}
               <MdLocationPin />
-              تهران، خیابان رسالت، خیابان هنگام، خیابان دانشگاه علم و صنعت
-              ایران، دانشگاه علم و صنعت ایران، دانشکده مهندسی کامپیوتر
+              تهران، تهران، خیابان رسالت، خیابان هنگام، خیابان دانشگاه علم و
+              صنعت ایران، دانشگاه علم و صنعت ایران، دانشکده مهندسی کامپیوتر
             </li>
           </ul>
         </div>
         <div className="landing-footer-navigate">
-          <h1 className="landing-footer-title">لینک‌ها مفید</h1>
+          <h1 className="landing-footer-title">لینک‌های مفید</h1>
           <ul className="landing-footer-list">
             <li className="landing-footer-list-item">
               <Link to="/signup">ثبت نام</Link>
