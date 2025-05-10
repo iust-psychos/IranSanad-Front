@@ -15,6 +15,8 @@ import { Tooltip } from "react-tooltip";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 import { RingLoader } from "react-spinners";
 import CookieManager from "../Managers/CookieManager.js";
+import LogoIcon from "../src/icons/logo.svg";
+
 const SignUp = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -158,12 +160,10 @@ const SignUp = () => {
         )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
-            <img src="../Images/" className={styles.ImageTitle} />
-            <div className={styles.Title}>
-              ایران
-              <br />
-              سند
-            </div>
+            <img src={LogoIcon} className={styles.ImageTitle} />
+            {/* <div className={styles.Title}>
+              <img src={LogoIcon} alt="ایران سند" />
+            </div> */}
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
