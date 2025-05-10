@@ -14,6 +14,7 @@ import { Tooltip } from "react-tooltip";
 import CookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 import { RingLoader } from "react-spinners";
+import LogoIcon from "../src/icons/logo.svg";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -100,12 +101,9 @@ const Login = () => {
         )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
-            <img src="../Images/" className={styles.ImageTitle} />
-            <div className={styles.Title}>
-              ایران
-              <br />
-              سند
-            </div>
+            <img src={LogoIcon} className={styles.ImageTitle} />
+            {/* <div className={styles.Title}>
+            </div> */}
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}

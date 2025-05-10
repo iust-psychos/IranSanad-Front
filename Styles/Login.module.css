@@ -27,6 +27,7 @@
     width:55%;
     height:100%;
     display: inline-block;
+    position: relative; 
 }
 
 .Title {
@@ -58,10 +59,14 @@
 }
 
 .InformationContainer { 
-    position: relative;
+    /* position: relative;
     padding: 5% 10%;
     width: 80%;
-    height: 72%;
+    height: 72%; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .infoTitle {

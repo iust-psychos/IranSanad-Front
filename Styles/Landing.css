@@ -19,10 +19,15 @@
     color: #AE8EE6;
 }
 
+.landing-hero-header-br {
+    display: none;
+}
+
 .landing-hero-body {
     font-size: 16px;
     font-family: 'Vazir';
     line-height: 1.5;
+    text-align: justify;
 }
 
 .landing-hero-image {
@@ -41,9 +46,36 @@
     height: 40px;
     font-family: 'Vazir';
     font-size: 15px;
-    background-color: #E8E3F9;
+    color: black;
+    background: linear-gradient(to right, #E8E3F9 0%, #E8E3F9 100%);
     border: 1px solid black;
     margin-top: 2%;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+    z-index: 1;
+}
+
+.landing-hero-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, black 0%, black 100%);
+    transition: all 0.4s ease-in-out;
+    z-index: -1;
+}
+
+.landing-hero-button:hover {
+    color: #E8E3F9;
+    border: 1px solid #E8E3F9;
+    transform: scale(1.05);
+}
+
+.landing-hero-button:hover::before {
+    left: 0;
 }
 
 .landing-services {
@@ -115,13 +147,12 @@
     padding: 5% 2%;
     text-align: center;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 2fr 1fr;
     grid-template-rows: auto auto;
     align-items: center;
-    gap: 5px;
 }
 
-.landing-stats-item > svg {
+.landing-stats-item-icon {
     grid-column: 2; 
     grid-row: 1 / span 2;
     height: 70%; 
@@ -130,12 +161,13 @@
 
 .landing-stats-item-number {
     font-family: 'Vazir';
-    font-size: 30px;
+    font-size: 28px;
 }
 
 .landing-stats-item-desc {
     font-family: 'Vazir';
-    font-size: 18px;
+    font-size: 22px;
+    font-weight: bold;
 }
 
 .landing-join {
@@ -175,17 +207,51 @@
 .landing-join-body-content-header {
     color: #AE8EE6;
     font-size: 30px;
+    margin: 2% 0;
+}
+
+.landing-join-body-content-text {
+    line-height: 1.5;
+    margin: 2% 0;
+    text-align: justify;
 }
 
 .landing-join-body-content-button {
     border-radius: 10px;
-    width: 90px;
-    height: 30px;
+    width: 120px;
+    height: 40px;
     font-family: 'Vazir';
     font-size: 15px;
-    background-color: #E8E3F9;
+    color: black;
+    background: linear-gradient(to right, whitesmoke 0%, whitesmoke 100%);
     border: 1px solid black;
-    /* align-self:flex-end; */
+    margin: 2% 0;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+    z-index: 1;
+}
+
+.landing-join-body-content-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, black 0%, black 100%);
+    transition: all 0.4s ease-in-out;
+    z-index: -1;
+}
+
+.landing-join-body-content-button:hover {
+    color: whitesmoke;
+    border: 1px solid whitesmoke;
+    transform: scale(1.05);
+}
+
+.landing-join-body-content-button:hover::before {
+    left: 0;
 }
 
 .landing-footer {
@@ -243,13 +309,19 @@
     }
     
     .landing-hero-header {
-        font-size: 40px;
+        font-size: 35px;
         margin-bottom: 2%;
+        line-height: 1.3;
+    }
+
+    .landing-hero-header-br {
+        display: inline;
     }
     
     .landing-hero-body {
         font-size: 16px;
         margin-top: 2%;
+        line-height: 1.4;
     }
     
     .landing-hero-text {
@@ -286,6 +358,7 @@
     }
     .landing-services-grid-item > h2 {
         grid-area: col2;
+        text-align: justify;
     }
     .landing-services-grid-item > div {
         grid-area: col3;
