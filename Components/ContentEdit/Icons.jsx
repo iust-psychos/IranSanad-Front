@@ -55,9 +55,9 @@ export const IconItalics = () => (
     <path
       d="M5.4 1.5H8.7M8.7 1.5H12M8.7 1.5L4.3 16.5M4.3 16.5H1M4.3 16.5H7.6"
       stroke="black"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -73,9 +73,9 @@ export const IconUnderline = () => (
     <path
       d="M11.8333 1.5V7.92857C11.8333 9.06521 11.3768 10.1553 10.5641 10.959C9.75147 11.7628 8.64927 12.2143 7.5 12.2143C6.35073 12.2143 5.24853 11.7628 4.43587 10.959C3.62321 10.1553 3.16667 9.06521 3.16667 7.92857V1.5M1 16.5H14"
       stroke="black"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -91,9 +91,9 @@ export const IconStrikethrough = () => (
     <path
       d="M1 9H16M12.0717 1.5H6.89C6.08518 1.50023 5.30669 1.78678 4.6938 2.30841C4.0809 2.83004 3.67358 3.5527 3.5447 4.34714C3.41582 5.14157 3.57379 5.95594 3.99034 6.64458C4.40689 7.33321 5.05486 7.85118 5.81833 8.10583L8.5 9M3.5 16.5H10.11C10.6968 16.5 11.2736 16.3477 11.7839 16.0579C12.2942 15.7682 12.7205 15.3509 13.0212 14.847C13.3219 14.3431 13.4866 13.7697 13.4993 13.183C13.5119 12.5963 13.372 12.0164 13.0933 11.5"
       stroke="black"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -109,9 +109,9 @@ export const IconLeftAlign = () => (
     <path
       d="M1 8.5H10.6M1 16H19M1 1H19"
       stroke="black"
-      stroke-width="1.5"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
     />
   </svg>
 );
@@ -126,9 +126,9 @@ export const IconCenterAlign = () => (
     <path
       d="M4.00037 8.5H18.9996M8.49962 16H14.5004M1 1H22"
       stroke="black"
-      stroke-width="1.5"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
     />
   </svg>
 );
@@ -143,9 +143,9 @@ export const IconRightAlign = () => (
     <path
       d="M19 8.5H9.4M19 1H1M19 16H1"
       stroke="black"
-      stroke-width="1.5"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
     />
   </svg>
 );
