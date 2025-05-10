@@ -19,10 +19,15 @@
     color: #AE8EE6;
 }
 
+.landing-hero-header-br {
+    display: none;
+}
+
 .landing-hero-body {
     font-size: 16px;
     font-family: 'Vazir';
     line-height: 1.5;
+    text-align: justify;
 }
 
 .landing-hero-image {
@@ -115,13 +120,12 @@
     padding: 5% 2%;
     text-align: center;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 2fr 1fr;
     grid-template-rows: auto auto;
     align-items: center;
-    gap: 5px;
 }
 
-.landing-stats-item > svg {
+.landing-stats-item-icon {
     grid-column: 2; 
     grid-row: 1 / span 2;
     height: 70%; 
@@ -130,12 +134,13 @@
 
 .landing-stats-item-number {
     font-family: 'Vazir';
-    font-size: 30px;
+    font-size: 28px;
 }
 
 .landing-stats-item-desc {
     font-family: 'Vazir';
-    font-size: 18px;
+    font-size: 22px;
+    font-weight: bold;
 }
 
 .landing-join {
@@ -175,16 +180,25 @@
 .landing-join-body-content-header {
     color: #AE8EE6;
     font-size: 30px;
+    margin: 2% 0;
+}
+
+.landing-join-body-content-text {
+    line-height: 1.5;
+    margin: 2% 0;
+    text-align: justify;
 }
 
 .landing-join-body-content-button {
     border-radius: 10px;
-    width: 90px;
-    height: 30px;
+    width: 120px;
+    height: 40px;
     font-family: 'Vazir';
     font-size: 15px;
-    background-color: #E8E3F9;
+    /* background-color: #E8E3F9; */
+    background-color: whitesmoke;
     border: 1px solid black;
+    margin: 2% 0;
     /* align-self:flex-end; */
 }
 
@@ -243,13 +257,19 @@
     }
     
     .landing-hero-header {
-        font-size: 40px;
+        font-size: 35px;
         margin-bottom: 2%;
+        line-height: 1.3;
+    }
+
+    .landing-hero-header-br {
+        display: inline;
     }
     
     .landing-hero-body {
         font-size: 16px;
         margin-top: 2%;
+        line-height: 1.4;
     }
     
     .landing-hero-text {
@@ -286,6 +306,7 @@
     }
     .landing-services-grid-item > h2 {
         grid-area: col2;
+        text-align: justify;
     }
     .landing-services-grid-item > div {
         grid-area: col3;
