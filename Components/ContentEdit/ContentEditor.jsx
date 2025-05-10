@@ -17,8 +17,8 @@ const ContentEditor = () => {
   const nameRef = useRef();
   /* Share Modal */
   const [showShareModal, setShowShareModal] = useState(false);
-  const [openHistoryModal, setOpenHistoryModal] = useState(false);
   const shareModalRef = useRef(null);
+  const [openHistoryModal, setOpenHistoryModal] = useState(false);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {

@@ -92,8 +92,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  cursor: pointer;
   overflow: hidden;
+  cursor: pointer;
   transition: box-shadow 0.2s ease;
 }
 
@@ -229,7 +229,10 @@
   background-color: #ffff00;
 }
 
-.content-editor.history-modal.popup {
+.history-modal * {
+  font-family: "Vazir";
+}
+.history-modal.popup {
   position: fixed;
   top: 0;
   width: 100%;
@@ -238,39 +241,227 @@
   background-color: #e8e3f9;
   z-index: 1000;
   display: grid;
-  grid-template-rows: repeat(3, fit-content);
-  grid-template-columns: 30% 70%;
+  grid-template-rows: max-content max-content 1fr;
+  grid-template-columns: 22rem 1fr;
   grid-template-areas:
-    "navbar sidebar-title"
-    "toolbar sidebar-title"
-    "document sidebar-content";
-}
-.content-editor.history-modal .sidebar-title {
-  grid-area: "sidebar-title";
-  background-color: #503389;
-}
-.content-editor.history-modal .sidebar-content {
-  grid-area: "sidebar-content";
-  background-color: #f5f5f5;
-}
-.content-editor.history-modal .navbar {
-  grid-area: "navbar";
-  background-color: #bba1ea;
-}
-.content-editor.history-modal .toolbar {
-  grid-area: "toolbar";
-  background-color: #f2f2f2;
-}
-.content-editor.history-modal .document {
-  grid-area: "document";
+    "sidebar-title navbar"
+    "sidebar-title toolbar"
+    "sidebar-content document";
 }
 
-.content-editor.history-modal .content-editor.history-modal.button {
-  box-sizing: border-box;
+.history-modal .sidebar-header-container {
+  grid-area: sidebar-title;
+  background-color: #503389;
+  height: 1fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.history-modal .sidebar-title {
+  color: white;
+}
+
+.history-modal .sidebar-content-container {
+  grid-area: sidebar-content;
+  background-color: #f5f5f5;
+}
+
+.history-modal .sidebar-content-container {
+  display: flex;
+  flex-direction: column;
+  direction: rtl;
+  font-family: sans-serif;
+  overflow-y: auto;
+}
+
+.history-modal .sidebar-content-container .timeline-item {
+  padding: 1rem;
+  display: grid;
+  background-color: transparent;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  position: relative;
+  cursor: pointer;
+  border: none;
+}
+
+.history-modal .sidebar-content-container .timeline-item:hover {
+  background-color: hsl(0, 0%, 90%);
+}
+
+.history-modal .sidebar-content-container .timeline-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin-left: 0.5rem;
+}
+
+.history-modal .sidebar-content-container .timeline-circle {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #555;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.history-modal .sidebar-content-container .timeline-circle.selected {
+  border-width: 4px;
+}
+
+.history-modal .sidebar-content-container .timeline-connector {
+  width: 2px;
+  flex-grow: 1;
+  background-color: #aaa;
+  margin-top: 4px;
+  height: 100%;
+}
+
+.history-modal .sidebar-content-container .timeline-content {
+  padding-right: 0.5rem;
+}
+
+.history-modal .sidebar-content-container .timeline-header {
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: right;
+}
+
+.history-modal .sidebar-content-container .timeline-meta {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #555;
+  gap: 0.5rem;
+  margin-top: 4px;
+}
+
+.history-modal .sidebar-content-container .avatar {
+  border-radius: 50%;
+  padding: 0.3rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  width: min-content;
+}
+
+.history-modal .sidebar-content-container .avatar svg {
+  height: 1.5rem;
+  width: fit-content;
+}
+.history-modal .sidebar-content-container .avatar path {
+  fill: black;
+}
+
+.history-modal .sidebar-content-container .dot {
+  font-size: 1.2rem;
+  margin: 0 0.3rem;
+}
+
+.history-modal .sidebar-content-container .timeline-menu {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.history-modal .navbar {
+  grid-area: navbar;
+  background-color: #bba1ea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+  padding: 0 1rem;
+}
+
+.history-modal .navbar .version-name {
+  background-color: rgb(255, 255, 255, 0.5);
+  margin-left: auto;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 0.05rem solid transparent;
+  padding-inline: 0.5rem;
+  padding-block: 0.2rem;
+  width: fit-content;
+}
+
+.history-modal .navbar button.restore {
+  background-color: #4f29ce;
+  border-radius: 999px;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  outline: none;
+}
+
+.history-modal .version-name:hover {
+  border: 0.05rem solid black;
+}
+
+.history-modal .toolbar {
+  grid-area: toolbar;
+  background-color: #f2f2f2;
+  height: 3rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-right: 1rem;
+  gap: 1rem;
+}
+
+.history-modal .toolbar button {
+  border: none;
+  outline: none;
+  border-radius: 999px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: min-content;
-  outline: 0;
-  user-select: none;
+  transition: box-shadow 0.2s ease;
 }
+
+.history-modal .toolbar button:hover {
+  box-shadow: 0 0 0 4px rgba(187, 161, 234, 0.45);
+  background-color: rgba(187, 161, 234, 0.4);
+  cursor: pointer;
+}
+
+.history-modal .document {
+  grid-area: document;
+  overflow: auto;
+}
+
+.history-modal .document .editor-container {
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: 1rem 3rem 3rem 3rem;
+}
+.history-modal .document .editor-input {
+  cursor: text;
+  width: 1020px;
+  height: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3rem;
+  background: #ffffff;
+  outline: none;
+  font-size: 1.2em;
+}
+
+.history-modal .close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 999px;
+}
+
+/* .history-modal .close:hover {
+  box-shadow: 0 0 0 4px rgba(80, 51, 137, 0.45);
+  background-color: rgba(80, 51, 137, 0.4);
+  cursor: pointer;
+} */
