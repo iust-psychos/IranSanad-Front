@@ -23,13 +23,14 @@ export default {
   quote: "editor-quote",
   rtl: "rtl",
   text: {
-    bold: "editor-text-bold",
     code: "editor-text-code",
     hashtag: "editor-text-hashtag",
-    italic: "editor-text-italic",
     overflowed: "editor-text-overflowed",
-    strikethrough: "editor-text-strikethrough",
+    bold: "editor-text-bold",
     underline: "editor-text-underline",
+    strikethrough: "editor-text-strikethrough",
     underlineStrikethrough: "editor-text-underlineStrikethrough",
+    italic: "editor-text-italic",
+    code: "editor-code",
   },
 };

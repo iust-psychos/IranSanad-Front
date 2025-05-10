@@ -11,11 +11,14 @@ import * as yup from "yup";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Tooltip } from "react-tooltip";
-import cookieManager from "../Managers/CookieManager";
+import CookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
+import { RingLoader } from "react-spinners";
+import LogoIcon from "../src/icons/logo.svg";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [redirectTimeout, setRedirectTimeout] = useState(null);
 
   useEffect(() => {
@@ -29,18 +32,9 @@ const Login = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [passFieldType, setPassFieldType] = useState("password");
-  const [showPassIcon, setShowPassIcon] = useState(
-    <RemoveRedEyeIcon
-      sx={{
-        position: "absolute",
-        top: "39%",
-        left: "21%",
-      }}
-    />
-  );
-  const iconContainer = useRef(null);
+
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -60,32 +54,10 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleShowPassword = (e) => {
+  const togglePasswordVisibility = (e) => {
     e.preventDefault();
-    if (!showPassword) {
-      setShowPassIcon(
-        <RemoveRedEyeIcon
-          sx={{
-            position: "absolute",
-            top: "39%",
-            left: "21%",
-          }}
-        />
-      );
-      setPassFieldType("password");
-    } else {
-      setShowPassIcon(
-        <VisibilityOffIcon
-          sx={{
-            position: "absolute",
-            top: "39%",
-            left: "21%",
-          }}
-        />
-      );
-      setPassFieldType("text");
-    }
     setShowPassword(!showPassword);
+    setPassFieldType(showPassword ? "password" : "text");
   };
 
   const handleSubmit = async (e) => {
@@ -93,39 +65,45 @@ const Login = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
+      setLoading(true);
       let resp = await LoginManager.Login(formData.email, formData.password);
-      cookieManager.SaveToken(10, resp.data.tokens.access);
-      let token = cookieManager.LoadToken();
+      CookieManager.SaveToken(10, resp.data.tokens.access);
+      let token = CookieManager.LoadToken();
 
       showSuccessToast("ورود موفقیت آمیز!");
-      navigate("/dashboard");
 
       const timeoutId = setTimeout(() => {
         navigate("/dashboard");
       }, 3000);
       setRedirectTimeout(timeoutId);
     } catch (err) {
-      const validationErrors = {};
-      err.inner.forEach((error) => {
-        console.log(error);
-        validationErrors[error.path] = error.message;
-      });
-      showErrorToast();
-      setErrors(validationErrors);
+      if (err.name == "AxiosError") {
+        showErrorToast(err.response.data.non_field_errors[0]);
+      } else {
+        const validationErrors = {};
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        setErrors(validationErrors);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={styles.Bakcground}>
       <div className={styles.Box}>
+        {loading && (
+          <div className={styles.loaderContainer}>
+            <RingLoader color="#bba1ea" size="5rem" />
+          </div>
+        )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
-            <img src="../Images/" className={styles.ImageTitle} />
-            <div className={styles.Title}>
-              ایران
-              <br />
-              سند
-            </div>
+            <img src={LogoIcon} className={styles.ImageTitle} />
+            {/* <div className={styles.Title}>
+            </div> */}
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
@@ -136,7 +114,7 @@ const Login = () => {
 
             <form onSubmit={handleSubmit} className={styles.inputsBox}>
               <div>
-                <label className={styles.inputsBoxLabels} htmlFor="email">
+                <label className={styles.inputsBoxLabels} htmlFor="username">
                   ایمیل
                 </label>
                 <br />
@@ -160,19 +138,13 @@ const Login = () => {
                   />
                 )}
               </div>
-              <div className={styles.password}>
+              <br />
+              <div className={styles.passwordContainer}>
                 <label className={styles.inputsBoxLabels} htmlFor="password">
                   رمز عبور
                 </label>
                 <InfoIcon
-                  sx={{
-                    position: "absolute",
-                    top: "30%",
-                    color: "#D4D4D4",
-                    width: "20px",
-                    height: "20px",
-                    left: "20%",
-                  }}
+                  className={styles.infoIcon}
                   data-tooltip-id="passwordPrequesties_tooltip"
                 />
                 <Tooltip
@@ -181,38 +153,44 @@ const Login = () => {
                   content={
                     "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
                   }
-                  place="right-start"
-                  role="validation-tooltip"
-                  data-testid="emailTooltip"
+                  place="left-end"
                 />
                 <br />
-                <span ref={iconContainer} onClick={handleShowPassword}>
-                  {showPassIcon}
-                </span>
-                <Input
-                  className={
-                    !errors.password
-                      ? styles.inputField
-                      : styles.inputFieldError
-                  }
-                  data-testid="password-info-icon"
-                  onChange={handleChange}
-                  type={passFieldType}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  data-tooltip-id="password_tooltip"
-                />
-                <br />
+                <div className={styles.passwordInputWrapper}>
+                  <Input
+                    className={
+                      !errors.password
+                        ? styles.inputField
+                        : styles.inputFieldError
+                    }
+                    onChange={handleChange}
+                    type={passFieldType}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    data-tooltip-id="password_tooltip"
+                  />
+                  <button
+                    type="button"
+                    className={styles.togglePasswordButton}
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? (
+                      <VisibilityOffIcon className={styles.passwordIcon} />
+                    ) : (
+                      <RemoveRedEyeIcon className={styles.passwordIcon} />
+                    )}
+                  </button>
+                </div>
+
                 {errors.password && (
                   <Tooltip
                     id="password_tooltip"
                     className={styles.errors}
                     content={errors.password}
-                    data-testid="password-tooltip"
                   />
                 )}
-                <p style={{ marginTop: "1%" }}>
+                <p style={{ marginTop: "3%" }}>
                   <Link
                     to="/forgot_password"
                     state={
@@ -223,7 +201,7 @@ const Login = () => {
                     فراموشی رمز عبور؟
                   </Link>
                 </p>
-                <button type="submit" name="login" className={styles.submitBtn}>
+                <button type="submit" className={styles.submitBtn}>
                   ورود
                 </button>
                 <p className={styles.noAccLink}>

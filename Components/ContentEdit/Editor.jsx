@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { HeadingNode } from "@lexical/rich-text";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
@@ -144,6 +144,7 @@ export default function Editor({ doc_uuid }) {
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
+      <ToolbarPlugin />
       <div className="editor-container">
         <ToolbarPlugin />
 
@@ -209,7 +210,7 @@ export default function Editor({ doc_uuid }) {
           <ul>
             {activeUsers.map((user) => (
               <li key={user.userId} style={{ color: user.color }}>
-                ● {user.name}
+                {user.name}
               </li>
             ))}
           </ul>
@@ -217,4 +218,4 @@ export default function Editor({ doc_uuid }) {
       </div>
     </LexicalComposer>
   );
-}
+};

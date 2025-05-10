@@ -1,21 +1,29 @@
 * {
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-@font-face { 
-  font-family: 'Vazir';
-  src: url('../src/fonts/Vazir/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
+@font-face {
+  font-family: "Vazir";
+  src: url("../src/fonts/Vazir/fonts/webfonts/Vazirmatn-Regular.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
-body {
-  direction: rtl;
-  font-family: 'Vazir';
+html {
+  /* font-size: 62.5%; */
 }
 
-.Toastify__toast, .Toastify__toast-body {
-  font-family: 'Vazir' !important;
+body {
+  direction: rtl;
+  font-family: "Vazir";
+  line-height: 1;
+}
+
+.Toastify__toast,
+.Toastify__toast-body {
+  font-family: "Vazir" !important;
   direction: rtl;
   text-align: right;
 }
