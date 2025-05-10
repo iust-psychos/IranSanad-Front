@@ -145,8 +145,11 @@ export default function Editor({ doc_uuid }) {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <ToolbarPlugin />
-      <div className="editor-container">
-        <ToolbarPlugin />
+      <div className="editor-container" ref={containerRef}>
+        {/* <RichTextPlugin
+          contentEditable={<ContentEditable className="editor-input" />}
+          ErrorBoundary={LexicalErrorBoundary}
+        /> */}
 
         <div className="page-controls">
           <button

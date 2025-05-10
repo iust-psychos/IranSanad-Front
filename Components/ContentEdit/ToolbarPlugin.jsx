@@ -1,11 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
@@ -70,7 +63,7 @@ function ToolbarPlugin() {
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         (payLoad) => {
-          setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
+          updateToolbar();
           return false;
         },
         COMMAND_PRIORITY_LOW
@@ -115,7 +108,7 @@ function ToolbarPlugin() {
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
         break;
       case richTextActions.Highlight:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "hightlight");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "highlight");
         break;
       case richTextActions.Code:
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
@@ -185,12 +178,12 @@ function ToolbarPlugin() {
 
   return (
     <div className="toolbar">
-      {richTextOptions.map(({ id, icon, label }) =>
+      {richTextOptions.map(({ id, icon, label }, index) =>
         id === richTextActions.Divider ? (
-          <IconDivider1 />
+          <IconDivider1 key={`${id}${index}`} />
         ) : (
           <button
-          key={id}
+            key={id}
             aria-label={label}
             onClick={() => onAction(id)}
             disabled={disableMap[id]}
