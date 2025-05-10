@@ -72,7 +72,7 @@ const Editor = ({ doc_uuid }) => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <ToolbarPlugin />
-      <div className="editor-container">
+      <div className="editor-container" ref={containerRef}>
         <RichTextPlugin
           contentEditable={<ContentEditable className="editor-input" />}
           ErrorBoundary={LexicalErrorBoundary}
@@ -84,7 +84,7 @@ const Editor = ({ doc_uuid }) => {
 
         <ListPlugin />
 
-        <OnChangePlugin onChange={() => {}} />
+        {/* <OnChangePlugin onChange={() => {}} /> */}
 
         <CollaborationPlugin
           id={doc_uuid}
