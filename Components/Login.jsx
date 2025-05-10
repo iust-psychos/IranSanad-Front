@@ -114,7 +114,7 @@ const Login = () => {
 
             <form onSubmit={handleSubmit} className={styles.inputsBox}>
               <div>
-                <label className={styles.inputsBoxLabels} htmlFor="username">
+                <label className={styles.inputsBoxLabels} htmlFor="email">
                   ایمیل
                 </label>
                 <br />

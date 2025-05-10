@@ -37,7 +37,6 @@ function PageContentManager({ currentPage, pageContents }) {
       const paragraph = $createParagraphNode();
 
       if (pageContents[currentPage]) {
-        // Simple text content loading - extend this for rich content
         paragraph.append($createTextNode(pageContents[currentPage]));
       }
 
