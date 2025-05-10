@@ -3,12 +3,13 @@ import Editor from "./Editor";
 import { IconLogo } from "../user-dashboard/components/Icons";
 import UserProfileDropdown from "../user-dashboard/components/UserProfileDropdown";
 import "./content-editor.css";
-import { IconShare } from "./Icons";
+import { IconComment, IconHistory, IconShare } from "./Icons";
 import Share from "../Share";
 import { useParams } from "react-router-dom";
 import { useLoaderData } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { renameDocument } from "../../Managers/user-dashboard-manager";
+import HistoryModal from "./HistoryModal";
 
 const ContentEditor = () => {
   const { doc_uuid } = useParams();
@@ -16,6 +17,7 @@ const ContentEditor = () => {
   const nameRef = useRef();
   /* Share Modal */
   const [showShareModal, setShowShareModal] = useState(false);
+  const [openHistoryModal, setOpenHistoryModal] = useState(false);
   const shareModalRef = useRef(null);
 
   const handleKeyDown = (e) => {
@@ -42,11 +44,22 @@ const ContentEditor = () => {
         />
 
         <button
+          className="menu-button menu-history"
+          onClick={() => setOpenHistoryModal(true)}
+        >
+          <IconHistory />
+        </button>
+        <button
+          className="menu-button menu-comment"
+          // onClick={() => setShowShareModal(true)}
+        >
+          <IconComment />
+        </button>
+        <button
           className="menu-button menu-share"
           onClick={() => setShowShareModal(true)}
         >
           <IconShare />
-          <p>اشتراک گذاری</p>
         </button>
         <UserProfileDropdown />
       </menu>
@@ -63,6 +76,7 @@ const ContentEditor = () => {
           </div>,
           document.body
         )}
+      <HistoryModal open={openHistoryModal} setOpen={setOpenHistoryModal} />
       <div className="fix-scrollbar"></div>
       <Editor doc_uuid={doc_uuid} />
     </div>

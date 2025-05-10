@@ -178,11 +178,12 @@ function ToolbarPlugin() {
 
   return (
     <div className="toolbar">
-      {richTextOptions.map(({ id, icon, label }) =>
+      {richTextOptions.map(({ id, icon, label }, index) =>
         id === richTextActions.Divider ? (
-          <IconDivider1 />
+          <IconDivider1 key={`${id}${index}`} />
         ) : (
           <button
+            key={id}
             aria-label={label}
             onClick={() => onAction(id)}
             disabled={disableMap[id]}

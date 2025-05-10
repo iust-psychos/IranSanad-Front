@@ -1,5 +1,5 @@
 import { WebsocketProvider } from "y-websocket";
-import { Doc } from "yjs";
+import * as Y from "yjs";
 import CookieManager from "../../Managers/CookieManager";
 
 export function createWebsocketProvider(id, yjsDocMap) {
@@ -7,7 +7,7 @@ export function createWebsocketProvider(id, yjsDocMap) {
   let doc = yjsDocMap.get(id);
 
   if (doc === undefined) {
-    doc = new Doc();
+    doc = new Y.Doc();
     yjsDocMap.set(id, doc);
   } else {
     doc.load();
@@ -22,11 +22,5 @@ export function createWebsocketProvider(id, yjsDocMap) {
     }
   );
 
-  wsProvider.on("status", (event) => {
-    console.log(event.status);
-  });
-
-  wsProvider.on("sync", (event) => {
-    console.log(event.valueOf());
-  });
+  return wsProvider;
 }

@@ -84,7 +84,7 @@ const Editor = ({ doc_uuid }) => {
 
         <ListPlugin />
 
-        <OnChangePlugin onChange={() => {}} />
+        {/* <OnChangePlugin onChange={() => {}} /> */}
 
         <CollaborationPlugin
           id={doc_uuid}
