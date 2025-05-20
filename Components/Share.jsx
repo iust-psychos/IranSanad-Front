@@ -343,7 +343,7 @@ const Share = ({ onClose, doc_uuid }) => {
                                   </Select.ItemIndicator>
                                 </Select.Item>
                                 <Select.Item
-                                  value="Write"
+                                  value="Writer"
                                   className="share-select-item"
                                 >
                                   <Select.ItemText>ویراستار</Select.ItemText>
