@@ -1,4 +1,8 @@
-export default {
+import { HeadingNode } from "@lexical/rich-text";
+import { CodeHighlightNode, CodeNode } from "@lexical/code";
+import { ListNode, ListItemNode } from "@lexical/list";
+
+const theme = {
   code: "editor-code",
   heading: {
     h1: "editor-heading-h1",
@@ -34,4 +38,12 @@ export default {
     code: "editor-code",
     highlight: "editor-highlight",
   },
+};
+
+export const editorConfig = {
+  editorState: null,
+  namespace: "Editor-1",
+  theme: theme,
+  onError: (error) => console.error(error),
+  nodes: [HeadingNode, CodeHighlightNode, CodeNode, ListNode, ListItemNode],
 };

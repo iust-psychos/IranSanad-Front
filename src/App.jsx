@@ -23,6 +23,8 @@ import { contentEditorLoader } from "../Managers/content-editor-manager";
 import cookieManager from "../Managers/CookieManager";
 import Landing from "../Components/Landing";
 import { isAuthenticated } from "../Utilities/Auth/AuthManager";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { editorConfig } from "../Components/ContentEdit/editor-config";
 
 const ProtectedRoute = ({
   isAuthenticated,
@@ -76,7 +78,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/document/:doc_uuid",
-        element: <ContentEditor />,
+        element: (
+          <LexicalComposer initialConfig={editorConfig}>
+            <ContentEditor />
+          </LexicalComposer>
+        ),
         loader: contentEditorLoader,
       },
       {

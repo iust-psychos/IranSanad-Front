@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { HeadingNode } from "@lexical/rich-text";
-import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { createWebsocketProvider } from "./providers";
 import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
@@ -11,21 +9,12 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { ListNode, ListItemNode } from "@lexical/list";
 import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import ToolbarPlugin from "./ToolbarPlugin";
-import theme from "./theme";
+import { editorConfig } from "./editor-config";
 import axios from "axios";
 import CookieManager from "../../Managers/CookieManager";
-
-const editorConfig = {
-  editorState: null,
-  namespace: "Editor-1",
-  theme: theme,
-  onError: (error) => console.error(error),
-  nodes: [HeadingNode, CodeHighlightNode, CodeNode, ListNode, ListItemNode],
-};
 
 function PageContentManager({ currentPage, pageContents }) {
   const [editor] = useLexicalComposerContext();
@@ -84,7 +73,7 @@ export default function Editor({ doc_uuid }) {
     }
   }, [userInfo]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (userInfo && yjsProvider) {
       yjsProvider.awareness.setLocalStateField("user", {
         name: userInfo.username,
@@ -142,7 +131,8 @@ export default function Editor({ doc_uuid }) {
   };
 
   return (
-    <LexicalComposer initialConfig={editorConfig}>
+    // <LexicalComposer initialConfig={editorConfig}>
+    <>
       <ToolbarPlugin />
       <div className="editor-container" ref={containerRef}>
         {/* <RichTextPlugin
@@ -218,6 +208,7 @@ export default function Editor({ doc_uuid }) {
           </ul>
         </div>
       </div>
-    </LexicalComposer>
+    </>
+    // </LexicalComposer>
   );
-};
+}
