@@ -113,7 +113,7 @@ const Login = () => {
             <span className={styles.loginTitle}>ورود به حساب</span>
 
             <form onSubmit={handleSubmit} className={styles.inputsBox}>
-              <div>
+              <div className={styles.inputsBoxUsername}>
                 <label className={styles.inputsBoxLabels} htmlFor="username">
                   ایمیل
                 </label>
@@ -153,7 +153,8 @@ const Login = () => {
                   content={
                     "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
                   }
-                  place="left-end"
+                  place="left"
+                  positionStrategy="fixed"
                 />
                 <br />
                 <div className={styles.passwordInputWrapper}>
