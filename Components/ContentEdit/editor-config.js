@@ -1,7 +1,11 @@
 import { HeadingNode } from "@lexical/rich-text";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { ListNode, ListItemNode } from "@lexical/list";
-
+import {
+  TableNode,
+  TableRowNode,
+  TableCellNode,
+} from "@lexical/table";
 const theme = {
   code: "editor-code",
   heading: {
@@ -45,5 +49,7 @@ export const editorConfig = {
   namespace: "Editor-1",
   theme: theme,
   onError: (error) => console.error(error),
-  nodes: [HeadingNode, CodeHighlightNode, CodeNode, ListNode, ListItemNode],
+  nodes: [HeadingNode, CodeHighlightNode, CodeNode, ListNode, ListItemNode ,   TableNode,
+  TableRowNode,
+  TableCellNode,],
 };

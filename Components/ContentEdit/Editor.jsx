@@ -15,6 +15,8 @@ import ToolbarPlugin from "./ToolbarPlugin";
 import { editorConfig } from "./editor-config";
 import axios from "axios";
 import CookieManager from "../../Managers/CookieManager";
+import InsertTableButton from "./InsertTableButton";
+import '../../Styles/editortable.css';
 
 function PageContentManager({ currentPage, pageContents }) {
   const [editor] = useLexicalComposerContext();
@@ -134,6 +136,7 @@ export default function Editor({ doc_uuid }) {
     // <LexicalComposer initialConfig={editorConfig}>
     <>
       <ToolbarPlugin />
+      
       <div className="editor-container" ref={containerRef}>
         {/* <RichTextPlugin
           contentEditable={<ContentEditable className="editor-input" />}

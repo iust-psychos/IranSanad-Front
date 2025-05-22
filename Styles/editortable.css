@@ -1,0 +1,9 @@
+.editor-input table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.editor-input th,
+.editor-input td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}

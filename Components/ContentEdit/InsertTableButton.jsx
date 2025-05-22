@@ -1,15 +1,29 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { INSERT_TABLE_COMMAND } from "@lexical/table";
+import {
+  $isRangeSelection,
+  $insertNodes,
+} from "lexical";
+import {  $getSelection } from 'lexical';
+import { $createParagraphNode } from "lexical";
+import {$createTableNodeWithDimensions} from "@lexical/table";
+import { TableIcon } from "./Icons";
 
-export default function InsertTableButton() {
+export default function InsertTableButton({rows , columns}) {
   const [editor] = useLexicalComposerContext();
 
   const insertTable = () => {
-    editor.dispatchCommand(INSERT_TABLE_COMMAND, {
-      columns: 3,
-      rows: 3,
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        const tableNode = $createTableNodeWithDimensions(columns, rows);
+        $insertNodes([tableNode, $createParagraphNode()]);
+      }
     });
   };
 
-  return <button onClick={insertTable}>Insert Table</button>;
+  return (
+    <button onClick={insertTable}>
+      <TableIcon/>
+    </button>
+  );
 }

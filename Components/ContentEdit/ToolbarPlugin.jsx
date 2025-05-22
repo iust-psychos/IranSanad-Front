@@ -23,7 +23,8 @@ import {
   INSERT_UNORDERED_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
 } from "@lexical/list";
-import { IconDivider1 } from "./Icons";
+import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
+import InsertTableButton from './InsertTableButton';
 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -34,6 +35,8 @@ function ToolbarPlugin() {
     [richTextActions.Redo]: true,
   });
   const [selectionMap, setSelectionMap] = useState({});
+  const [tableRows , setTableRows] = useState(1);
+  const [tableColumns , setTableColumns] = useState(1);
 
   const updateToolbar = () => {
     const selection = $getSelection();
@@ -133,6 +136,28 @@ function ToolbarPlugin() {
     }
   };
 
+  const incrementRows = () => {
+    if (tableRows >= 12)
+      return;
+    setTableRows(tableRows + 1);
+  }
+
+  const decrementRows = () => {
+    if (tableRows <= 1)
+      return;
+    setTableRows(tableRows - 1);
+  }
+
+  const incrementColumns = () => { 
+    setTableColumns(tableColumns + 1);
+  }
+
+  const decrementColumns = () => {
+    if (tableColumns <= 1)
+      return;
+    setTableColumns(tableColumns - 1);
+  }
+
   // useEffect(() => {
   //   return editor.registerCommand(
   //     editor.SELECTION_CHANGE_COMMAND,
@@ -191,8 +216,17 @@ function ToolbarPlugin() {
           >
             {icon}
           </button>
+          
         )
       )}
+      <IconDivider1 />
+      <button onClick={incrementRows}><PlusIcon/></button>
+      <span>{tableRows}</span>
+      <button onClick={decrementRows}><MinusIcon/></button>
+      <InsertTableButton rows={tableRows} columns={tableColumns} />
+      <button onClick={incrementColumns}><PlusIcon/></button>
+      <span>{tableColumns}</span>
+      <button onClick={decrementColumns}><MinusIcon/></button>
     </div>
   );
 }
