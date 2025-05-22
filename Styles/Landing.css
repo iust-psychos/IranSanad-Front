@@ -1,8 +1,10 @@
 .landing {
     display: flex;
     flex-direction: column;
-    background-color: #E8E3F9;
+    color: var(--text-primary);
+    background-color: var(--primary-bg);
     gap: 5%;
+    font-family: 'Vazir';
 }
 
 .landing-hero {
@@ -11,12 +13,12 @@
     justify-content: space-between;
     align-items: center;
     padding: 5%;
+    background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
 }
 
 .landing-hero-header {
     font-size: 30px;
-    font-family: 'Vazir';
-    color: #AE8EE6;
+    color: var(--accent-gold);
 }
 
 .landing-hero-header-br {
@@ -25,9 +27,9 @@
 
 .landing-hero-body {
     font-size: 16px;
-    font-family: 'Vazir';
     line-height: 1.5;
     text-align: justify;
+    color: var(--text-primary);
 }
 
 .landing-hero-image {
@@ -44,16 +46,16 @@
     border-radius: 10px;
     width: 120px;
     height: 40px;
-    font-family: 'Vazir';
     font-size: 15px;
-    color: black;
-    background: linear-gradient(to right, #E8E3F9 0%, #E8E3F9 100%);
+    color: var(--text-primary);
+    background: var(--accent-gold);
     border: 1px solid black;
     margin-top: 2%;
     position: relative;
     overflow: hidden;
-    transition: all 0.4s ease-in-out;
     z-index: 1;
+    transition: all 0.4s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .landing-hero-button::before {
@@ -63,14 +65,15 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, black 0%, black 100%);
+    background: linear-gradient(to right, var(--text-primary) 0%, var(--text-primary) 100%);
     transition: all 0.4s ease-in-out;
     z-index: -1;
 }
 
 .landing-hero-button:hover {
-    color: #E8E3F9;
-    border: 1px solid #E8E3F9;
+    background: var(--text-primary);
+    color: var(--accent-gold);
+    border: 1px solid var(--primary-bg); 
     transform: scale(1.05);
 }
 
@@ -84,12 +87,13 @@
     align-items: center;
     padding: 5%;
     min-height: 0;
+    background-color: var(--secondary-bg);
 }
 
 .landing-services-title {
     font-size: 30px;
     margin-bottom: 5%;
-    color: #AE8EE6;
+    color: var(--accent-gold);
 }
 
 .landing-services-grid {
@@ -105,11 +109,11 @@
     grid-template-rows: repeat(3, auto);
     justify-items: center;
     align-items: center;
-    border: 1px solid black;
     border-radius: 40px;
     padding: 5%;
     gap: 1%;
-    background-color: whitesmoke;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
 }
 
 .landing-services-grid-item-img {
@@ -117,15 +121,15 @@
 }
 
 .landing-services-grid-item-title {
-    color: #AE8EE6;
+    color: var(--accent-gold);
 }
 
 .landing-services-grid-item-body {
     margin-top: 2%;
-    border: 1px solid black;
+    border: 1px solid var(--border);
     border-radius: 10px;
     padding: 2%;
-    background-color: #E8E3F9;
+    background-color: var(--primary-bg);
 }
 
 .landing-services-grid-item-body > p {
@@ -138,11 +142,14 @@
     grid-template-rows: repeat(2, 1fr);
     padding: 5%;
     gap: 10px;
+    background-color: var(--stats-bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
 .landing-stats-item {
-    background: whitesmoke;
-    border: 1px solid black;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
     border-radius: 10px;
     padding: 5% 2%;
     text-align: center;
@@ -160,12 +167,11 @@
 }
 
 .landing-stats-item-number {
-    font-family: 'Vazir';
     font-size: 28px;
+    color: var(--accent-gold);
 }
 
 .landing-stats-item-desc {
-    font-family: 'Vazir';
     font-size: 22px;
     font-weight: bold;
 }
@@ -175,10 +181,11 @@
     flex-direction: column;
     align-items: center;
     padding: 5%;
+    background: linear-gradient(135deg, var(--secondary-bg) 0%, var(--primary-bg) 100%);
 }
 
 .landing-join-title {
-    color: #AE8EE6;
+    color: var(--accent-gold);
     margin-bottom: 1%;
 }
 
@@ -197,15 +204,15 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: whitesmoke;
-    border: 1px solid black;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
     border-radius: 40px;
     padding: 2% 3%;
     margin-top: 3%;
 }
 
 .landing-join-body-content-header {
-    color: #AE8EE6;
+    color: var(--accent-gold);
     font-size: 30px;
     margin: 2% 0;
 }
@@ -220,10 +227,9 @@
     border-radius: 10px;
     width: 120px;
     height: 40px;
-    font-family: 'Vazir';
     font-size: 15px;
-    color: black;
-    background: linear-gradient(to right, whitesmoke 0%, whitesmoke 100%);
+    background: var(--accent-gold);
+    color: var(--text-primary);
     border: 1px solid black;
     margin: 2% 0;
     position: relative;
@@ -239,14 +245,15 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, black 0%, black 100%);
+    background: linear-gradient(to right, var(--text-primary) 0%, var(--text-primary) 100%);
     transition: all 0.4s ease-in-out;
     z-index: -1;
 }
 
 .landing-join-body-content-button:hover {
-    color: whitesmoke;
-    border: 1px solid whitesmoke;
+    background: var(--text-primary);
+    color: var(--accent-gold);
+    border: 1px solid var(--primary-bg); 
     transform: scale(1.05);
 }
 
@@ -257,8 +264,8 @@
 .landing-footer {
     display: flex;
     flex-direction: column;
-    background-color: whitesmoke;
-    border: 1px solid black;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border);
     border-radius: 40px;
     padding: 2% 3%;
     margin: 2% 0;
@@ -266,8 +273,8 @@
 
 .landing-footer-title {
     font-size: 22px;
-    font-family: 'Vazir';
     margin-bottom: 20px;
+     color: var(--accent-gold);
 }
 
 .landing-footer-contact {
@@ -283,7 +290,6 @@
 }
 
 .landing-footer-list-item {
-    font-family: 'Vazir';
     margin: 10px 0;
 }
 
@@ -291,13 +297,21 @@
     vertical-align: middle;
     width: 22px;
     height: 22px;
-    fill: #AE8EE6;
+    /* fill: var(--color-secondary); */
+    color: var(--accent-gold);
 }
 
 .landing-footer-list-item a {
     text-decoration: none;
-    color: black;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
 }
+
+.landing-footer-list-item a:hover {
+  color: var(--accent-gold);
+}
+
+
 
 @media screen and (min-width: 768px) {
     .landing {
@@ -407,4 +421,14 @@
         margin: 1% 0;
         max-width: 50%;
     } */
+}
+
+@keyframes goldPulse {
+  0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+
+.landing-hero-button:focus {
+  animation: goldPulse 1.5s infinite;
 }

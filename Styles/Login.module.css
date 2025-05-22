@@ -1,7 +1,7 @@
 .Bakcground { 
     width: 100%;
     height: 100vh;
-    background-color: #E3D9FF;
+    background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
 }
 
 .Box {
@@ -12,15 +12,16 @@
     position: relative;
     top:7%;
     right:7%;
+    /* background-color: var(--accent-gold-hover); */
 }
 
 .InnerBox {
-    background-color: #C7B5FF;
+    background-color: var(--secondary-bg);
     border-radius: 10px;
     width: 100%;
     height: 100%;
     display: flex;
-    box-shadow: 0.7rem 0.7rem 0.1rem 0 #DCD1FF , -0.7rem -0.7rem 0.1rem 0 #DCD1FF;
+    box-shadow: 0.1rem 0.1rem 0.5rem 0 var(--accent-gold-hover) , -0.1rem -0.1rem 0.3rem 0 var(--accent-gold-hover);
 }
 
 .detailsContainer {
@@ -28,49 +29,42 @@
     height:100%;
     display: inline-block;
     position: relative; 
-}
-
-.Title {
-    position: relative;
-    padding-top:7%;
-    padding-right:13%;
-    color:#FFFFFF;
-    z-index: 2;
-    font-weight: 700;
-    font-size: 21px;
-    line-height: 100%;
-    height: 10%;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
 }
 
 .passwordPrequesties , .passwordPrequestiesLogin {
-    background-color: #EAE4FF !important;
-    color: black !important;
+    background-color: var(--secondary-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--accent-gold) !important;
     width: 60% !important;
 }
 
 .passwordPrequestiesLogin {
-    top:10%;
+    width: 60% !important;
+    z-index: 2 !important; 
+    max-width: 300px !important; 
+    white-space: normal !important; 
+    text-align: right !important; 
+    font-family: 'Vazir' !important; 
 }
 
 .ImageTitle {
     position: absolute;
     right: 6%;
     top:11%;
+    z-index: 1;
 }
 
 .InformationContainer { 
-    /* position: relative;
-    padding: 5% 10%;
-    width: 80%;
-    height: 72%; */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 80%;
 }
 
 .infoTitle {
-    color : rgba(255, 255, 255, 1);
+    /* color : var(--text-primary); */
     font-weight: 100;
     font-size: 14px;
 }
@@ -80,16 +74,17 @@
     top:12%;
     font-size: 16px;
     font-weight: 700;
-    color :rgba(255, 255, 255, 1);
+    /* color: var(--text-primary); */
 }
 
 .formBox {
     width: 45%;
     height:100%;
-    background-color: #FFFBFB;
+    background-color: var(--primary-bg);
     display: inline-block;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+    padding: 1%;
 }
 
 .loginTitle {
@@ -98,58 +93,82 @@
     right:10%;
     font-weight: 700;
     font-size: 18px;
+    color: var(--accent-gold);
 }
 
 .inputsBox {
-    position: relative;
-    top:20%;
-    right:10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    height: 100%; 
+    padding: 0 10%;
+}
+
+.inputsBoxUsername {
+    width: 100%;
 }
 
 .inputsBoxLabels {
-    color:#747275;
+    color: var(--text-primary);
     font-weight: 100;
 }
 
 .inputField {
-    width: 76%;
+    width: 100%;
     padding: 1% 2%;
     font-size: 18px;
-    border: 1px solid #EEEDEF;
-    border-radius: 10px;
+    border: 1px solid var(--border);
+    border-radius:5px;
     margin-top: 5px;
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
 }
 
 .inputFieldError {
     width: 76%;
     padding: 1% 2%;
     font-size: 18px;
-    border: 2px solid #e61515;
+     border: 2px solid var(--error);
     border-radius: 10px;
     margin-top: 5px;
 }
 
 .inputField:focus {
     outline: none;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
 }
 
 .forgetpasswordlink {
     text-decoration: none;
-    color: #C7B5FF;
+    color: var(--accent-gold);
     font-weight: 100;
+    transition: color 0.2s ease;
+}
+
+.forgetpasswordlink:hover {
+  color: var(--accent-gold-hover);
+  text-decoration: underline;
 }
 
 .submitBtn {
     padding: 1%;
-    width: 78%;
+    width: 100%;
     margin-top:60px;
-    margin-right: 8px;
     font-family: 'Vazir';
     border: none;
-    background-color: #C7B5FF;
+    background-color: var(--accent-gold);
+    color: var(--text-primary);
     border-radius: 5px;
-    color: #FFFBFB;
     font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submitBtn:hover {
+  background-color: var(--accent-gold-hover);
+  box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
 }
 
 button {
@@ -159,36 +178,37 @@ button {
 .noAccLink {
     margin: 3% 26%;
     font-weight: 100;
+    color: var(--text-secondary);
 }
 
 .errors {
-    background-color: rgb(255, 99, 99) !important;
-    color: #FFFFFF !important;
+    background-color: var(--error) !important;
+    color: white !important;
 }
 
 .resend {
     margin-top: 2%;
     margin-right: 2% ;
     text-decoration: none;
-    color: #C7B5FF;
+    color: var(--text-primary);
     font-weight: 100;
     display: block;
     cursor: pointer;
-    
 }
 
 .loaderContainer {
     position: fixed;
-    width: 82%;
+    width: 80%;
     height: 80%;
     border-radius: 10px;
-    backdrop-filter: blur(7px);
+    backdrop-filter: blur(5px);
     background-color: rgba(0, 0, 0, 0.4); 
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
 }
+
 *:focus {
     outline: none; /* temp fix to infoIcon focus outline problem*/
 }
@@ -199,16 +219,17 @@ button {
   }
   
 .togglePasswordButton {
-  position: absolute;
-  /* right: 73%; */
-  top: 60%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  color: #D4D4D4;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    color: var(--text-secondary);
+    position: absolute;
+    top: 60%;
+    left: 0;
+    z-index: 1;
+    transform: translateY(-50%);
 }
 
 .passwordIcon {
@@ -217,7 +238,7 @@ button {
 }
 
 .infoIcon {
-  color: #D4D4D4;
+  color: var(--text-secondary);
   width: 20px;
   height: 20px;
   margin-right: 8px;

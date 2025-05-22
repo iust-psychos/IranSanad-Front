@@ -102,8 +102,6 @@ const Login = () => {
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
             <img src={LogoIcon} className={styles.ImageTitle} />
-            {/* <div className={styles.Title}>
-            </div> */}
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
@@ -113,7 +111,7 @@ const Login = () => {
             <span className={styles.loginTitle}>ورود به حساب</span>
 
             <form onSubmit={handleSubmit} className={styles.inputsBox}>
-              <div>
+              <div className={styles.inputsBoxUsername}>
                 <label className={styles.inputsBoxLabels} htmlFor="email">
                   ایمیل
                 </label>
@@ -153,7 +151,8 @@ const Login = () => {
                   content={
                     "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
                   }
-                  place="left-end"
+                  place="left"
+                  positionStrategy="fixed"
                 />
                 <br />
                 <div className={styles.passwordInputWrapper}>

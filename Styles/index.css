@@ -2,17 +2,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
+
 @font-face {
   font-family: "Vazir";
   src: url("../src/fonts/Vazir/fonts/webfonts/Vazirmatn-Regular.woff2")
     format("woff2");
   font-weight: normal;
   font-style: normal;
-}
-
-html {
-  /* font-size: 62.5%; */
 }
 
 body {
@@ -27,3 +25,38 @@ body {
   direction: rtl;
   text-align: right;
 }
+
+:root {
+  --primary-bg: #FFFFFF;
+  --secondary-bg: #F8F8F8;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --accent-gold: #D4AF37;
+  --accent-gold-hover: #B7950B;
+  --border: #E0E0E0;
+  --card-bg: #FFFFFF;
+  --stats-bg: #F8F8F8;
+  --error: #D32F2F;
+  --table-header-bg: #1E1E1E;
+  --table-row-hover: #F0F0F0;
+}
+
+[data-theme="dark"] {
+  --primary-bg: #121212;
+  --secondary-bg: #1E1E1E;
+  --text-primary: #E0E0E0;
+  --text-secondary: #A0A0A0;
+  --accent-gold: #D4AF37;
+  --accent-gold-hover: #FFD700;
+  --border: #333333;
+  --card-bg: #1E1E1E;
+  --stats-bg: #121212;
+  --error: #F44336;
+  --table-header-bg: #2A2A2A;
+  --table-row-hover: #2A2A2A;
+}
+
+/* *::selection {
+  color: white;
+  background-color: var(--color-primary);
+} */

@@ -110,6 +110,30 @@ function Root() {
 }
 
 export default function App() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setIsDarkMode(mediaQuery.matches);
+
+    const handleColorSchemeChange = (e) => {
+      setIsDarkMode(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleColorSchemeChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleColorSchemeChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-theme",
+      isDarkMode ? "dark" : "light"
+    );
+  }, [isDarkMode]);
+
   return (
     <>
       <ToastContainer
