@@ -102,8 +102,6 @@ const Login = () => {
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
             <img src={LogoIcon} className={styles.ImageTitle} />
-            {/* <div className={styles.Title}>
-            </div> */}
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
