@@ -95,9 +95,13 @@ const SignUp = () => {
         showErrorToast(err.response.data.message);
       } else {
         const validationErrors = {};
-        err.inner.forEach((error) => {
-          validationErrors[error.path] = error.message;
-        });
+        if (err.inner !== undefined) {
+          err.inner.forEach((error) => {
+            validationErrors[error.path] = error.message;
+          });
+        } else {
+          validationErrors[0] = "مشکلی پیش آمد.";
+        }
         setErrors(validationErrors);
       }
     } finally {
@@ -129,8 +133,10 @@ const SignUp = () => {
       navigate("/dashboard");
     } catch (err) {
       if (err.name == "AxiosError") {
-        showErrorToast(err.response.data.message);
+        console.log(err);
+        showErrorToast(err.response.data.code[0]);
       } else {
+        console.log(err);
         setErrorValidationCode(err.message);
       }
     } finally {
@@ -199,6 +205,7 @@ const SignUp = () => {
                     id="username_tooltip"
                     className={styles.errors}
                     content={errors.username}
+                    data-testid="username-error"
                   />
                 )}
               </div>
@@ -339,7 +346,7 @@ const SignUp = () => {
                   className={styles.inputsBoxLabels}
                   htmlFor="validationCode"
                 >
-                  کد ارسال شده به ایمیل
+                  کد تایید
                 </label>
                 <br />
                 <Input

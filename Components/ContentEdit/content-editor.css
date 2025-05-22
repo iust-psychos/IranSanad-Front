@@ -15,7 +15,7 @@
   top: 0;
   z-index: 999;
   color: white;
-  padding: 0.5rem 1.5rem;
+  padding: 0.25rem 1.5rem;
 
   display: flex;
   flex-direction: row;
@@ -35,20 +35,52 @@
   cursor: pointer;
 }
 
-.content-editor .navbar .content-name {
-  background-color: rgb(255, 255, 255, 0.5);
+.content-editor .navbar .document-header {
   margin-left: auto;
+}
+
+.content-editor .navbar .content-name {
+  /* background-color: rgb(255, 255, 255, 0.5); */
+  background-color: transparent;
   border-radius: 0.5rem;
   font-size: 1rem;
   font-weight: 500;
   border: 0.05rem solid transparent;
   padding-inline: 0.5rem;
   padding-block: 0.2rem;
-  width: fit-content;
+  /* height: 2rem; */
+  /* margin-bottom: 0.1rem; */
 }
 
-.content-editor .navbar .content-name:hover {
+.content-editor .navbar .content-name:hover,
+.content-editor .navbar .content-name:focus {
   border: 0.05rem solid black;
+}
+
+.content-editor .navbar .menubar {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: auto;
+}
+
+.content-editor .navbar .menubar {
+  display: flex;
+  gap: 0.1rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: auto;
+}
+
+.content-editor .navbar .menubar button {
+  padding: 0.25rem;
+  background-color: transparent;
+  border: none;
+}
+
+.content-editor .navbar .menubar button:hover {
+  background-color: #ae8ee6;
 }
 
 .content-editor menu.navbar .menu-button {
@@ -125,7 +157,7 @@
 .content-editor .toolbar {
   position: fixed;
   display: flex;
-  top: 3.45rem;
+  top: 3.75rem;
   width: 100%;
   background-color: #f2f2f2;
   /* border-radius: 999px; */
@@ -136,6 +168,7 @@
   font-size: 1rem;
   margin-left: auto;
   margin-right: auto;
+  overflow-x: auto;
 }
 
 .content-editor .toolbar button {
@@ -171,7 +204,7 @@
 
 .content-editor .fix-scrollbar {
   width: 100vw;
-  height: 7rem;
+  height: 7.1rem;
   flex-shrink: 0;
 }
 
