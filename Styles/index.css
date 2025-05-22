@@ -2,17 +2,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
+
 @font-face {
   font-family: "Vazir";
   src: url("../src/fonts/Vazir/fonts/webfonts/Vazirmatn-Regular.woff2")
     format("woff2");
   font-weight: normal;
   font-style: normal;
-}
-
-html {
-  /* font-size: 62.5%; */
 }
 
 body {
@@ -26,4 +24,47 @@ body {
   font-family: "Vazir" !important;
   direction: rtl;
   text-align: right;
+}
+
+:root {
+  --color-primary: #00b7c2;
+  --color-secondary: #FFA500;
+  --color-accent: #d9b382;
+  --color-header: #f4f6f8;
+  --color-body: #233D4D;
+  
+  /* --color-bg: #ffffff;             */
+  /*--color-surface: #f8f9fa;         */
+  /*--color-text: #2d3748;            */
+  /*--color-text-secondary: #4a5568;  */
+  
+  /*--color-primary: #3182ce;     */
+  /*--color-secondary: #38a169;   */
+  /*--color-accent: #d69e2e;      */
+  /*--color-border: #e2e8f0;      */
+  /*--color-error: #e53e3e;       */
+}
+
+[data-theme="dark"] {
+  --color-primary: #4fd1e5;     
+  --color-secondary: #FFB74D;   
+  --color-accent: #a78b6d;      
+  --color-header: #1a1a1a;      
+  --color-body: #e0e0e0;        
+  
+  /* --color-bg: #1a202c;           */
+  /* --color-surface: #2d3748;      */
+  /* --color-text: #e2e8f0;         */
+  /* --color-text-secondary: #a0aec0; */
+
+  /* --color-primary: #63b3ed;     
+  --color-secondary: #68d391; 
+  --color-accent: #f6ad55;    
+  --color-border: #4a5568;     
+  --color-error: #fc8181;    */
+}
+
+*::selection {
+  color: white;
+  background-color: var(--color-primary);
 }
