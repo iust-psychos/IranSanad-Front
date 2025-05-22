@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { userInfoLoader } from "@/Managers/user-dashboard-manager";
 import CookieManager from "@/Managers/CookieManager";
 import { RingLoader } from "react-spinners";
+import constants from "../../../Managers/constants";
 
 export default function UserProfileDropdown() {
   const navigate = useNavigate();
@@ -51,7 +52,10 @@ export default function UserProfileDropdown() {
                     </button>
                   </Menu.Item>
                   <img
-                    src={userInfo.profile_image || DEFAULT_IMAGE}
+                    src={
+                      `${constants.baseDomain}${userInfo.profile_image}` ||
+                      DEFAULT_IMAGE
+                    }
                     alt="عکس پروفایل"
                   />
                 </menu>
