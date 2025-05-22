@@ -44,9 +44,9 @@ export default function Loading() {
           خوش آمدید
         </motion.h1>
       </motion.div>
-      <motion.h1 className="loading-banner">
+      <motion.div className="loading-banner">
         <img src={LogoIcon} alt="ایران سند" />
-      </motion.h1>
+      </motion.div>
     </>
   );
 }

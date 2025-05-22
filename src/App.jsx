@@ -113,10 +113,18 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    if (prefersDark) setIsDarkMode(true);
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setIsDarkMode(mediaQuery.matches);
+
+    const handleColorSchemeChange = (e) => {
+      setIsDarkMode(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleColorSchemeChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleColorSchemeChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -125,10 +133,6 @@ export default function App() {
       isDarkMode ? "dark" : "light"
     );
   }, [isDarkMode]);
-
-  // const toggleTheme = () => {
-  //   setIsDarkMode(!isDarkMode);
-  // };
 
   return (
     <>
