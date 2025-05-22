@@ -2,13 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { Dialog } from "@base-ui-components/react/dialog";
 import { IconBack, IconDown, IconUp } from "./Icons";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { HeadingNode } from "@lexical/rich-text";
-import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { ListNode, ListItemNode } from "@lexical/list";
-import theme from "./theme";
+import { editorConfig as initialEditorConfig } from "./editor-config";
 import {
   IconUserProfileDefault,
   IconVerticalOptions,
@@ -16,12 +13,8 @@ import {
 
 export default function HistoryModal({ open, setOpen }) {
   const editorConfig = {
-    editorState: null,
-    namespace: "Editor-1",
     editable: false,
-    theme: theme,
-    onError: (error) => console.error(error),
-    nodes: [HeadingNode, CodeHighlightNode, CodeNode, ListNode, ListItemNode],
+    ...initialEditorConfig,
   };
   const nameRef = useRef();
   const versions = [
