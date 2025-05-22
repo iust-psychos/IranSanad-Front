@@ -1,7 +1,7 @@
 .Bakcground { 
     width: 100%;
     height: 100vh;
-    background-color: #E3D9FF;
+    background-color: var(--color-header);
 }
 
 .Box {
@@ -15,12 +15,12 @@
 }
 
 .InnerBox {
-    background-color: #C7B5FF;
+    background-color: var(--color-secondary);
     border-radius: 10px;
     width: 100%;
     height: 100%;
     display: flex;
-    box-shadow: 0.7rem 0.7rem 0.1rem 0 #DCD1FF , -0.7rem -0.7rem 0.1rem 0 #DCD1FF;
+    box-shadow: 0.5rem 0.5rem 0.5rem 0 var(--color-primary) , -0.3rem -0.3rem 0.3rem 0 var(--color-accent);
 }
 
 .detailsContainer {
@@ -34,7 +34,7 @@
     position: relative;
     padding-top:7%;
     padding-right:13%;
-    color:#FFFFFF;
+    color: var(--color-header);
     z-index: 2;
     font-weight: 700;
     font-size: 21px;
@@ -43,34 +43,39 @@
 }
 
 .passwordPrequesties , .passwordPrequestiesLogin {
-    background-color: #EAE4FF !important;
+    background-color: var(--color-accent) !important;
     color: black !important;
     width: 60% !important;
 }
 
 .passwordPrequestiesLogin {
-    top:10%;
+    background-color: var(--color-accent) !important;
+    color: black !important;
+    width: 60% !important;
+    z-index: 2 !important; 
+    max-width: 300px !important; 
+    white-space: normal !important; 
+    text-align: right !important; 
+    font-family: 'Vazir' !important; 
 }
 
 .ImageTitle {
     position: absolute;
     right: 6%;
     top:11%;
+    z-index: 1;
 }
 
 .InformationContainer { 
-    /* position: relative;
-    padding: 5% 10%;
-    width: 80%;
-    height: 72%; */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 80%;
 }
 
 .infoTitle {
-    color : rgba(255, 255, 255, 1);
+    color : var(--color-header);
     font-weight: 100;
     font-size: 14px;
 }
@@ -80,16 +85,17 @@
     top:12%;
     font-size: 16px;
     font-weight: 700;
-    color :rgba(255, 255, 255, 1);
+    color: var(--color-header);
 }
 
 .formBox {
     width: 45%;
     height:100%;
-    background-color: #FFFBFB;
+    background-color: var(--color-header);
     display: inline-block;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+    padding: 1%;
 }
 
 .loginTitle {
@@ -101,9 +107,15 @@
 }
 
 .inputsBox {
-    position: relative;
-    top:20%;
-    right:10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    height: 100%; 
+    padding: 0 10%;
+}
+
+.inputsBoxUsername {
+    width: 100%;
 }
 
 .inputsBoxLabels {
@@ -112,12 +124,13 @@
 }
 
 .inputField {
-    width: 76%;
+    width: 100%;
     padding: 1% 2%;
     font-size: 18px;
-    border: 1px solid #EEEDEF;
-    border-radius: 10px;
+    border: 1px solid var(--color-header);
+    border-radius:5px;
     margin-top: 5px;
+
 }
 
 .inputFieldError {
@@ -135,18 +148,17 @@
 
 .forgetpasswordlink {
     text-decoration: none;
-    color: #C7B5FF;
+    color: var(--color-primary);
     font-weight: 100;
 }
 
 .submitBtn {
     padding: 1%;
-    width: 78%;
+    width: 100%;
     margin-top:60px;
-    margin-right: 8px;
     font-family: 'Vazir';
     border: none;
-    background-color: #C7B5FF;
+    background-color: var(--color-primary);
     border-radius: 5px;
     color: #FFFBFB;
     font-size: 18px;
@@ -170,11 +182,10 @@ button {
     margin-top: 2%;
     margin-right: 2% ;
     text-decoration: none;
-    color: #C7B5FF;
+    color: var(--color-primary);
     font-weight: 100;
     display: block;
     cursor: pointer;
-    
 }
 
 .loaderContainer {
@@ -189,6 +200,7 @@ button {
     align-items: center;
     z-index: 9999;
 }
+
 *:focus {
     outline: none; /* temp fix to infoIcon focus outline problem*/
 }
@@ -199,16 +211,18 @@ button {
   }
   
 .togglePasswordButton {
-  position: absolute;
-  /* right: 73%; */
-  top: 60%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  color: #D4D4D4;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    color: #D4D4D4;
+
+    position: absolute;
+    top: 60%;
+    left: 0;
+    z-index: 1;
+    transform: translateY(-50%);
 }
 
 .passwordIcon {

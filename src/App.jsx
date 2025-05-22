@@ -110,6 +110,26 @@ function Root() {
 }
 
 export default function App() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    if (prefersDark) setIsDarkMode(true);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-theme",
+      isDarkMode ? "dark" : "light"
+    );
+  }, [isDarkMode]);
+
+  // const toggleTheme = () => {
+  //   setIsDarkMode(!isDarkMode);
+  // };
+
   return (
     <>
       <ToastContainer
