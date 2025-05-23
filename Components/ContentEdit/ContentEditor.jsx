@@ -13,6 +13,7 @@ import HistoryModal from "./HistoryModal";
 import { getMenuBlueprint } from "./menu-bar-config";
 import MenubarDropdown from "./MenuBarDropdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import FindReplaceModal from "./FindReplaceModal";
 
 /* Added By Erfan */
 import Commentsystem from "../Comment/CommentSystem";
@@ -34,6 +35,8 @@ const ContentEditor = () => {
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
 
   /* Added By Erfan */
+  const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
+
   const [openCommentSystem, setOpenCommentSystem] = useState(false);
   const [user, setUser] = useState(null);
   const token = CookieManager.LoadToken();
@@ -97,13 +100,15 @@ const ContentEditor = () => {
             onBlur={handleBlur}
           />
           <menu className="menubar">
-            {getMenuBlueprint(editor).map((section) => (
-              <MenubarDropdown
-                key={section.label}
-                mainLabel={section.label}
-                items={section.items}
-              />
-            ))}
+            {getMenuBlueprint(editor, () => setOpenFindReplaceDialog(true)).map(
+              (section) => (
+                <MenubarDropdown
+                  key={section.label}
+                  mainLabel={section.label}
+                  items={section.items}
+                />
+              )
+            )}
           </menu>
         </div>
 
@@ -144,6 +149,14 @@ const ContentEditor = () => {
       <HistoryModal open={openHistoryModal} setOpen={setOpenHistoryModal} />
 
       {/* Added By Erfan  */}
+      {openFindReplaceDialog && (
+        <FindReplaceModal
+          editor={editor}
+          onClose={() => setOpenFindReplaceDialog(false)}
+          isOpen={openFindReplaceDialog}
+        />
+      )}
+
       {openCommentSystem && (
         <Commentsystem
           documentId={doc_uuid}

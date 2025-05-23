@@ -65,7 +65,7 @@
 //   },
 // ];
 
-export const getMenuBlueprint = (editor) => [
+export const getMenuBlueprint = (editor, openFindReplaceDialog) => [
   {
     label: "فایل",
     items: [
@@ -89,7 +89,7 @@ export const getMenuBlueprint = (editor) => [
       { label: "حذف", action: () => document.execCommand("delete") },
       {
         label: "جست و جو و جایگزینی",
-        action: () => openFindReplaceDialog(),
+        action: openFindReplaceDialog,
       },
     ],
   },
