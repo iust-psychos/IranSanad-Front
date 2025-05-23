@@ -24,9 +24,8 @@ import {
   INSERT_ORDERED_LIST_COMMAND,
 } from "@lexical/list";
 import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
-import InsertTableButton from './InsertTableButton';
 
-function ToolbarPlugin() {
+function ToolbarPlugin({currentPage}) {
   const [editor] = useLexicalComposerContext();
   const [fontFamily, setFontFamily] = useState("Arial");
   const [fontSize, setFontSize] = useState("14");
@@ -196,7 +195,6 @@ function ToolbarPlugin() {
         )
       )}
       <IconDivider1 />
-      <InsertTableButton />
     </div>
   );
 }

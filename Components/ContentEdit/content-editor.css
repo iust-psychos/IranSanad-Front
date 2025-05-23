@@ -8,6 +8,7 @@
   flex-direction: column;
   height: 100vh;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .content-editor menu.navbar {

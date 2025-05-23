@@ -7,3 +7,86 @@
   border: 1px solid #ccc;
   padding: 8px;
 }
+
+/* Styles For Paging */
+.editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.editor-status {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+}
+
+.editor-page {
+  background: white;
+  margin-bottom: 20px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.editor-page.last-page {
+  margin-bottom: 0;
+}
+
+.editor-input {
+  min-height: 900px; /* Leave some space for margins */
+  outline: none;
+}
+
+.pages-container {
+  scroll-behavior: smooth;
+}
+
+.active-users {
+  display: flex;
+  align-items: center;
+}
+
+.active-users h4 {
+  margin: 0 10px 0 0;
+}
+
+.active-users ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.active-users li {
+  margin-left: 10px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.05);
+}
+
+.editor-page {
+  margin: 20px auto;
+  padding: 0;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.editor-input {
+  min-height: calc(100% - 40px);
+  padding: 0;
+  margin: 0;
+  outline: none;
+  border: none;
+}
+
+.editor-page::before, .editor-page::after {
+  content: none;
+}
+.active-users-panel {
+  border-top: 1px solid #e0e0e0;
+  padding: 10px;
+  margin-top: 10px;
+  background: #f9f9f9;
+}
