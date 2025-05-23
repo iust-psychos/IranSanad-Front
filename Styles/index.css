@@ -39,6 +39,11 @@ body {
   --error: #D32F2F;
   --table-header-bg: #1E1E1E;
   --table-row-hover: #F0F0F0;
+  --navbar-bg: #1E1E1E;
+  --editor-bg: #FFFFFF;
+  --toolbar-bg: #F0F0F0;
+  --button-bg: #D4AF37;
+  --button-hover: #B7950B;
 }
 
 [data-theme="dark"] {
@@ -54,6 +59,11 @@ body {
   --error: #F44336;
   --table-header-bg: #2A2A2A;
   --table-row-hover: #2A2A2A;
+  --navbar-bg: #2A2a2a;
+  --editor-bg: #1e1e1e;
+  --toolbar-bg: #2A2a2a;
+  --button-bg: #D4AF37;
+  --button-hover: #FFD700;
 }
 
 /* *::selection {
