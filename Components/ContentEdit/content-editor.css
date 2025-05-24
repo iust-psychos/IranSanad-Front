@@ -615,10 +615,6 @@
   background-color: var(--primary-accent-dark);
 }
 
-.FindReplaceModal-ToggleContainer {
-  
-}
-
 .FindReplaceModal-ToggleButton {
   position: absolute;
   right: -6%;
@@ -639,7 +635,7 @@
 .FindReplaceModal-ToggleIcon {
   font-size: 1.2rem;
   color: var(--text-primary);
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
   transform: rotate(0deg); 
 }
 
