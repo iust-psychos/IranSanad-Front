@@ -171,7 +171,8 @@
   overflow-x: auto;
 }
 
-.content-editor .toolbar button {
+.content-editor .toolbar .icon-button,
+.content-editor .toolbar .icon-dropdown {
   border: none;
   border-radius: 0.2rem;
   padding: 0.4rem 0.5rem;
@@ -182,25 +183,56 @@
   align-items: center;
 }
 
-.content-editor .toolbar button svg {
+.content-editor .toolbar .icon-button svg,
+.content-editor .toolbar .icon-dropdown svg {
   margin-left: auto;
   margin-right: auto;
 }
 
-.content-editor .toolbar button:hover:not(:disabled) {
+.content-editor .toolbar .icon-button:hover:not(:disabled),
+.content-editor .toolbar .icon-dropdown:hover:not(:disabled) {
   background-color: #e6e6e6;
 }
 
-.content-editor .toolbar button:disabled {
+.content-editor .toolbar .icon-button:disabled,
+.content-editor .toolbar .icon-dropdown:disabled {
   cursor: default;
 }
-.content-editor .toolbar button:disabled svg path {
+.content-editor .toolbar .icon-button:disabled svg path,
+.content-editor .toolbar .icon-dropdown:disabled svg path {
   fill: hsl(0, 0%, 40%);
 }
 
-.content-editor .toolbar button.active {
+.content-editor .toolbar .icon-button.active,
+.content-editor .toolbar .icon-dropdown.active {
   background-color: #cccccc;
 }
+
+/*********************TODO************************/
+.user-dashboard-dropdown.item-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+}
+
+.user-dashboard-dropdown.item-indicator-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--accent-gold);
+}
+
+.user-dashboard-dropdown.scroll-arrow {
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  background-color: rgba(212, 175, 55, 0.1);
+  padding-block: 0.25rem;
+  user-select: none;
+  cursor: default;
+}
+/*********************************************/
 
 .content-editor .fix-scrollbar {
   width: 100vw;
@@ -217,7 +249,7 @@
   /* display: flex;
   justify-content: center;
   align-items: start; */
-  padding: 1rem 3rem 3rem 3rem;
+  padding: 1rem 3rem 1rem 3rem;
 }
 .content-editor .editor-input {
   width: 1020px;
@@ -228,7 +260,7 @@
   padding: 3rem;
   background: #ffffff;
   outline: none;
-  font-size: 1.2em;
+  font-size: 0.75rem;
 }
 
 .content-editor .editor-input .editor-text-bold {

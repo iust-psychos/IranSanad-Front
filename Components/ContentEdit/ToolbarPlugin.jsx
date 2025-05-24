@@ -18,13 +18,21 @@ import {
 import {
   $patchStyleText,
   $getSelectionStyleValueForProperty,
+  getStyleObjectFromCSS,
 } from "@lexical/selection";
+import { $isTableSelection } from "@lexical/table";
 import {
   INSERT_UNORDERED_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
 } from "@lexical/list";
 import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
-import InsertTableButton from './InsertTableButton';
+import InsertTableButton from "./InsertTableButton";
+import {
+  clearFormatting,
+  getFontFallback,
+  updateFontSize,
+} from "./font-utility";
+import { DEFAULT_FONT_SIZE } from "./editor-config";
 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -38,9 +46,24 @@ function ToolbarPlugin() {
 
   const updateToolbar = () => {
     const selection = $getSelection();
-
+    let newSelectionMap = {};
     if ($isRangeSelection(selection)) {
-      const newSelectionMap = {
+      newSelectionMap = {
+        [richTextActions.FontFamily]: $getSelectionStyleValueForProperty(
+          selection,
+          "font-family",
+          "Arial"
+        ),
+        [richTextActions.FontSize.Update]: $getSelectionStyleValueForProperty(
+          selection,
+          "font-size",
+          `${DEFAULT_FONT_SIZE}px`
+        ),
+      };
+    }
+    if ($isRangeSelection(selection) || $isTableSelection(selection)) {
+      newSelectionMap = {
+        ...newSelectionMap,
         [richTextActions.Bold]: selection.hasFormat("bold"),
         [richTextActions.Italics]: selection.hasFormat("italic"),
         [richTextActions.Underline]: selection.hasFormat("underline"),
@@ -88,7 +111,7 @@ function ToolbarPlugin() {
     );
   });
 
-  const onAction = (id) => {
+  const onAction = (id, option = "", value = "") => {
     switch (id) {
       case richTextActions.Bold:
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
@@ -129,6 +152,29 @@ function ToolbarPlugin() {
       case richTextActions.Redo:
         editor.dispatchCommand(REDO_COMMAND, undefined);
         break;
+      case richTextActions.FontSize.Increment:
+        updateFontSize(editor, "increment", "");
+        break;
+      case richTextActions.FontSize.Update:
+        updateFontSize(editor, "increment", value);
+        break;
+      case richTextActions.FontSize.Decrement:
+        updateFontSize(editor, "decrement", "");
+        break;
+      case richTextActions.FontFamily:
+        const robustValue = getFontFallback(value);
+        editor.update(() => {
+          const selection = $getSelection();
+          if (selection !== null) {
+            $patchStyleText(selection, {
+              [option]: robustValue,
+            });
+          }
+        });
+        break;
+      case richTextActions.ClearFormatting:
+        clearFormatting(editor);
+        break;
       default:
         break;
     }
@@ -165,34 +211,17 @@ function ToolbarPlugin() {
   //   );
   // }, [editor, fontFamily, fontSize]);
 
-  const fontOptions = [
-    "Arial",
-    "Times New Roman",
-    "Courier New",
-    "Georgia",
-    "Verdana",
-  ];
-
-  const fontSizes = [
-    8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 60, 72,
-  ];
-
   return (
     <div className="toolbar">
-      {richTextOptions.map(({ id, icon, label }, index) =>
-        id === richTextActions.Divider ? (
-          <IconDivider1 key={`${id}${index}`} />
-        ) : (
-          <button
-            key={id}
-            aria-label={label}
-            onClick={() => onAction(id)}
-            disabled={disableMap[id]}
-            className={selectionMap[id] ? "active" : null}
-          >
-            {icon}
-          </button>
-          
+      {richTextOptions.map(
+        ({ id, component: StyledComponent, props }, index) => (
+          <StyledComponent
+            key={`${id}${index}`}
+            onAction={onAction}
+            disableMap={disableMap}
+            selectionMap={selectionMap}
+            {...props}
+          />
         )
       )}
       <IconDivider1 />

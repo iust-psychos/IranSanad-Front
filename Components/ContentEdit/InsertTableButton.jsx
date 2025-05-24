@@ -58,7 +58,7 @@ export default function InsertTableButton() {
 
   return (
     <div>
-      <button onClick={handleOpen}>
+      <button className="icon-button" onClick={handleOpen}>
         <TableIcon />
       </button>
       <Dialog open={open} onClose={handleClose}>
