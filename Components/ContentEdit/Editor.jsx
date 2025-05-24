@@ -74,17 +74,11 @@ const PageContainer = forwardRef(({ children, isLastPage }, ref) => {
         overflow: "visible",
       }}
     >
-      <div
-        style={{
-          padding: `${PAGE_MARGIN}px`,
-          height: "100%",
-          boxSizing: "border-box",
-          position: "relative",
-          overflow: "visible",
-        }}
-      >
+      {/* <div
+
+      > */}
         {children}
-      </div>
+      {/* </div> */}
       {!isLastPage && (
         <div
           className="page-break"

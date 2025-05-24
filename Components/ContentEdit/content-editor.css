@@ -230,11 +230,11 @@
 }
 
 .content-editor .editor-input {
-  width: 1020px;
+  width: 1094px;
   height: 1320px;
   /* margin: 1rem 3rem 3rem 3rem; */
-  margin-left: auto;
-  margin-right: auto;
+  /* margin-left: auto; */
+  /* margin-right: auto; */
   padding: 3rem;
   background: var(--editor-bg);
   color: var(--text-primary);

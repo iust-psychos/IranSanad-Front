@@ -26,7 +26,7 @@ import {
 import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
 
 function ToolbarPlugin({currentPage , activeEditor}) {
-  const [editor] = useLexicalComposerContext();
+  // const [activeEditor] = useLexicalComposerContext();
   const [fontFamily, setFontFamily] = useState("Arial");
   const [fontSize, setFontSize] = useState("14");
   const [disableMap, setDisableMap] = useState({
@@ -54,79 +54,80 @@ function ToolbarPlugin({currentPage , activeEditor}) {
   };
 
   useEffect(() => {
-    return mergeRegister(
-      editor.registerUpdateListener(({ editorState }) => {
-        editorState.read(() => {
-          updateToolbar();
-        });
-      }),
-      editor.registerCommand(
-        SELECTION_CHANGE_COMMAND,
-        (payLoad) => {
-          updateToolbar();
-          return false;
-        },
-        COMMAND_PRIORITY_LOW
-      ),
-      editor.registerCommand(
-        CAN_UNDO_COMMAND,
-        (payLoad) => {
-          setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
-          return false;
-        },
-        COMMAND_PRIORITY_LOW
-      ),
-      editor.registerCommand(
-        CAN_REDO_COMMAND,
-        (payLoad) => {
-          setDisableMap((prev) => ({ ...prev, redo: !payLoad }));
-          return false;
-        },
-        COMMAND_PRIORITY_LOW
-      )
-    );
+    if(activeEditor !== undefined && activeEditor !== null)
+      return mergeRegister(
+        activeEditor.registerUpdateListener(({ activeEditorState }) => {
+          activeEditorState.read(() => {
+            updateToolbar();
+          });
+        }),
+        activeEditor.registerCommand(
+          SELECTION_CHANGE_COMMAND,
+          (payLoad) => {
+            updateToolbar();
+            return false;
+          },
+          COMMAND_PRIORITY_LOW
+        ),
+        activeEditor.registerCommand(
+          CAN_UNDO_COMMAND,
+          (payLoad) => {
+            setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
+            return false;
+          },
+          COMMAND_PRIORITY_LOW
+        ),
+        activeEditor.registerCommand(
+          CAN_REDO_COMMAND,
+          (payLoad) => {
+            setDisableMap((prev) => ({ ...prev, redo: !payLoad }));
+            return false;
+          },
+          COMMAND_PRIORITY_LOW
+        )
+      );
   });
 
   const onAction = (id) => {
     switch (id) {
       case richTextActions.Bold:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
         break;
       case richTextActions.Italics:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
+        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
         break;
       case richTextActions.Underline:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
+        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
         break;
       case richTextActions.Strikethrough:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
+        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
         break;
       case richTextActions.Superscript:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
+        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
         break;
       case richTextActions.Subscript:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
+        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
         break;
       case richTextActions.Highlight:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "highlight");
+        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "highlight");
         break;
       case richTextActions.Code:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
+        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
         break;
       case richTextActions.LeftAlign:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
+        activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
         break;
       case richTextActions.CenterAlign:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
+        activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
         break;
       case richTextActions.RightAlign:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
+        activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
         break;
       case richTextActions.Undo:
-        editor.dispatchCommand(UNDO_COMMAND, undefined);
+        activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
         break;
       case richTextActions.Redo:
-        editor.dispatchCommand(REDO_COMMAND, undefined);
+        activeEditor.dispatchCommand(REDO_COMMAND, undefined);
         break;
       default:
         break;
@@ -134,8 +135,8 @@ function ToolbarPlugin({currentPage , activeEditor}) {
   };
 
   // useEffect(() => {
-  //   return editor.registerCommand(
-  //     editor.SELECTION_CHANGE_COMMAND,
+  //   return activeEditor.registerCommand(
+  //     activeEditor.SELECTION_CHANGE_COMMAND,
   //     () => {
   //       const selection = $getSelection();
   //       if ($isRangeSelection(selection)) {
@@ -162,7 +163,7 @@ function ToolbarPlugin({currentPage , activeEditor}) {
 
   //     0
   //   );
-  // }, [editor, fontFamily, fontSize]);
+  // }, [activeEditor, fontFamily, fontSize]);
 
   const fontOptions = [
     "Arial",
