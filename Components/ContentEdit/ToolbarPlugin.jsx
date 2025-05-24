@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
-
+import InsertTableButton from './Inserttablebutton';
 import {
   $getSelection,
   $isRangeSelection,
@@ -25,7 +25,7 @@ import {
 } from "@lexical/list";
 import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
 
-function ToolbarPlugin({currentPage}) {
+function ToolbarPlugin({currentPage , activeEditor}) {
   const [editor] = useLexicalComposerContext();
   const [fontFamily, setFontFamily] = useState("Arial");
   const [fontSize, setFontSize] = useState("14");
@@ -195,6 +195,7 @@ function ToolbarPlugin({currentPage}) {
         )
       )}
       <IconDivider1 />
+      <InsertTableButton activeEditor={activeEditor} />
     </div>
   );
 }
