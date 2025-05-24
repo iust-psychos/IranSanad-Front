@@ -1,9 +1,8 @@
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { INSERT_TABLE_COMMAND } from "@lexical/table";
 import { $isRangeSelection, $insertNodes } from "lexical";
 import { $getSelection } from "lexical";
 import { $createParagraphNode } from "lexical";
 import { $createTableNodeWithDimensions } from "@lexical/table";
-
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -11,28 +10,27 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { MinusIcon, PlusIcon, TableIcon } from "./Icons";
-
-export default function InsertTableButton() {
-  const [editor] = useLexicalComposerContext();
+export default function InsertTableButton({ activeEditor }) {
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState(1);
   const [columns, setColumns] = useState(1);
+
+  const insertTable = () => {
+    if (activeEditor) {
+      activeEditor.dispatchCommand(INSERT_TABLE_COMMAND, {
+        columns: columns,
+        rows: rows,
+      });
+    }
+    handleClose();
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-  };
-  const insertTable = () => {
-    editor.update(() => {
-      const selection = $getSelection();
-      if ($isRangeSelection(selection)) {
-        const tableNode = $createTableNodeWithDimensions(columns, rows);
-        $insertNodes([tableNode, $createParagraphNode()]);
-      }
-    });
-    handleClose();
   };
 
   const incrementRows = () => {

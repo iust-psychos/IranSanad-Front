@@ -1,4 +1,10 @@
-import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  forwardRef,
+} from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { createWebsocketProvider } from "./providers";
 import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
@@ -10,17 +16,31 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
+import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { INSERT_TABLE_COMMAND } from "@lexical/table";
 import ToolbarPlugin from "./ToolbarPlugin";
 import { editorConfig } from "./editor-config";
 import axios from "axios";
 import CookieManager from "../../Managers/CookieManager";
-import InsertTableButton from "./InsertTableButton";
-import '../../Styles/editortable.css';
+import "../../Styles/editortable.css";
+
+const PAGE_WIDTH = 1094;
+const PAGE_HEIGHT = 1523;
+const PAGE_MARGIN = 72;
+
+function EditorInitPlugin({ onReady }) {
+  const [editor] = useLexicalComposerContext();
+  useEffect(() => {
+    onReady?.(editor);
+  }, [editor, onReady]);
+  return null;
+}
+
+
 
 function PageContentManager({ currentPage, pageContents }) {
   const [editor] = useLexicalComposerContext();
-
   useEffect(() => {
     editor.update(() => {
       const root = $getRoot();
@@ -38,8 +58,53 @@ function PageContentManager({ currentPage, pageContents }) {
   return null;
 }
 
+const PageContainer = forwardRef(({ children, isLastPage }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={`editor-page ${isLastPage ? "last-page" : ""}`}
+      style={{
+        width: `${PAGE_WIDTH}px`,
+        minHeight: `${PAGE_HEIGHT}px`,
+        margin: "20px auto",
+        backgroundColor: "white",
+        boxShadow: "0 0 5px rgba(0,0,0,0.1)",
+        position: "relative",
+        border: "1px solid #e0e0e0",
+        overflow: "visible",
+      }}
+    >
+      <div
+        style={{
+          padding: `${PAGE_MARGIN}px`,
+          height: "100%",
+          boxSizing: "border-box",
+          position: "relative",
+          overflow: "visible",
+        }}
+      >
+        {children}
+      </div>
+      {!isLastPage && (
+        <div
+          className="page-break"
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "1px",
+            backgroundColor: "#ccc",
+          }}
+        />
+      )}
+    </div>
+  );
+});
+
 export default function Editor({ doc_uuid }) {
   const containerRef = useRef(null);
+  const pagesContainerRef = useRef(null);
   const [yjsProvider, setYjsProvider] = useState(null);
   const [connected, setConnected] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
@@ -47,11 +112,17 @@ export default function Editor({ doc_uuid }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [pageContents, setPageContents] = useState([""]);
+  const pageRefs = useRef([]);
+  const [activeEditor, setActiveEditor] = useState(null);
+
+  const handleEditorReady = useCallback((editor) => {
+    setActiveEditor(editor);
+  }, []);
 
   const handleGetUserInformation = async () => {
     try {
-      let token = CookieManager.LoadToken();
-      let response = await axios.get(
+      const token = CookieManager.LoadToken();
+      const response = await axios.get(
         "http://iransanad.fiust.ir/api/v1/auth/info/",
         {
           headers: {
@@ -65,12 +136,25 @@ export default function Editor({ doc_uuid }) {
       return null;
     }
   };
+
+  const handleEditorChange = useCallback(
+    (editorState) => {
+      editorState.read(() => {
+        const content = $getRoot().getTextContent();
+        setPageContents((prev) => {
+          const updated = [...prev];
+          updated[currentPage] = content;
+          return updated;
+        });
+      });
+    },
+    [currentPage]
+  );
+
   useEffect(() => {
-    if (userInfo === null) {
+    if (!userInfo) {
       handleGetUserInformation().then((data) => {
-        if (data) {
-          setUserInfo(data);
-        }
+        if (data) setUserInfo(data);
       });
     }
   }, [userInfo]);
@@ -79,10 +163,11 @@ export default function Editor({ doc_uuid }) {
     if (userInfo && yjsProvider) {
       yjsProvider.awareness.setLocalStateField("user", {
         name: userInfo.username,
-        color: "#" + Math.floor(Math.random() * 16777215).toString(16), // Random color
+        color: "#" + Math.floor(Math.random() * 16777215).toString(16),
       });
     }
   }, [userInfo, yjsProvider]);
+
   const handleAwarenessUpdate = useCallback(() => {
     if (!yjsProvider) return;
     const awareness = yjsProvider.awareness;
@@ -104,104 +189,74 @@ export default function Editor({ doc_uuid }) {
     };
   }, [yjsProvider, handleAwarenessUpdate]);
 
-  // ... (keep all other existing useEffect hooks and functions the same)
   const providerFactory = useCallback((id, yjsDocMap) => {
     const provider = createWebsocketProvider(id, yjsDocMap);
     provider.on("status", (event) => {
-      setConnected(
-        event.status === "connected" ||
-          ("connected" in event && event.connected === true)
-      );
+      setConnected(event.status === "connected" || event.connected === true);
     });
     setTimeout(() => setYjsProvider(provider), 0);
     return provider;
   }, []);
-  const handlePageChange = (newPage) => {
-    // Save current content before switching
-    setPageContents((prev) => {
-      const updated = [...prev];
-      // We'll update the current page content via OnChangePlugin
-      return updated;
-    });
-    setCurrentPage(newPage);
-  };
 
-  const addNewPage = () => {
-    setPageContents((prev) => [...prev, ""]);
-    setTotalPages((prev) => prev + 1);
-    setCurrentPage(totalPages);
-  };
+  const handleScroll = useCallback(() => {
+    if (!pagesContainerRef.current) return;
+    const container = pagesContainerRef.current;
+    const scrollPosition = container.scrollTop;
+    const containerHeight = container.clientHeight;
+    let current = 0;
+    for (let i = 0; i < pageRefs.current.length; i++) {
+      const page = pageRefs.current[i];
+      if (page) {
+        const rect = page.getBoundingClientRect();
+        const pageTop = rect.top + scrollPosition - container.offsetTop;
+        const pageBottom = pageTop + rect.height;
+        if (
+          scrollPosition + containerHeight / 2 >= pageTop &&
+          scrollPosition + containerHeight / 2 <= pageBottom
+        ) {
+          current = i;
+          break;
+        }
+      }
+    }
+    setCurrentPage(current);
+  }, []);
+
+  useEffect(() => {
+    const container = pagesContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
+    }
+  }, [handleScroll]);
+
+  const checkForOverflow = useCallback(() => {
+    const lastPageRef = pageRefs.current[pageRefs.current.length - 1];
+    if (lastPageRef) {
+      const lastPageHeight = lastPageRef.scrollHeight;
+      const lastPageClientHeight = lastPageRef.clientHeight;
+      if (lastPageHeight > lastPageClientHeight + 10) {
+        setTotalPages((prev) => prev + 1);
+        setPageContents((prev) => [...prev, ""]);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(checkForOverflow, 500);
+    return () => clearTimeout(timer);
+  }, [pageContents, checkForOverflow]);
 
   return (
-    // <LexicalComposer initialConfig={editorConfig}>
-    <>
-      <ToolbarPlugin />
-      
-      <div className="editor-container" ref={containerRef}>
-        {/* <RichTextPlugin
-          contentEditable={<ContentEditable className="editor-input" />}
-          ErrorBoundary={LexicalErrorBoundary}
-        /> */}
-
-        <div className="page-controls">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 0}
-          >
-            Previous Page
-          </button>
-          <span>
-            Page {currentPage + 1} of {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages - 1}
-          >
-            Next Page
-          </button>
-          <button onClick={addNewPage}>Add New Page</button>
-        </div>
-
-        <div className="editor-inner" ref={containerRef}>
-          <PageContentManager
-            currentPage={currentPage}
-            pageContents={pageContents}
-          />
-          <RichTextPlugin
-            contentEditable={<ContentEditable className="editor-input" />}
-            placeholder={
-              <div className="editor-placeholder">Start typing...</div>
-            }
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-
-          <AutoFocusPlugin />
-          <HistoryPlugin />
-          <ListPlugin />
-          <OnChangePlugin
-            onChange={(editorState) => {
-              editorState.read(() => {
-                const content = $getRoot().getTextContent();
-                setPageContents((prev) => {
-                  const updated = [...prev];
-                  updated[currentPage] = content;
-                  return updated;
-                });
-              });
-            }}
-          />
-
-          <CollaborationPlugin
-            id={`${doc_uuid}-page-${currentPage}`}
-            providerFactory={providerFactory}
-            shouldBootstrap={true}
-            username={userInfo?.username || "Anonymous"}
-            cursorColor="red"
-            cursorsContainerRef={containerRef}
-          />
-        </div>
+    <div className="editor-wrapper">
+      <ToolbarPlugin currentPage={currentPage} activeEditor={activeEditor} />
+      {/* <InsertTableButton activeEditor={activeEditor} /> */}
+      <div className="editor-status">
+        <span>
+          Page {currentPage + 1} of {totalPages}
+        </span>
         <div className="active-users">
-          <h4>کاربران فعال:</h4>
+          <h4>Active Users:</h4>
           <ul>
             {activeUsers.map((user) => (
               <li key={user.userId} style={{ color: user.color }}>
@@ -211,7 +266,51 @@ export default function Editor({ doc_uuid }) {
           </ul>
         </div>
       </div>
-    </>
-    // </LexicalComposer>
+
+      <div
+        className="pages-container"
+        ref={pagesContainerRef}
+        style={{
+          height: "calc(100vh - 150px)",
+          overflowY: "auto",
+          padding: "20px",
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <PageContainer
+            key={index}
+            ref={(el) => (pageRefs.current[index] = el)}
+            isLastPage={index === totalPages - 1}
+          >
+            <LexicalComposer initialConfig={editorConfig}>
+              <EditorInitPlugin onReady={handleEditorReady} />
+              <PageContentManager
+                currentPage={currentPage}
+                pageContents={pageContents}
+              />
+              <RichTextPlugin
+                contentEditable={<ContentEditable className="editor-input" />}
+                placeholder={<div className="editor-placeholder"></div>}
+                ErrorBoundary={LexicalErrorBoundary}
+              />
+              <AutoFocusPlugin />
+              <HistoryPlugin />
+              <ListPlugin />
+              <TablePlugin />
+              <OnChangePlugin onChange={handleEditorChange} />
+              <CollaborationPlugin
+                id={`${doc_uuid}-page-${index}`}
+                providerFactory={providerFactory}
+                shouldBootstrap={true}
+                username={userInfo?.username || "Anonymous"}
+                cursorColor="red"
+                cursorsContainerRef={containerRef}
+              />
+            </LexicalComposer>
+          </PageContainer>
+        ))}
+      </div>
+    </div>
   );
 }
