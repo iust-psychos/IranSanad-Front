@@ -27,6 +27,8 @@ export default function CommentSystem({ documentId, currentUser, onClose }) {
   // const commentType = {
   // "id": 1,
   // "author_username": "erfan",
+  // "author_firstname": "",
+  // "author_lastname": "",
   // "text": "این یک یادداشت است",
   // "range_start": {},
   // "range_end": {},
@@ -333,6 +335,8 @@ export default function CommentSystem({ documentId, currentUser, onClose }) {
                 <div className="comment-author">
                   {comment.author_username === currentUser.username
                     ? "شما"
+                    : comment.author_firstname && comment.author_firstname
+                    ? `${comment.author_firstname} ${comment.author_lastname}`
                     : comment.author_username}
                 </div>
                 <div className="comment-time">

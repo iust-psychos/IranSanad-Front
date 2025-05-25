@@ -1,10 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  forwardRef,
-} from "react";
+import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { createWebsocketProvider } from "./providers";
 import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
@@ -36,8 +30,6 @@ function EditorInitPlugin({ onReady }) {
   }, [editor, onReady]);
   return null;
 }
-
-
 
 function PageContentManager({ currentPage, pageContents }) {
   const [editor] = useLexicalComposerContext();
@@ -77,7 +69,7 @@ const PageContainer = forwardRef(({ children, isLastPage }, ref) => {
       {/* <div
 
       > */}
-        {children}
+      {children}
       {/* </div> */}
       {!isLastPage && (
         <div
@@ -246,11 +238,8 @@ export default function Editor({ doc_uuid }) {
       <ToolbarPlugin currentPage={currentPage} activeEditor={activeEditor} />
       {/* <InsertTableButton activeEditor={activeEditor} /> */}
       <div className="editor-status">
-        <span>
-          Page {currentPage + 1} of {totalPages}
-        </span>
         <div className="active-users">
-          <h4>Active Users:</h4>
+          <h4>کاربران فعال: </h4>
           <ul>
             {activeUsers.map((user) => (
               <li key={user.userId} style={{ color: user.color }}>
@@ -259,6 +248,9 @@ export default function Editor({ doc_uuid }) {
             ))}
           </ul>
         </div>
+        <span>
+          صفحه {currentPage + 1} از {totalPages}
+        </span>
       </div>
 
       <div

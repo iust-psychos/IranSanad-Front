@@ -35,6 +35,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
     }
 
     const foundMatches = [];
+
     editor.getEditorState().read(() => {
       const root = $getRoot();
       const searchText = findText.toLowerCase();
@@ -64,6 +65,8 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
 
     setMatches(foundMatches);
     setCurrentMatchIndex(0);
+
+    console.log(matches);
 
     // Select the first match if any
     if (foundMatches.length > 0) {
@@ -259,7 +262,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
                     disabled={!matchCount}
                   >
                     <LuReplace className="FindReplaceModal-Icon" />
-                    <span>جایگزینی</span>
+                    {/* <span>جایگزینی</span> */}
                   </button>
                   <button
                     className="FindReplaceModal-ReplaceButton"
@@ -267,7 +270,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
                     disabled={!matchCount}
                   >
                     <LuReplaceAll className="FindReplaceModal-Icon" />
-                    <span>جایگزینی همه</span>
+                    {/* <span>جایگزینی همه</span> */}
                   </button>
                 </div>
               </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
-import InsertTableButton from './Inserttablebutton';
+import InsertTableButton from "./Inserttablebutton";
 import {
   $getSelection,
   $isRangeSelection,
@@ -25,7 +25,7 @@ import {
 } from "@lexical/list";
 import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
 
-function ToolbarPlugin({currentPage , activeEditor}) {
+function ToolbarPlugin({ currentPage, activeEditor }) {
   // const [activeEditor] = useLexicalComposerContext();
   const [fontFamily, setFontFamily] = useState("Arial");
   const [fontSize, setFontSize] = useState("14");
@@ -54,7 +54,7 @@ function ToolbarPlugin({currentPage , activeEditor}) {
   };
 
   useEffect(() => {
-    if(activeEditor !== undefined && activeEditor !== null)
+    if (activeEditor !== undefined && activeEditor !== null)
       return mergeRegister(
         activeEditor.registerUpdateListener(({ activeEditorState }) => {
           activeEditorState.read(() => {
@@ -192,7 +192,6 @@ function ToolbarPlugin({currentPage , activeEditor}) {
           >
             {icon}
           </button>
-          
         )
       )}
       <IconDivider1 />
