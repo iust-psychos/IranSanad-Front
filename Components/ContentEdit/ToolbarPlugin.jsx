@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
@@ -14,6 +14,7 @@ import {
   COMMAND_PRIORITY_LOW,
   CAN_REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
+  $getRoot,
 } from "lexical";
 import {
   $patchStyleText,
@@ -44,23 +45,23 @@ function ToolbarPlugin() {
   });
   const [selectionMap, setSelectionMap] = useState({});
 
-  const updateToolbar = () => {
+  const updateToolbar = useCallback(() => {
     const selection = $getSelection();
     let newSelectionMap = {};
-    if ($isRangeSelection(selection)) {
-      newSelectionMap = {
-        [richTextActions.FontFamily]: $getSelectionStyleValueForProperty(
-          selection,
-          "font-family",
-          "Arial"
-        ),
-        [richTextActions.FontSize.Update]: $getSelectionStyleValueForProperty(
-          selection,
-          "font-size",
-          `${DEFAULT_FONT_SIZE}px`
-        ),
-      };
-    }
+    // if ($isRangeSelection(selection)) {
+    //   newSelectionMap = {
+    //     [richTextActions.FontFamily]: $getSelectionStyleValueForProperty(
+    //       selection,
+    //       "font-family",
+    //       "Arial"
+    //     ),
+    //     [richTextActions.FontSize.Update]: $getSelectionStyleValueForProperty(
+    //       selection,
+    //       "font-size",
+    //       `${DEFAULT_FONT_SIZE}px`
+    //     ),
+    //   };
+    // }
     if ($isRangeSelection(selection) || $isTableSelection(selection)) {
       newSelectionMap = {
         ...newSelectionMap,
@@ -75,7 +76,7 @@ function ToolbarPlugin() {
       };
       setSelectionMap(newSelectionMap);
     }
-  };
+  }, [editor, setSelectionMap]);
 
   useEffect(() => {
     return mergeRegister(
@@ -156,7 +157,7 @@ function ToolbarPlugin() {
         updateFontSize(editor, "increment", "");
         break;
       case richTextActions.FontSize.Update:
-        updateFontSize(editor, "increment", value);
+        updateFontSize(editor, "", value);
         break;
       case richTextActions.FontSize.Decrement:
         updateFontSize(editor, "decrement", "");
@@ -179,37 +180,6 @@ function ToolbarPlugin() {
         break;
     }
   };
-
-  // useEffect(() => {
-  //   return editor.registerCommand(
-  //     editor.SELECTION_CHANGE_COMMAND,
-  //     () => {
-  //       const selection = $getSelection();
-  //       if ($isRangeSelection(selection)) {
-  //         setBold(selection.hasFormat("bold"));
-  //         setItalic(selection.hasFormat("italic"));
-  //         setUnderline(selection.hasFormat("underline"));
-  //         setStrikethrough(selection.hasFormat("strikethrough"));
-
-  //         const family = $getSelectionStyleValueForProperty(
-  //           selection,
-  //           "font-family",
-  //           fontFamily
-  //         );
-  //         const size = $getSelectionStyleValueForProperty(
-  //           selection,
-  //           "font-size",
-  //           `${fontSize}px`
-  //         );
-  //         if (family) setFontFamily(family.replace(/['"]/g, ""));
-  //         if (size) setFontSize(parseInt(size));
-  //       }
-  //       return false;
-  //     },
-
-  //     0
-  //   );
-  // }, [editor, fontFamily, fontSize]);
 
   return (
     <div className="toolbar">

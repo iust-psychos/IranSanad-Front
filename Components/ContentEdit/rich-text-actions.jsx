@@ -179,17 +179,17 @@ export const richTextOptions = [
       Icon: (iconProps) => <IconMinus {...iconProps} />,
     },
   },
-  {
-    id: richTextActions.FontFamily,
-    component: Dropdown,
-    props: {
-      id: richTextActions.FontFamily,
-      label: "Font Family",
-      items: FONT_FAMILY,
-      option: "font-family",
-      defaultValue: "Arial",
-    },
-  },
+  // {
+  //   id: richTextActions.FontFamily,
+  //   component: Dropdown,
+  //   props: {
+  //     id: richTextActions.FontFamily,
+  //     label: "Font Family",
+  //     items: FONT_FAMILY,
+  //     option: "font-family",
+  //     defaultValue: "Arial",
+  //   },
+  // },
   {
     id: richTextActions.Divider,
     component: IconDivider1,

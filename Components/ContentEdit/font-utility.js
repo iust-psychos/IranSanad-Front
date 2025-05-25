@@ -40,6 +40,11 @@ export function getAdjustedFontSize(
   mode = "increment",
   fontSizes = FONT_SIZES
 ) {
+  if (mode == "") {
+    if (currentSize > fontSizes[-1]) return fontSizes[-1];
+    else if (currentSize < fontSizes[0]) return fontSizes[0];
+    else return currentSize;
+  }
   const sortedSizes = [...fontSizes].sort((a, b) => a - b);
   const currentIndex = sortedSizes.findIndex((size) => size >= currentSize);
 
@@ -90,7 +95,8 @@ export const updateFontSizeInSelection = (editor, newFontSize, updateType) => {
 
 export const updateFontSize = (editor, updateType, inputValue) => {
   if (inputValue !== "") {
-    const nextFontSize = getAdjustedFontSize(Number(inputValue), "increment");
+    const nextFontSize = getAdjustedFontSize(Number(inputValue), updateType);
+    console.log(nextFontSize);
     updateFontSizeInSelection(editor, String(nextFontSize) + "px", null);
   } else {
     updateFontSizeInSelection(editor, null, updateType);

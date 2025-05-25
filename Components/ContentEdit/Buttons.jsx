@@ -1,4 +1,5 @@
-import { Select } from "@base-ui-components/react/select";
+import { Select, Menu } from "@base-ui-components/react";
+import { IconDropDown } from "../user-dashboard/components/Icons";
 
 export const IconButton = ({ id, label, Icon, ...props }) => (
   <button
@@ -49,7 +50,7 @@ export const Dropdown = ({
       break;
     case "font-size":
       value = props.selectionMap[id]
-        ? props.selectionMap[id].split("px")[0]
+        ? props.selectionMap[id].slice(0, -2)
         : defaultValue;
       break;
     default:
@@ -57,33 +58,31 @@ export const Dropdown = ({
   }
 
   return (
-    <Select.Root value={value} disabled={props?.disableMap[id]}>
-      <Select.Trigger
-        className="user-dashboard-dropdown dropdown-button"
-        aria-label={label}
+    <Menu.Root disabled={props?.disableMap[id]}>
+      <Menu.Trigger
+        className={`content-editor-dropdown dropdown-button ${
+          props.className || ""
+        } ${props.selectionMap[id] ? "active" : ""}`}
       >
-        <Select.Value />
-        <Select.Icon />
-      </Select.Trigger>
-      <Select.Portal>
-        <Select.Positioner sideOffset={8}>
-          <Select.ScrollUpArrow className="user-dashboard-dropdown scroll-arrow" />
-          <Select.Popup className="user-dashboard-dropdown dropdown-menu">
+        <p>{value}</p>
+        <IconDropDown />
+      </Menu.Trigger>
+      <Menu.Portal>
+        <Menu.Positioner sideOffset={8}>
+          <Menu.Popup className="content-editor-dropdown dropdown-menu">
             {items.map((item) => (
-              <Select.Item
+              <Menu.Item
                 key={item}
-                value={item}
-                className="user-dashboard-dropdown dropdown-item"
+                value={String(item)}
+                className="content-editor-dropdown dropdown-item"
                 onClick={() => props?.onAction(id, option, item)}
               >
-                <Select.ItemText>{item}</Select.ItemText>
-              </Select.Item>
+                {item}
+              </Menu.Item>
             ))}
-          </Select.Popup>
-
-          <Select.ScrollDownArrow className="user-dashboard-dropdown scroll-arrow" />
-        </Select.Positioner>
-      </Select.Portal>
-    </Select.Root>
+          </Menu.Popup>
+        </Menu.Positioner>
+      </Menu.Portal>
+    </Menu.Root>
   );
 };

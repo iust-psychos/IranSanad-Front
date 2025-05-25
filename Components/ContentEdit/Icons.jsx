@@ -71,8 +71,8 @@ export const PlusIcon = () => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
+    strokeWidth="2"
+    strokeLinecap="round"
   >
     <path d="M12 5v14M5 12h14" />
   </svg>
@@ -86,8 +86,8 @@ export const MinusIcon = () => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
+    strokeWidth="2"
+    strokeLinecap="round"
   >
     <path d="M5 12h14" />
   </svg>
@@ -101,9 +101,9 @@ export const TableIcon = () => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
   >
     <path d="M3 3h18v18H3z" />
     <path d="M3 9h18M3 15h18M9 3v18M15 3v18" />
