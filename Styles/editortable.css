@@ -8,6 +8,15 @@
   padding: 8px;
 }
 
+.editor-inner {
+  text-align: center;
+  background-color: var(--editor-outside-bg);
+}
+
+.editor-input {
+  display: inline-block;
+}
+
 /* Styles For Paging */
 .editor-wrapper {
   display: flex;

@@ -4,7 +4,7 @@
   top: 0;
   height: 100vh;
   width: 350px;
-  background: white;
+  background: var(--editor-bg);
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   display: flex;
@@ -13,9 +13,9 @@
 
 .comment-system-header {
   padding: 15px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border);
   align-items: center;
-  background-color: var(--navbar-bg);;
+  background-color: var(--navbar-bg);
   display: flex;
   justify-content: center;
   height: 117px;
@@ -56,7 +56,7 @@
 .comment-item {
   margin-bottom: 10px;
   padding: 15px 15px 15px 5px;
-  background: #f9f9f9;
+  background: var(--secondary-bg);
   border-radius: 8px;
 }
 
@@ -96,11 +96,11 @@
 }
 
 .edit-button {
-  color: #4285f4;
+  color: var(--accent-gold);
 }
 
 .edit-button:hover {
-  background: #e8f0fe;
+  background: #fefbe8;
 }
 
 .delete-button, .delete-reply-button {
@@ -209,7 +209,7 @@
 .reply-item {
   margin-bottom: 10px;
   padding: 10px;
-  background: white;
+  background: var(--primary-bg);
   border-radius: 4px;
 }
 
@@ -241,14 +241,15 @@
 
 .comment-form {
   padding: 15px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--border);
   display: flex;
+  gap: 5px;
 }
 
 .comment-input {
   flex: 1;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   border-radius: 4px;
   margin-right: 10px;
   resize: none;
