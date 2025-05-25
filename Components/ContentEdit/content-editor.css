@@ -96,10 +96,15 @@
   border: none;
   width: 2.2rem;
   height: 2.2rem;
-  background-color: var(--accent-gold);
+  background-color: inherit;
+  border: 1px solid var(--accent-gold);
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.content-editor menu.navbar .menu-button svg path {
+  fill: var(--accent-gold);
 }
 
 /* .content-editor .navbar .menu-share {
