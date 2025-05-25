@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Dialog } from "@base-ui-components/react/dialog";
 import "./content-editor.css";
 import { IoMdClose } from "react-icons/io";
@@ -25,10 +25,23 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
   const [showReplace, setShowReplace] = useState(false);
   const [matches, setMatches] = useState([]);
   const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
+  const [currentEditor , setCurrentEditor] = useState(null);
+
+  const updateEditor = useCallback((currEditor) => {
+    if (currEditor !== undefined && currEditor !== null) {
+      setCurrentEditor(currEditor);
+    }
+  });
+
+  useEffect(() => {
+    if (currentEditor !== null && currentEditor !== undefined) {
+      updateEditor(editor);
+    }
+  });
 
   // Find all matches in the document
   useEffect(() => {
-    if (!editor || findText.trim() === "") {
+    if (!currentEditor || findText.trim() === "") {
       setMatches([]);
       setCurrentMatchIndex(0);
       return;
@@ -36,7 +49,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
 
     const foundMatches = [];
 
-    editor.getEditorState().read(() => {
+    currentEditor.getEditorState().read(() => {
       const root = $getRoot();
       const searchText = findText.toLowerCase();
 
@@ -72,14 +85,14 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
     if (foundMatches.length > 0) {
       selectMatch(0);
     }
-  }, [findText, editor]);
+  }, [findText, currentEditor]);
 
   // Highlight and scroll to the current match
   const selectMatch = (index) => {
     if (matches.length === 0 || index < 0 || index >= matches.length) return;
 
     const match = matches[index];
-    editor.update(() => {
+    currentEditor.update(() => {
       const node = $getNodeByKey(match.nodeKey);
 
       if ($isTextNode(node)) {
@@ -90,7 +103,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
         $setSelection(rangeSelection);
 
         // Scroll to the selection
-        const element = editor.getElementByKey(match.nodeKey);
+        const element = currentEditor.getElementByKey(match.nodeKey);
         if (element) {
           element.scrollIntoView({
             behavior: "smooth",
@@ -113,7 +126,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
     if (matches.length === 0) return;
 
     const match = matches[currentMatchIndex];
-    editor.update(() => {
+    currentEditor.update(() => {
       const node = $getNodeByKey(match.nodeKey);
 
       if ($isTextNode(node)) {
@@ -161,7 +174,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
   const replaceAll = () => {
     if (matches.length === 0) return;
 
-    editor.update(() => {
+    currentEditor.update(() => {
       // Process replacements from last to first to avoid position shifting issues
       const sortedMatches = [...matches].sort((a, b) => {
         if (a.nodeKey !== b.nodeKey) return 0;

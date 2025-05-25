@@ -57,7 +57,7 @@ const PageContainer = forwardRef(({ children, isLastPage }, ref) => {
       className={`editor-page ${isLastPage ? "last-page" : ""}`}
       style={{
         width: `${PAGE_WIDTH}px`,
-        minHeight: `${PAGE_HEIGHT}px`,
+        // minHeight: `${PAGE_HEIGHT}px`,
         margin: "20px auto",
         backgroundColor: "white",
         boxShadow: "0 0 5px rgba(0,0,0,0.1)",
