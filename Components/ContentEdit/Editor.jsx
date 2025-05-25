@@ -168,9 +168,6 @@ export default function Editor({ doc_uuid }) {
           />
           <RichTextPlugin
             contentEditable={<ContentEditable className="editor-input" />}
-            placeholder={
-              <div className="editor-placeholder">Start typing...</div>
-            }
             ErrorBoundary={LexicalErrorBoundary}
           />
 

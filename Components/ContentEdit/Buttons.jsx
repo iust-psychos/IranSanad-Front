@@ -1,5 +1,6 @@
 import { Select, Menu } from "@base-ui-components/react";
 import { IconDropDown } from "../user-dashboard/components/Icons";
+import { useEffect, useState } from "react";
 
 export const IconButton = ({ id, label, Icon, ...props }) => (
   <button
@@ -56,6 +57,8 @@ export const Dropdown = ({
     default:
       break;
   }
+  const [valueVisible, setValueVisible] = useState(value);
+  useEffect(() => setValueVisible(value), [value]);
 
   return (
     <Menu.Root disabled={props?.disableMap[id]}>
@@ -64,7 +67,7 @@ export const Dropdown = ({
           props.className || ""
         } ${props.selectionMap[id] ? "active" : ""}`}
       >
-        <p>{value}</p>
+        <p>{valueVisible}</p>
         <IconDropDown />
       </Menu.Trigger>
       <Menu.Portal>

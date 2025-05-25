@@ -45,20 +45,20 @@ function ToolbarPlugin() {
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
     let newSelectionMap = {};
-    // if ($isRangeSelection(selection)) {
-    //   newSelectionMap = {
-    //     [richTextActions.FontFamily]: $getSelectionStyleValueForProperty(
-    //       selection,
-    //       "font-family",
-    //       "Arial"
-    //     ),
-    //     [richTextActions.FontSize.Update]: $getSelectionStyleValueForProperty(
-    //       selection,
-    //       "font-size",
-    //       `${DEFAULT_FONT_SIZE}px`
-    //     ),
-    //   };
-    // }
+    if ($isRangeSelection(selection)) {
+      newSelectionMap = {
+        [richTextActions.FontFamily]: $getSelectionStyleValueForProperty(
+          selection,
+          "font-family",
+          "Arial"
+        ),
+        [richTextActions.FontSize.Update]: $getSelectionStyleValueForProperty(
+          selection,
+          "font-size",
+          `${DEFAULT_FONT_SIZE}px`
+        ),
+      };
+    }
     if ($isRangeSelection(selection) || $isTableSelection(selection)) {
       newSelectionMap = {
         ...newSelectionMap,
