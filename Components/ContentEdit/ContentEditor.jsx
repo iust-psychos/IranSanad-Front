@@ -18,6 +18,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import Commentsystem from "../Comment/CommentSystem";
 import CookieManager from "../../Managers/CookieManager";
 import axios from "axios";
+import FindReplaceModal from "./FindReplaceModal";
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 
 const ContentEditor = () => {
@@ -34,6 +35,8 @@ const ContentEditor = () => {
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
 
   /* Added By Erfan */
+  const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
+
   const [openCommentSystem, setOpenCommentSystem] = useState(false);
   const [user, setUser] = useState(null);
   const token = CookieManager.LoadToken();
@@ -96,13 +99,15 @@ const ContentEditor = () => {
             onBlur={handleBlur}
           />
           <menu className="menubar">
-            {getMenuBlueprint(editor).map((section) => (
-              <MenubarDropdown
-                key={section.label}
-                mainLabel={section.label}
-                items={section.items}
-              />
-            ))}
+            {getMenuBlueprint(editor, () => setOpenFindReplaceDialog(true)).map(
+              (section) => (
+                <MenubarDropdown
+                  key={section.label}
+                  mainLabel={section.label}
+                  items={section.items}
+                />
+              )
+            )}
           </menu>
         </div>
 
@@ -143,6 +148,12 @@ const ContentEditor = () => {
       <HistoryModal open={openHistoryModal} setOpen={setOpenHistoryModal} />
 
       {/* Added By Erfan  */}
+      {openFindReplaceDialog && (
+        <FindReplaceModal
+          onClose={() => setOpenFindReplaceDialog(false)}
+          isOpen={openFindReplaceDialog}
+        />
+      )}
       {openCommentSystem && (
         <Commentsystem
           documentId={doc_uuid}

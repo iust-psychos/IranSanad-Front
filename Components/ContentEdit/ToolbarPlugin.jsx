@@ -37,8 +37,6 @@ import { DEFAULT_FONT_SIZE } from "./editor-config";
 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
-  const [fontFamily, setFontFamily] = useState("Arial");
-  const [fontSize, setFontSize] = useState("14");
   const [disableMap, setDisableMap] = useState({
     [richTextActions.Undo]: true,
     [richTextActions.Redo]: true,
@@ -195,7 +193,7 @@ function ToolbarPlugin() {
         )
       )}
       <IconDivider1 />
-      <InsertTableButton />
+      <InsertTableButton editor={editor} />
     </div>
   );
 }
