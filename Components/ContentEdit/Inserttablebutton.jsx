@@ -10,7 +10,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { MinusIcon, PlusIcon, TableIcon } from "./Icons";
-export default function InsertTableButton({ activeEditor }) {
+
+export default function InsertTableButton({ editor }) {
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState(1);
   const [columns, setColumns] = useState(1);
@@ -56,7 +57,7 @@ export default function InsertTableButton({ activeEditor }) {
 
   return (
     <div>
-      <button onClick={handleOpen}>
+      <button className="icon-button" onClick={handleOpen}>
         <TableIcon />
       </button>
       <Dialog open={open} onClose={handleClose}>

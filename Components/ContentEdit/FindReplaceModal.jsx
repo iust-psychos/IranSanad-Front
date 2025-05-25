@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Dialog } from "@base-ui-components/react/dialog";
 import "./content-editor.css";
 import { IoMdClose } from "react-icons/io";
@@ -18,38 +18,26 @@ import {
   $isRangeSelection,
   $getNodeByKey,
 } from "lexical";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
-const FindReplaceModal = ({ editor, onClose, isOpen }) => {
+const FindReplaceModal = ({ onClose, isOpen }) => {
+  const [editor] = useLexicalComposerContext();
   const [findText, setFindText] = useState("");
   const [replaceText, setReplaceText] = useState("");
   const [showReplace, setShowReplace] = useState(false);
   const [matches, setMatches] = useState([]);
   const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
-  const [currentEditor , setCurrentEditor] = useState(null);
-
-  const updateEditor = useCallback((currEditor) => {
-    if (currEditor !== undefined && currEditor !== null) {
-      setCurrentEditor(currEditor);
-    }
-  });
-
-  useEffect(() => {
-    if (currentEditor !== null && currentEditor !== undefined) {
-      updateEditor(editor);
-    }
-  });
 
   // Find all matches in the document
   useEffect(() => {
-    if (!currentEditor || findText.trim() === "") {
+    if (!editor || findText.trim() === "") {
       setMatches([]);
       setCurrentMatchIndex(0);
       return;
     }
 
     const foundMatches = [];
-
-    currentEditor.getEditorState().read(() => {
+    editor.getEditorState().read(() => {
       const root = $getRoot();
       const searchText = findText.toLowerCase();
 
@@ -79,20 +67,18 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
     setMatches(foundMatches);
     setCurrentMatchIndex(0);
 
-    console.log(matches);
-
     // Select the first match if any
     if (foundMatches.length > 0) {
       selectMatch(0);
     }
-  }, [findText, currentEditor]);
+  }, [findText, editor]);
 
   // Highlight and scroll to the current match
   const selectMatch = (index) => {
     if (matches.length === 0 || index < 0 || index >= matches.length) return;
 
     const match = matches[index];
-    currentEditor.update(() => {
+    editor.update(() => {
       const node = $getNodeByKey(match.nodeKey);
 
       if ($isTextNode(node)) {
@@ -103,7 +89,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
         $setSelection(rangeSelection);
 
         // Scroll to the selection
-        const element = currentEditor.getElementByKey(match.nodeKey);
+        const element = editor.getElementByKey(match.nodeKey);
         if (element) {
           element.scrollIntoView({
             behavior: "smooth",
@@ -126,7 +112,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
     if (matches.length === 0) return;
 
     const match = matches[currentMatchIndex];
-    currentEditor.update(() => {
+    editor.update(() => {
       const node = $getNodeByKey(match.nodeKey);
 
       if ($isTextNode(node)) {
@@ -174,7 +160,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
   const replaceAll = () => {
     if (matches.length === 0) return;
 
-    currentEditor.update(() => {
+    editor.update(() => {
       // Process replacements from last to first to avoid position shifting issues
       const sortedMatches = [...matches].sort((a, b) => {
         if (a.nodeKey !== b.nodeKey) return 0;
@@ -275,7 +261,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
                     disabled={!matchCount}
                   >
                     <LuReplace className="FindReplaceModal-Icon" />
-                    {/* <span>جایگزینی</span> */}
+                    <span>جایگزینی</span>
                   </button>
                   <button
                     className="FindReplaceModal-ReplaceButton"
@@ -283,7 +269,7 @@ const FindReplaceModal = ({ editor, onClose, isOpen }) => {
                     disabled={!matchCount}
                   >
                     <LuReplaceAll className="FindReplaceModal-Icon" />
-                    {/* <span>جایگزینی همه</span> */}
+                    <span>جایگزینی همه</span>
                   </button>
                 </div>
               </div>

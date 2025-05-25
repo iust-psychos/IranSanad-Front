@@ -160,7 +160,7 @@ export const IconUnderline = () => (
   </svg>
 );
 
-export const IconHighlight = () => (
+export const IconHighlight = ({ color }) => (
   <svg
     width="18"
     height="18"
@@ -181,7 +181,10 @@ export const IconHighlight = () => (
         d="M4.47019 15H1.9702C1.87973 15.0005 1.79084 14.9763 1.713 14.9302C1.63516 14.8841 1.57128 14.8178 1.52818 14.7383C1.48507 14.6587 1.46436 14.569 1.46823 14.4786C1.47211 14.3882 1.50044 14.3006 1.55019 14.225L3.1602 11.755C3.20083 11.6923 3.25501 11.6394 3.31875 11.6004C3.3825 11.5614 3.45418 11.5371 3.52854 11.5294C3.60289 11.5218 3.67802 11.5309 3.7484 11.556C3.81877 11.5812 3.8826 11.6219 3.93519 11.675L5.54019 13.285C5.62872 13.3734 5.68091 13.4917 5.68646 13.6167C5.69202 13.7416 5.65053 13.8641 5.5702 13.96L4.85019 14.82C4.80372 14.8758 4.74566 14.9208 4.68004 14.9519C4.61441 14.983 4.54281 14.9994 4.47019 15ZM2.8902 14H4.2352L4.5002 13.67L3.6502 12.82L2.8902 14Z"
         fill="black"
       />
-      <path d="M1.52979 15.5H16.5298V17H1.52979V15.5Z" fill="black" />
+      <path
+        d="M1.52979 15.5H16.5298V17H1.52979V15.5Z"
+        fill={color ?? "black"}
+      />
     </g>
     <defs>
       <clipPath id="clip0_1005_50">
@@ -401,10 +404,51 @@ export const IconBack = () => (
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M0 24.8794C3.67 20.4873 6.929 17.9951 9.777 17.4029C12.625 16.8108 15.3365 16.7213 17.9115 17.1346V25L30 12.1654L17.9115 0V7.47574C13.15 7.5125 9.102 9.18725 5.7675 12.5C2.4335 15.8127 0.511 19.9392 0 24.8794Z"
       fill="white"
     />
+  </svg>
+);
+export const IconClearFormatting = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 18 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M10.7273 6.86364L8.61364 4.75L5.86364 2H16.9091V4.72727H11.6364L10.7273 6.86364ZM16.7273 18L9.18182 10.4545L7.36364 14.7273H4.38636L7.09091 8.36364L0 1.27273L1.27273 0L18 16.7273L16.7273 18Z"
+      fill="black"
+    />
+  </svg>
+);
+
+export const IconPlus = () => (
+  <svg
+    width="18"
+    height="17"
+    viewBox="0 0 18 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M0 9.15385V7.84615H8.30769V0H9.69231V7.84615H18V9.15385H9.69231V17H8.30769V9.15385H0Z"
+      fill="black"
+    />
+  </svg>
+);
+
+export const IconMinus = () => (
+  <svg
+    width="18"
+    height="1"
+    viewBox="0 0 18 1"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M0 1V0H18V1H0Z" fill="black" />
   </svg>
 );

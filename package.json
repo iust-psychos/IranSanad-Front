@@ -19,7 +19,7 @@
     "@emotion/styled": "^11.14.0",
     "@lexical/react": "^0.31.2",
     "@lexical/table": "^0.31.2",
-    "@lexical/yjs": "^0.30.0",
+    "@lexical/yjs": "^0.31.2",
     "@mui/icons-material": "^6.4.7",
     "@mui/joy": "^5.0.0-beta.51",
     "@mui/material": "^6.4.11",

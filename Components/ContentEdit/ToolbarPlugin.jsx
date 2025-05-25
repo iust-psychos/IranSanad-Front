@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
@@ -14,43 +15,54 @@ import {
   COMMAND_PRIORITY_LOW,
   CAN_REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
+  $getRoot,
 } from "lexical";
 import {
   $patchStyleText,
   $getSelectionStyleValueForProperty,
+  getStyleObjectFromCSS,
 } from "@lexical/selection";
+import { $isTableSelection } from "@lexical/table";
 import {
   INSERT_UNORDERED_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
 } from "@lexical/list";
 import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
+import {
+  clearFormatting,
+  getFontFallback,
+  updateFontSize,
+} from "./font-utility";
+import { DEFAULT_FONT_SIZE } from "./editor-config";
 
-function ToolbarPlugin({ currentPage, activeEditor }) {
-  // const [activeEditor] = useLexicalComposerContext();
-  const [fontFamily, setFontFamily] = useState("Arial");
-  const [fontSize, setFontSize] = useState("14");
+function ToolbarPlugin() {
+  const [editor] = useLexicalComposerContext();
   const [disableMap, setDisableMap] = useState({
     [richTextActions.Undo]: true,
     [richTextActions.Redo]: true,
   });
-  const [editor , setEditor] = useState(null);
   const [selectionMap, setSelectionMap] = useState({});
 
-  const updateEditor = useCallback((currentEditor) => {
-    setEditor(currentEditor);
-  });
-
-  useEffect(() => {
-    if (activeEditor !== undefined && activeEditor !== null) {
-      updateEditor(activeEditor);
-    }
-  })
-
-  const updateToolbar = () => {
+  const updateToolbar = useCallback(() => {
     const selection = $getSelection();
-
-    if ($isRangeSelection(selection)) {
-      const newSelectionMap = {
+    let newSelectionMap = {};
+    // if ($isRangeSelection(selection)) {
+    //   newSelectionMap = {
+    //     [richTextActions.FontFamily]: $getSelectionStyleValueForProperty(
+    //       selection,
+    //       "font-family",
+    //       "Arial"
+    //     ),
+    //     [richTextActions.FontSize.Update]: $getSelectionStyleValueForProperty(
+    //       selection,
+    //       "font-size",
+    //       `${DEFAULT_FONT_SIZE}px`
+    //     ),
+    //   };
+    // }
+    if ($isRangeSelection(selection) || $isTableSelection(selection)) {
+      newSelectionMap = {
+        ...newSelectionMap,
         [richTextActions.Bold]: selection.hasFormat("bold"),
         [richTextActions.Italics]: selection.hasFormat("italic"),
         [richTextActions.Underline]: selection.hasFormat("underline"),
@@ -62,7 +74,7 @@ function ToolbarPlugin({ currentPage, activeEditor }) {
       };
       setSelectionMap(newSelectionMap);
     }
-  };
+  }, [editor, setSelectionMap]);
 
   useEffect(() => {
     if (editor !== undefined && editor !== null)
@@ -99,7 +111,7 @@ function ToolbarPlugin({ currentPage, activeEditor }) {
       );
   });
 
-  const onAction = (id) => {
+  const onAction = (id, option = "", value = "") => {
     switch (id) {
       case richTextActions.Bold:
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
@@ -140,73 +152,49 @@ function ToolbarPlugin({ currentPage, activeEditor }) {
       case richTextActions.Redo:
         editor.dispatchCommand(REDO_COMMAND, undefined);
         break;
+      case richTextActions.FontSize.Increment:
+        updateFontSize(editor, "increment", "");
+        break;
+      case richTextActions.FontSize.Update:
+        updateFontSize(editor, "", value);
+        break;
+      case richTextActions.FontSize.Decrement:
+        updateFontSize(editor, "decrement", "");
+        break;
+      case richTextActions.FontFamily:
+        const robustValue = getFontFallback(value);
+        editor.update(() => {
+          const selection = $getSelection();
+          if (selection !== null) {
+            $patchStyleText(selection, {
+              [option]: robustValue,
+            });
+          }
+        });
+        break;
+      case richTextActions.ClearFormatting:
+        clearFormatting(editor);
+        break;
       default:
         break;
     }
   };
 
-  // useEffect(() => {
-  //   return activeEditor.registerCommand(
-  //     activeEditor.SELECTION_CHANGE_COMMAND,
-  //     () => {
-  //       const selection = $getSelection();
-  //       if ($isRangeSelection(selection)) {
-  //         setBold(selection.hasFormat("bold"));
-  //         setItalic(selection.hasFormat("italic"));
-  //         setUnderline(selection.hasFormat("underline"));
-  //         setStrikethrough(selection.hasFormat("strikethrough"));
-
-  //         const family = $getSelectionStyleValueForProperty(
-  //           selection,
-  //           "font-family",
-  //           fontFamily
-  //         );
-  //         const size = $getSelectionStyleValueForProperty(
-  //           selection,
-  //           "font-size",
-  //           `${fontSize}px`
-  //         );
-  //         if (family) setFontFamily(family.replace(/['"]/g, ""));
-  //         if (size) setFontSize(parseInt(size));
-  //       }
-  //       return false;
-  //     },
-
-  //     0
-  //   );
-  // }, [activeEditor, fontFamily, fontSize]);
-
-  const fontOptions = [
-    "Arial",
-    "Times New Roman",
-    "Courier New",
-    "Georgia",
-    "Verdana",
-  ];
-
-  const fontSizes = [
-    8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 60, 72,
-  ];
-
   return (
     <div className="toolbar">
-      {richTextOptions.map(({ id, icon, label }, index) =>
-        id === richTextActions.Divider ? (
-          <IconDivider1 key={`${id}${index}`} />
-        ) : (
-          <button
-            key={id}
-            aria-label={label}
-            onClick={() => onAction(id)}
-            disabled={disableMap[id]}
-            className={selectionMap[id] ? "active" : null}
-          >
-            {icon}
-          </button>
+      {richTextOptions.map(
+        ({ id, component: StyledComponent, props }, index) => (
+          <StyledComponent
+            key={`${id}${index}`}
+            onAction={onAction}
+            disableMap={disableMap}
+            selectionMap={selectionMap}
+            {...props}
+          />
         )
       )}
       <IconDivider1 />
-      <InsertTableButton activeEditor={editor} />
+      <InsertTableButton editor={editor} />
     </div>
   );
 }

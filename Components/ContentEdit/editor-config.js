@@ -1,11 +1,7 @@
 import { HeadingNode } from "@lexical/rich-text";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { ListNode, ListItemNode } from "@lexical/list";
-import {
-  TableNode,
-  TableRowNode,
-  TableCellNode,
-} from "@lexical/table";
+import { TableNode, TableRowNode, TableCellNode } from "@lexical/table";
 const theme = {
   code: "editor-code",
   heading: {
@@ -49,7 +45,35 @@ export const editorConfig = {
   namespace: "Editor-1",
   theme: theme,
   onError: (error) => console.error(error),
-  nodes: [HeadingNode, CodeHighlightNode, CodeNode, ListNode, ListItemNode ,   TableNode,
-  TableRowNode,
-  TableCellNode,],
+  nodes: [
+    HeadingNode,
+    CodeHighlightNode,
+    CodeNode,
+    ListNode,
+    ListItemNode,
+    TableNode,
+    TableRowNode,
+    TableCellNode,
+  ],
 };
+
+export const FONT_SIZES = [
+  8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72,
+];
+
+export const DEFAULT_FONT_SIZE = 12;
+
+export const FONT_FAMILY = [
+  "Arial",
+  "Verdana",
+  "Helvetica",
+  "Tahoma",
+  "Trebuchet MS",
+  "Times New Roman",
+  "Georgia",
+  "Garamond",
+  "Courier New",
+  "Lucida Console",
+  "Brush Script MT",
+  "Impact",
+];

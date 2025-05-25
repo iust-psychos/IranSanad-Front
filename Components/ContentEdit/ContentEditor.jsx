@@ -19,6 +19,7 @@ import FindReplaceModal from "./FindReplaceModal";
 import Commentsystem from "../Comment/CommentSystem";
 import CookieManager from "../../Managers/CookieManager";
 import axios from "axios";
+import FindReplaceModal from "./FindReplaceModal";
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 
 const ContentEditor = () => {
@@ -37,6 +38,8 @@ const ContentEditor = () => {
   /* Added By Erfan */
   const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
 
+  const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
+
   const [openCommentSystem, setOpenCommentSystem] = useState(false);
   const [user, setUser] = useState(null);
   const token = CookieManager.LoadToken();
@@ -50,7 +53,6 @@ const ContentEditor = () => {
       })
       .then((response) => {
         setUser(response.data);
-        console.log(response);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -162,12 +164,10 @@ const ContentEditor = () => {
       {/* Added By Erfan  */}
       {openFindReplaceDialog && (
         <FindReplaceModal
-          editor={editor}
           onClose={() => setOpenFindReplaceDialog(false)}
           isOpen={openFindReplaceDialog}
         />
       )}
-
       {openCommentSystem && (
         <Commentsystem
           documentId={doc_uuid}
