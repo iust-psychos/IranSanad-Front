@@ -261,7 +261,7 @@ const FindReplaceModal = ({ onClose, isOpen }) => {
                     disabled={!matchCount}
                   >
                     <LuReplace className="FindReplaceModal-Icon" />
-                    <span>جایگزینی</span>
+                    {/* <span>جایگزینی</span> */}
                   </button>
                   <button
                     className="FindReplaceModal-ReplaceButton"
@@ -269,7 +269,7 @@ const FindReplaceModal = ({ onClose, isOpen }) => {
                     disabled={!matchCount}
                   >
                     <LuReplaceAll className="FindReplaceModal-Icon" />
-                    <span>جایگزینی همه</span>
+                    {/* <span>جایگزینی همه</span> */}
                   </button>
                 </div>
               </div>

@@ -141,24 +141,36 @@ export default function Editor({ doc_uuid }) {
           contentEditable={<ContentEditable className="editor-input" />}
           ErrorBoundary={LexicalErrorBoundary}
         /> */}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          {/* <div className="page-controls">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 0}
+            >
+              Previous Page
+            </button>
+            <span>
+              Page {currentPage + 1} of {totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages - 1}
+            >
+              Next Page
+            </button>
+            <button onClick={addNewPage}>Add New Page</button>
+          </div> */}
 
-        <div className="page-controls">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 0}
-          >
-            Previous Page
-          </button>
-          <span>
-            Page {currentPage + 1} of {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages - 1}
-          >
-            Next Page
-          </button>
-          <button onClick={addNewPage}>Add New Page</button>
+          <div className="active-users">
+            <h4>کاربران فعال:</h4>
+            <ul>
+              {activeUsers.map((user) => (
+                <li key={user.userId} style={{ color: user.color }}>
+                  {user.name}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="editor-inner" ref={containerRef}>
@@ -195,16 +207,6 @@ export default function Editor({ doc_uuid }) {
             cursorColor="red"
             cursorsContainerRef={containerRef}
           />
-        </div>
-        <div className="active-users">
-          <h4>کاربران فعال:</h4>
-          <ul>
-            {activeUsers.map((user) => (
-              <li key={user.userId} style={{ color: user.color }}>
-                {user.name}
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </>
