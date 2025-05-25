@@ -19,7 +19,6 @@ import FindReplaceModal from "./FindReplaceModal";
 import Commentsystem from "../Comment/CommentSystem";
 import CookieManager from "../../Managers/CookieManager";
 import axios from "axios";
-import FindReplaceModal from "./FindReplaceModal";
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 
 const ContentEditor = () => {
@@ -36,8 +35,6 @@ const ContentEditor = () => {
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
 
   /* Added By Erfan */
-  const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
-
   const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
 
   const [openCommentSystem, setOpenCommentSystem] = useState(false);

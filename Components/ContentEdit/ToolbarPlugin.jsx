@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import React, { useCallback, useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
