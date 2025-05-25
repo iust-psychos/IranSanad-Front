@@ -7,6 +7,7 @@ import CookieManager from "../../Managers/CookieManager";
 import { format, newDate } from "date-fns-jalali";
 import { parseISO } from "date-fns";
 import { faIR } from "date-fns-jalali/locale";
+import { toPersianDigit } from "../../Scripts/persian-number-converter.js";
 
 const commentsBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/document";
 const replyBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/commentreply";
@@ -24,35 +25,11 @@ export default function CommentSystem({ documentId, currentUser, onClose }) {
 
   const token = CookieManager.LoadToken();
 
-  // const commentType = {
-  // "id": 1,
-  // "author_username": "erfan",
-  // "author_firstname": "",
-  // "author_lastname": "",
-  // "text": "این یک یادداشت است",
-  // "range_start": {},
-  // "range_end": {},
-  // "is_resolved": false,
-  // "resolved_by": 1,
-  //  created_at: "",
-  //  updated_at: "",
-  //  commentreply_set = [
-  //  {
-  //   "id": 1,
-  //   "author_username": "test",
-  //   "comment": 1,
-  //   "text": "hello guys!!!",
-  //   "created_at": "2025-05-22T16:00:14.773191+03:30",
-  //   "updated_at": "2025-05-22T16:00:14.773236+03:30"
-  //  }
-  // ]
-  // };
-
   // Convert Date
   const convertDate = (dateString) => {
     const date = parseISO(dateString);
     const persianDate = format(date, "d MMMM - HH:mm", { locale: faIR });
-    return persianDate;
+    return toPersianDigit(persianDate);
   };
 
   // Get All Comments
@@ -388,7 +365,9 @@ export default function CommentSystem({ documentId, currentUser, onClose }) {
                   </div>
                 </form>
               ) : (
-                <div className="comment-text">{comment.text}</div>
+                <div className="comment-text">
+                  {toPersianDigit(comment.text)}
+                </div>
               )}
 
               <button
@@ -488,7 +467,9 @@ export default function CommentSystem({ documentId, currentUser, onClose }) {
                           </div>
                         </form>
                       ) : (
-                        <div className="reply-text">{reply.text}</div>
+                        <div className="reply-text">
+                          {toPersianDigit(reply.text)}
+                        </div>
                       )}
                     </div>
                   ))}

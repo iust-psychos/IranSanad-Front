@@ -47,6 +47,7 @@
     width: 120px;
     height: 40px;
     font-size: 15px;
+    font-family: 'Vazir';
     color: var(--text-primary);
     background: var(--accent-gold);
     border: 1px solid black;
@@ -157,6 +158,7 @@
     grid-template-columns: 2fr 1fr;
     grid-template-rows: auto auto;
     align-items: center;
+    gap: 10px 0;
 }
 
 .landing-stats-item-icon {
@@ -164,7 +166,10 @@
     grid-row: 1 / span 2;
     height: 70%; 
     width: auto;
+    margin: 0 auto;
+    color: var(--text-primary);
 }
+
 
 .landing-stats-item-number {
     font-size: 28px;
@@ -228,6 +233,7 @@
     width: 120px;
     height: 40px;
     font-size: 15px;
+    font-family: 'Vazir';
     background: var(--accent-gold);
     color: var(--text-primary);
     border: 1px solid black;

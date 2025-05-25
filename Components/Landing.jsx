@@ -10,9 +10,9 @@ import Service4 from "../src/Images/LandingPage/service4.svg";
 import Join from "../src/Images/LandingPage/join.svg";
 import { MdEmail, MdPhoneEnabled, MdLocationPin } from "react-icons/md";
 import { TbLanguage } from "react-icons/tb";
-import CountryIcon from "../src/Images/LandingPage/country.png";
-import DocumentIcon from "../src/Images/LandingPage/document.png";
-import UserIcon from "../src/Images/LandingPage/user.png";
+import { FaLocationDot } from "react-icons/fa6";
+import { HiDocumentDuplicate } from "react-icons/hi2";
+import { FaUser } from "react-icons/fa";
 import AnimatedSVG from "./AnimatedSVG";
 import CountUp from "react-countup";
 import { toPersianDigit } from "../Scripts/persian-number-converter";
@@ -189,7 +189,7 @@ const Landing = () => {
             )} */}
           </h1>
           <p className="landing-stats-item-desc">کاربر فعال</p>
-          <img src={UserIcon} className="landing-stats-item-icon" />
+          <FaUser className="landing-stats-item-icon" />
         </div>
         <div className="landing-stats-item">
           <h1 className="landing-stats-item-number">
@@ -201,7 +201,7 @@ const Landing = () => {
             />
           </h1>
           <p className="landing-stats-item-desc">سند منتشر شده</p>
-          <img src={DocumentIcon} className="landing-stats-item-icon" />
+          <HiDocumentDuplicate className="landing-stats-item-icon" />
         </div>
         <div className="landing-stats-item">
           <h1 className="landing-stats-item-number">
@@ -213,7 +213,7 @@ const Landing = () => {
             />
           </h1>
           <p className="landing-stats-item-desc">زبان تحت پوشش</p>
-          <TbLanguage className="landing-stats-item-icon" color="#9D27B0ff" />
+          <TbLanguage className="landing-stats-item-icon" />
         </div>
         <div className="landing-stats-item">
           <h1 className="landing-stats-item-number">
@@ -225,7 +225,7 @@ const Landing = () => {
             />
           </h1>
           <p className="landing-stats-item-desc">کشور تحت پوشش</p>
-          <img src={CountryIcon} className="landing-stats-item-icon" />
+          <FaLocationDot className="landing-stats-item-icon" />
         </div>
       </div>
       <div className="landing-join">
