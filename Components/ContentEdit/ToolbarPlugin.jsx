@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
@@ -33,7 +33,18 @@ function ToolbarPlugin({ currentPage, activeEditor }) {
     [richTextActions.Undo]: true,
     [richTextActions.Redo]: true,
   });
+  const [editor , setEditor] = useState(null);
   const [selectionMap, setSelectionMap] = useState({});
+
+  const updateEditor = useCallback((currentEditor) => {
+    setEditor(currentEditor);
+  });
+
+  useEffect(() => {
+    if (activeEditor !== undefined && activeEditor !== null) {
+      updateEditor(activeEditor);
+    }
+  })
 
   const updateToolbar = () => {
     const selection = $getSelection();
@@ -54,14 +65,14 @@ function ToolbarPlugin({ currentPage, activeEditor }) {
   };
 
   useEffect(() => {
-    if (activeEditor !== undefined && activeEditor !== null)
+    if (editor !== undefined && editor !== null)
       return mergeRegister(
-        activeEditor.registerUpdateListener(({ activeEditorState }) => {
-          activeEditorState.read(() => {
+        editor.registerUpdateListener(({ editorState }) => {
+          editorState.read(() => {
             updateToolbar();
           });
         }),
-        activeEditor.registerCommand(
+        editor.registerCommand(
           SELECTION_CHANGE_COMMAND,
           (payLoad) => {
             updateToolbar();
@@ -69,7 +80,7 @@ function ToolbarPlugin({ currentPage, activeEditor }) {
           },
           COMMAND_PRIORITY_LOW
         ),
-        activeEditor.registerCommand(
+        editor.registerCommand(
           CAN_UNDO_COMMAND,
           (payLoad) => {
             setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
@@ -77,7 +88,7 @@ function ToolbarPlugin({ currentPage, activeEditor }) {
           },
           COMMAND_PRIORITY_LOW
         ),
-        activeEditor.registerCommand(
+        editor.registerCommand(
           CAN_REDO_COMMAND,
           (payLoad) => {
             setDisableMap((prev) => ({ ...prev, redo: !payLoad }));
@@ -91,43 +102,43 @@ function ToolbarPlugin({ currentPage, activeEditor }) {
   const onAction = (id) => {
     switch (id) {
       case richTextActions.Bold:
-        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
         break;
       case richTextActions.Italics:
-        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
         break;
       case richTextActions.Underline:
-        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
         break;
       case richTextActions.Strikethrough:
-        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
         break;
       case richTextActions.Superscript:
-        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
         break;
       case richTextActions.Subscript:
-        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
         break;
       case richTextActions.Highlight:
-        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "highlight");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "highlight");
         break;
       case richTextActions.Code:
-        activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
         break;
       case richTextActions.LeftAlign:
-        activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
         break;
       case richTextActions.CenterAlign:
-        activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
         break;
       case richTextActions.RightAlign:
-        activeEditor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
         break;
       case richTextActions.Undo:
-        activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
+        editor.dispatchCommand(UNDO_COMMAND, undefined);
         break;
       case richTextActions.Redo:
-        activeEditor.dispatchCommand(REDO_COMMAND, undefined);
+        editor.dispatchCommand(REDO_COMMAND, undefined);
         break;
       default:
         break;
@@ -195,7 +206,7 @@ function ToolbarPlugin({ currentPage, activeEditor }) {
         )
       )}
       <IconDivider1 />
-      <InsertTableButton activeEditor={activeEditor} />
+      <InsertTableButton activeEditor={editor} />
     </div>
   );
 }
