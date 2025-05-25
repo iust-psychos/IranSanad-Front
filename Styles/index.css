@@ -39,6 +39,12 @@ body {
   --error: #D32F2F;
   --table-header-bg: #1E1E1E;
   --table-row-hover: #F0F0F0;
+  --navbar-bg: #1E1E1E;
+  --editor-bg: #FFFFFF;
+  --editor-outside-bg: #EAECF1;
+  --toolbar-bg: #F0F0F0;
+  --button-bg: #D4AF37;
+  --button-hover: #B7950B;
 }
 
 [data-theme="dark"] {
@@ -54,6 +60,12 @@ body {
   --error: #F44336;
   --table-header-bg: #2A2A2A;
   --table-row-hover: #2A2A2A;
+  --navbar-bg: #2A2a2a;
+  --editor-bg: #262626;
+  --editor-outside-bg: #121416;
+  --toolbar-bg: #555454;
+  --button-bg: #D4AF37;
+  --button-hover: #FFD700;
 }
 
 /* *::selection {

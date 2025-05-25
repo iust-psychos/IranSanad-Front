@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
-
+import InsertTableButton from "./Inserttablebutton";
 import {
   $getSelection,
   $isRangeSelection,
@@ -27,7 +28,6 @@ import {
   INSERT_ORDERED_LIST_COMMAND,
 } from "@lexical/list";
 import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
-import InsertTableButton from "./InsertTableButton";
 import {
   clearFormatting,
   getFontFallback,
@@ -77,37 +77,38 @@ function ToolbarPlugin() {
   }, [editor, setSelectionMap]);
 
   useEffect(() => {
-    return mergeRegister(
-      editor.registerUpdateListener(({ editorState }) => {
-        editorState.read(() => {
-          updateToolbar();
-        });
-      }),
-      editor.registerCommand(
-        SELECTION_CHANGE_COMMAND,
-        (payLoad) => {
-          updateToolbar();
-          return false;
-        },
-        COMMAND_PRIORITY_LOW
-      ),
-      editor.registerCommand(
-        CAN_UNDO_COMMAND,
-        (payLoad) => {
-          setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
-          return false;
-        },
-        COMMAND_PRIORITY_LOW
-      ),
-      editor.registerCommand(
-        CAN_REDO_COMMAND,
-        (payLoad) => {
-          setDisableMap((prev) => ({ ...prev, redo: !payLoad }));
-          return false;
-        },
-        COMMAND_PRIORITY_LOW
-      )
-    );
+    if (editor !== undefined && editor !== null)
+      return mergeRegister(
+        editor.registerUpdateListener(({ editorState }) => {
+          editorState.read(() => {
+            updateToolbar();
+          });
+        }),
+        editor.registerCommand(
+          SELECTION_CHANGE_COMMAND,
+          (payLoad) => {
+            updateToolbar();
+            return false;
+          },
+          COMMAND_PRIORITY_LOW
+        ),
+        editor.registerCommand(
+          CAN_UNDO_COMMAND,
+          (payLoad) => {
+            setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
+            return false;
+          },
+          COMMAND_PRIORITY_LOW
+        ),
+        editor.registerCommand(
+          CAN_REDO_COMMAND,
+          (payLoad) => {
+            setDisableMap((prev) => ({ ...prev, redo: !payLoad }));
+            return false;
+          },
+          COMMAND_PRIORITY_LOW
+        )
+      );
   });
 
   const onAction = (id, option = "", value = "") => {

@@ -13,6 +13,7 @@ import HistoryModal from "./HistoryModal";
 import { getMenuBlueprint } from "./menu-bar-config";
 import MenubarDropdown from "./MenuBarDropdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import FindReplaceModal from "./FindReplaceModal";
 
 /* Added By Erfan */
 import Commentsystem from "../Comment/CommentSystem";
@@ -37,6 +38,8 @@ const ContentEditor = () => {
   /* Added By Erfan */
   const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
 
+  const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
+
   const [openCommentSystem, setOpenCommentSystem] = useState(false);
   const [user, setUser] = useState(null);
   const token = CookieManager.LoadToken();
@@ -52,6 +55,17 @@ const ContentEditor = () => {
         setUser(response.data);
       })
       .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "f") {
+        e.preventDefault();
+        setOpenFindReplaceDialog(true);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   const handleKeyDown = async (e) => {

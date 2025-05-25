@@ -15,16 +15,16 @@
   padding: 15px;
   border-bottom: 1px solid #e0e0e0;
   align-items: center;
-  background-color: #503389;
+  background-color: var(--navbar-bg);;
   display: flex;
   justify-content: center;
-  height: 112px;
+  height: 117px;
 }
 
 .comment-system-header p {
   margin: 0;
   font-size: 18px;
-  color: white;
+  color: var(--accent-gold);;
 }
 
 .close-button {
@@ -69,7 +69,7 @@
 
 .comment-author {
   font-weight: bold;
-  color: #bba1ea;
+  color: var(--accent-gold);
   margin: auto 10px auto 0;
 }
 
@@ -139,7 +139,7 @@
 }
 
 .save-button, .post-reply-button {
-  background: #4285f4;
+  background: var(--accent-gold);
   color: white;
   border: none;
   padding: 6px 12px;
@@ -149,7 +149,7 @@
 }
 
 .save-button:hover, .post-reply-button:hover {
-  background: #3367d6;
+  background: var(--accent-gold-hover);
 }
 
 .cancel-button, .cancel-reply-button {
@@ -223,7 +223,7 @@
 .reply-author {
   font-weight: bold;
   font-size: 14px;
-  color: #34a853;
+  color: var(--accent-gold-hover);
   margin: auto 10px auto 0;
 }
 
@@ -257,7 +257,7 @@
 
 .comment-submit {
   padding: 10px 15px;
-  background: #4285f4;
+  background: var(--accent-gold);
   color: white;
   border: none;
   border-radius: 4px;
@@ -265,5 +265,5 @@
 }
 
 .comment-submit:hover {
-  background: #3367d6;
+  background: var(--accent-gold-hover);
 }
