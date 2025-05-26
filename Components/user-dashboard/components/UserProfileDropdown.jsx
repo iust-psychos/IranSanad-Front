@@ -1,11 +1,12 @@
 import { Menu } from "@base-ui-components/react/menu";
-import DEFAULT_IMAGE from "../../../src/Images/UserProfile/Default.png";
+import DEFAULT_IMAGE from "@/src/Images/UserProfile/Default.png";
 import { IconUserProfileClose } from "./Icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { userInfoLoader } from "../../../Managers/user-dashboard-manager";
-import CookieManager from "../../../Managers/CookieManager";
+import { userInfoLoader } from "@/Managers/user-dashboard-manager";
+import CookieManager from "@/Managers/CookieManager";
 import { RingLoader } from "react-spinners";
+import constants from "../../../Managers/constants";
 
 export default function UserProfileDropdown() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function UserProfileDropdown() {
         <Menu.Positioner sideOffset={6} align="end">
           <Menu.Popup className="user-dashboard-dropdown profile-dropdown">
             {isLoading ? (
-              <RingLoader color="#bba1ea" size="1.5rem" />
+              <RingLoader color="#bba1ea" size="1.5rem" data-testid="spinner" />
             ) : isError ? (
               <div className="p-4 text-red-600">خطا در دریافت اطلاعات</div>
             ) : userInfo ? (
@@ -51,7 +52,10 @@ export default function UserProfileDropdown() {
                     </button>
                   </Menu.Item>
                   <img
-                    src={userInfo.profile_image || DEFAULT_IMAGE}
+                    src={
+                      `${constants.baseDomain}${userInfo.profile_image}` ||
+                      DEFAULT_IMAGE
+                    }
                     alt="عکس پروفایل"
                   />
                 </menu>

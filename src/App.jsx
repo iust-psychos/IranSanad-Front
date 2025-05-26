@@ -22,15 +22,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { contentEditorLoader } from "../Managers/content-editor-manager";
 import cookieManager from "../Managers/CookieManager";
 import Landing from "../Components/Landing";
-
-const isAuthenticated = cookieManager.LoadToken() ? true : false;
+import { isAuthenticated } from "../Utilities/Auth/AuthManager";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { editorConfig } from "../Components/ContentEdit/editor-config";
 
 const ProtectedRoute = ({
   isAuthenticated,
   redirectPath = "/login",
   children,
 }) => {
-  console.log(isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to={redirectPath} replace />;
   }
@@ -78,7 +78,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/document/:doc_uuid",
-        element: <ContentEditor />,
+        element: (
+          <LexicalComposer initialConfig={editorConfig}>
+            <ContentEditor />
+          </LexicalComposer>
+        ),
         loader: contentEditorLoader,
       },
       {
@@ -106,6 +110,30 @@ function Root() {
 }
 
 export default function App() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setIsDarkMode(mediaQuery.matches);
+
+    const handleColorSchemeChange = (e) => {
+      setIsDarkMode(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleColorSchemeChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleColorSchemeChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-theme",
+      isDarkMode ? "dark" : "light"
+    );
+  }, [isDarkMode]);
+
   return (
     <>
       <ToastContainer

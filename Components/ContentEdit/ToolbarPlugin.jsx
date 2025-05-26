@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { richTextActions, richTextOptions } from "./rich-text-actions";
 import { mergeRegister } from "@lexical/utils";
-
+import InsertTableButton from "./Inserttablebutton";
 import {
   $getSelection,
   $isRangeSelection,
@@ -21,32 +14,54 @@ import {
   COMMAND_PRIORITY_LOW,
   CAN_REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
+  $getRoot,
 } from "lexical";
 import {
   $patchStyleText,
   $getSelectionStyleValueForProperty,
+  getStyleObjectFromCSS,
 } from "@lexical/selection";
+import { $isTableSelection } from "@lexical/table";
 import {
   INSERT_UNORDERED_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
 } from "@lexical/list";
-import { IconDivider1 } from "./Icons";
+import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
+import {
+  clearFormatting,
+  getFontFallback,
+  updateFontSize,
+} from "./font-utility";
+import { DEFAULT_FONT_SIZE } from "./editor-config";
 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
-  const [fontFamily, setFontFamily] = useState("Arial");
-  const [fontSize, setFontSize] = useState("14");
   const [disableMap, setDisableMap] = useState({
     [richTextActions.Undo]: true,
     [richTextActions.Redo]: true,
   });
   const [selectionMap, setSelectionMap] = useState({});
 
-  const updateToolbar = () => {
+  const updateToolbar = useCallback(() => {
     const selection = $getSelection();
-
+    let newSelectionMap = {};
     if ($isRangeSelection(selection)) {
-      const newSelectionMap = {
+      newSelectionMap = {
+        [richTextActions.FontFamily]: $getSelectionStyleValueForProperty(
+          selection,
+          "font-family",
+          "Arial"
+        ),
+        [richTextActions.FontSize.Update]: $getSelectionStyleValueForProperty(
+          selection,
+          "font-size",
+          `${DEFAULT_FONT_SIZE}px`
+        ),
+      };
+    }
+    if ($isRangeSelection(selection) || $isTableSelection(selection)) {
+      newSelectionMap = {
+        ...newSelectionMap,
         [richTextActions.Bold]: selection.hasFormat("bold"),
         [richTextActions.Italics]: selection.hasFormat("italic"),
         [richTextActions.Underline]: selection.hasFormat("underline"),
@@ -58,43 +73,44 @@ function ToolbarPlugin() {
       };
       setSelectionMap(newSelectionMap);
     }
-  };
+  }, [editor, setSelectionMap]);
 
   useEffect(() => {
-    return mergeRegister(
-      editor.registerUpdateListener(({ editorState }) => {
-        editorState.read(() => {
-          updateToolbar();
-        });
-      }),
-      editor.registerCommand(
-        SELECTION_CHANGE_COMMAND,
-        (payLoad) => {
-          setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
-          return false;
-        },
-        COMMAND_PRIORITY_LOW
-      ),
-      editor.registerCommand(
-        CAN_UNDO_COMMAND,
-        (payLoad) => {
-          setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
-          return false;
-        },
-        COMMAND_PRIORITY_LOW
-      ),
-      editor.registerCommand(
-        CAN_REDO_COMMAND,
-        (payLoad) => {
-          setDisableMap((prev) => ({ ...prev, redo: !payLoad }));
-          return false;
-        },
-        COMMAND_PRIORITY_LOW
-      )
-    );
+    if (editor !== undefined && editor !== null)
+      return mergeRegister(
+        editor.registerUpdateListener(({ editorState }) => {
+          editorState.read(() => {
+            updateToolbar();
+          });
+        }),
+        editor.registerCommand(
+          SELECTION_CHANGE_COMMAND,
+          (payLoad) => {
+            updateToolbar();
+            return false;
+          },
+          COMMAND_PRIORITY_LOW
+        ),
+        editor.registerCommand(
+          CAN_UNDO_COMMAND,
+          (payLoad) => {
+            setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
+            return false;
+          },
+          COMMAND_PRIORITY_LOW
+        ),
+        editor.registerCommand(
+          CAN_REDO_COMMAND,
+          (payLoad) => {
+            setDisableMap((prev) => ({ ...prev, redo: !payLoad }));
+            return false;
+          },
+          COMMAND_PRIORITY_LOW
+        )
+      );
   });
 
-  const onAction = (id) => {
+  const onAction = (id, option = "", value = "") => {
     switch (id) {
       case richTextActions.Bold:
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
@@ -115,7 +131,7 @@ function ToolbarPlugin() {
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
         break;
       case richTextActions.Highlight:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "hightlight");
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "highlight");
         break;
       case richTextActions.Code:
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
@@ -135,70 +151,49 @@ function ToolbarPlugin() {
       case richTextActions.Redo:
         editor.dispatchCommand(REDO_COMMAND, undefined);
         break;
+      case richTextActions.FontSize.Increment:
+        updateFontSize(editor, "increment", "");
+        break;
+      case richTextActions.FontSize.Update:
+        updateFontSize(editor, "", value);
+        break;
+      case richTextActions.FontSize.Decrement:
+        updateFontSize(editor, "decrement", "");
+        break;
+      case richTextActions.FontFamily:
+        const robustValue = getFontFallback(value);
+        editor.update(() => {
+          const selection = $getSelection();
+          if (selection !== null) {
+            $patchStyleText(selection, {
+              [option]: robustValue,
+            });
+          }
+        });
+        break;
+      case richTextActions.ClearFormatting:
+        clearFormatting(editor);
+        break;
       default:
         break;
     }
   };
 
-  // useEffect(() => {
-  //   return editor.registerCommand(
-  //     editor.SELECTION_CHANGE_COMMAND,
-  //     () => {
-  //       const selection = $getSelection();
-  //       if ($isRangeSelection(selection)) {
-  //         setBold(selection.hasFormat("bold"));
-  //         setItalic(selection.hasFormat("italic"));
-  //         setUnderline(selection.hasFormat("underline"));
-  //         setStrikethrough(selection.hasFormat("strikethrough"));
-
-  //         const family = $getSelectionStyleValueForProperty(
-  //           selection,
-  //           "font-family",
-  //           fontFamily
-  //         );
-  //         const size = $getSelectionStyleValueForProperty(
-  //           selection,
-  //           "font-size",
-  //           `${fontSize}px`
-  //         );
-  //         if (family) setFontFamily(family.replace(/['"]/g, ""));
-  //         if (size) setFontSize(parseInt(size));
-  //       }
-  //       return false;
-  //     },
-
-  //     0
-  //   );
-  // }, [editor, fontFamily, fontSize]);
-
-  const fontOptions = [
-    "Arial",
-    "Times New Roman",
-    "Courier New",
-    "Georgia",
-    "Verdana",
-  ];
-
-  const fontSizes = [
-    8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 60, 72,
-  ];
-
   return (
     <div className="toolbar">
-      {richTextOptions.map(({ id, icon, label }) =>
-        id === richTextActions.Divider ? (
-          <IconDivider1 />
-        ) : (
-          <button
-            aria-label={label}
-            onClick={() => onAction(id)}
-            disabled={disableMap[id]}
-            className={selectionMap[id] ? "active" : null}
-          >
-            {icon}
-          </button>
+      {richTextOptions.map(
+        ({ id, component: StyledComponent, props }, index) => (
+          <StyledComponent
+            key={`${id}${index}`}
+            onAction={onAction}
+            disableMap={disableMap}
+            selectionMap={selectionMap}
+            {...props}
+          />
         )
       )}
+      <IconDivider1 />
+      <InsertTableButton editor={editor} />
     </div>
   );
 }

@@ -315,7 +315,10 @@ const Share = ({ onClose, doc_uuid }) => {
                             )
                           }
                         >
-                          <Select.Trigger className="share-select-trigger">
+                          <Select.Trigger
+                            className="share-select-trigger"
+                            data-testid={`permission-select-${permissionItem.user.id}`}
+                          >
                             <Select.Value
                               placeholder={
                                 permissionItem.access_level === "ReadOnly"
@@ -340,7 +343,7 @@ const Share = ({ onClose, doc_uuid }) => {
                                   </Select.ItemIndicator>
                                 </Select.Item>
                                 <Select.Item
-                                  value="Write"
+                                  value="Writer"
                                   className="share-select-item"
                                 >
                                   <Select.ItemText>ویراستار</Select.ItemText>

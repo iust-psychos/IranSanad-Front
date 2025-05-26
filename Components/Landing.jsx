@@ -9,10 +9,10 @@ import Service3 from "../src/Images/LandingPage/service3.svg";
 import Service4 from "../src/Images/LandingPage/service4.svg";
 import Join from "../src/Images/LandingPage/join.svg";
 import { MdEmail, MdPhoneEnabled, MdLocationPin } from "react-icons/md";
-import { FaUserLarge } from "react-icons/fa6";
-import { IoIosDocument } from "react-icons/io";
 import { TbLanguage } from "react-icons/tb";
-import { IoMdFlag } from "react-icons/io";
+import { FaLocationDot } from "react-icons/fa6";
+import { HiDocumentDuplicate } from "react-icons/hi2";
+import { FaUser } from "react-icons/fa";
 import AnimatedSVG from "./AnimatedSVG";
 import CountUp from "react-countup";
 import { toPersianDigit } from "../Scripts/persian-number-converter";
@@ -31,7 +31,7 @@ const Landing = () => {
   const scale3 = 0.9 + ratio3 * 0.1;
   const scale4 = 0.9 + ratio4 * 0.1;
 
-  const scale5 = 0.9 + ratio5 * 0.1;
+  const scale5 = 0.8 + ratio5 * 0.1;
 
   const nav = useNavigate();
 
@@ -66,12 +66,12 @@ const Landing = () => {
       <div className="landing-hero">
         <div className="landing-hero-text">
           <h1 className="landing-hero-header">
-            ایران‌سند؛ ساده، هوشمند، قدرتمند
+            ایران‌سند؛
+            <br className="landing-hero-header-br" /> ساده، هوشمند، قدرتمند
           </h1>
           <p className="landing-hero-body">
-            با ایران‌سند، اسناد خود را به صورت آنلاین ایجاد، ویرایش و مدیریت
-            کنید! ✨ همکاری در لحظه، ذخیره‌سازی ابری و ابزارهای پیشرفته—همه در
-            یک پلتفرم سریع و امن.
+            با ایران‌سند، اسناد خود را به صورت برخط ایجاد، ویرایش و مدیریت کنید!{" "}
+            <br /> ✨ همکاری در لحظه، ذخیره‌سازی ابری و ابزارهای پیشرفته ...
           </p>
           <button
             className="landing-hero-button"
@@ -98,14 +98,14 @@ const Landing = () => {
             <img
               className="landing-services-grid-item-img"
               src={Service4}
-              alt="ویرایش آنلاین اسناد"
+              alt="ویرایش برخط اسناد"
             />
             <h2 className="landing-services-grid-item-title">
               ویرایش آنلاین اسناد
             </h2>
             <div className="landing-services-grid-item-body">
               <p>
-                ویرایش همزمان اسناد به صورت آنلاین با قابلیت ذخیره‌سازی خودکار و
+                ویرایش همزمان اسناد به صورت برخط با قابلیت ذخیره‌سازی خودکار و
                 تاریخچه تغییرات
               </p>
             </div>
@@ -124,7 +124,7 @@ const Landing = () => {
             <h2 className="landing-services-grid-item-title">همکاری تیمی</h2>
             <div className="landing-services-grid-item-body">
               <p>
-                امکان کار تیمی روی اسناد با تعیین سطوح دسترسی مختلف برای هر عضو
+                امکان کار تیمی روی اسناد با تعیین سطح دسترسی مختلف برای هر عضو
                 تیم
               </p>
             </div>
@@ -179,8 +179,8 @@ const Landing = () => {
           <h1 className="landing-stats-item-number">
             {/* {inView ? ( */}
             <CountUp
-              end={100000}
-              duration={5}
+              end={10}
+              duration={3}
               separator=","
               formattingFn={toPersianDigit}
             />
@@ -189,43 +189,43 @@ const Landing = () => {
             )} */}
           </h1>
           <p className="landing-stats-item-desc">کاربر فعال</p>
-          <FaUserLarge />
+          <FaUser className="landing-stats-item-icon" />
         </div>
         <div className="landing-stats-item">
           <h1 className="landing-stats-item-number">
             <CountUp
-              end={200000}
-              duration={5}
+              end={35}
+              duration={3}
               separator=","
               formattingFn={toPersianDigit}
             />
           </h1>
           <p className="landing-stats-item-desc">سند منتشر شده</p>
-          <IoIosDocument />
+          <HiDocumentDuplicate className="landing-stats-item-icon" />
         </div>
         <div className="landing-stats-item">
           <h1 className="landing-stats-item-number">
             <CountUp
-              end={15}
-              duration={3}
+              end={2}
+              duration={1}
               separator=","
               formattingFn={toPersianDigit}
             />
           </h1>
           <p className="landing-stats-item-desc">زبان تحت پوشش</p>
-          <TbLanguage />
+          <TbLanguage className="landing-stats-item-icon" />
         </div>
         <div className="landing-stats-item">
           <h1 className="landing-stats-item-number">
             <CountUp
-              end={19}
-              duration={3}
+              end={7}
+              duration={2}
               separator=","
               formattingFn={toPersianDigit}
             />
           </h1>
-          <p className="landing-stats-item-desc">کشور تحت سرویس</p>
-          <IoMdFlag />
+          <p className="landing-stats-item-desc">کشور تحت پوشش</p>
+          <FaLocationDot className="landing-stats-item-icon" />
         </div>
       </div>
       <div className="landing-join">
@@ -244,22 +244,21 @@ const Landing = () => {
               ایران‌سند در یک نگاه
             </h2>
             <p className="landing-join-body-content-text">
-              ایران‌سند، پلتفرمی هوشمند و بومی است که با هدف بهبود تجربه کاربران
-              برای ایجاد، ویرایش و مدیریت اسناد به صورت آنلاین آغاز به فعالیت
-              کرده است! با قابلیت‌های پیشرفته‌ای مانند ویرایش همزمان، ذخیره‌سازی
+              ایران‌سند، سکویی هوشمند و بومی است که با هدف بهبود تجربه کاربران
+              در ایجاد، ویرایش و مدیریت اسناد به صورت آنلاین آغاز به فعالیت کرده
+              است! با قابلیت‌های پیشرفته‌ای مانند ویرایش همزمان، ذخیره‌سازی
               ابری، پشتیبانی از فرمت‌های مختلف و ابزارهای هوشمند نوشتاری،
               ایران‌سند تجربه‌ای سریع، امن و کاربرپسند را در اختیار شما قرار
-              می‌دهد. چه برای کارهای شخصی، تحصیلی یا حرفه‌ای نیاز به تهیه سند
-              داشته باشید، این پلتفرم به شما کمک می‌کند تا به راحتی محتوای خود
-              را ایجاد و به اشتراک بگذارید. با دسترسی از هر دستگاه و هر مکان،
-              ایران‌سند همراه همیشگی شما در دنیای دیجیتال است! 🚀
+              می‌دهد. ایران سند مناسب تولید و اشتراک گذاری اسناد برای انواع
+              کارهای شخصی، تحصیلی، شغلی و حرفه ای است. ایران‌سند همراه همیشگی
+              شما در دنیای دیجیتال است!
             </p>
             <button
               className="landing-join-body-content-button"
               type="button"
               onClick={handleJoinClick}
             >
-              ثبت نام کنید
+              شروع کنید 🚀
             </button>
           </div>
         </div>
@@ -282,13 +281,13 @@ const Landing = () => {
             <li className="landing-footer-list-item">
               {" "}
               <MdLocationPin />
-              تهران، خیابان رسالت، خیابان هنگام، خیابان دانشگاه علم و صنعت
-              ایران، دانشگاه علم و صنعت ایران، دانشکده مهندسی کامپیوتر
+              تهران، تهران، خیابان رسالت، خیابان هنگام، خیابان دانشگاه علم و
+              صنعت ایران، دانشگاه علم و صنعت ایران، دانشکده مهندسی کامپیوتر
             </li>
           </ul>
         </div>
         <div className="landing-footer-navigate">
-          <h1 className="landing-footer-title">لینک‌ها مفید</h1>
+          <h1 className="landing-footer-title">لینک‌های مفید</h1>
           <ul className="landing-footer-list">
             <li className="landing-footer-list-item">
               <Link to="/signup">ثبت نام</Link>

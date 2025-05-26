@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import "../Styles/Loading.css";
+import LogoIcon from "../src/icons/logo.svg";
 
 export default function Loading() {
   return (
@@ -43,7 +44,9 @@ export default function Loading() {
           خوش آمدید
         </motion.h1>
       </motion.div>
-      <motion.h1 className="loading-banner">ایران سند</motion.h1>
+      <motion.div className="loading-banner">
+        <img src={LogoIcon} alt="ایران سند" />
+      </motion.div>
     </>
   );
 }

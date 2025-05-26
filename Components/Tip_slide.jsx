@@ -2,7 +2,7 @@ import "react";
 import styles from "../Styles/Tip_slide.module.css";
 import React, { useState, useRef, useEffect } from "react";
 
-const Tip_slide = ({ text_list, className ,interval}) => {
+const Tip_slide = ({ text_list, className, interval }) => {
   const slide_interval = interval ? interval : 5000;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedCircle, setSelectedCircle] = useState("1");
@@ -29,7 +29,6 @@ const Tip_slide = ({ text_list, className ,interval}) => {
     slideToIndex(index);
   };
 
-
   useEffect(() => {
     const interval = setInterval(() => {
       const nextIndex = (currentIndex + 1) % text_list.length;
@@ -37,7 +36,7 @@ const Tip_slide = ({ text_list, className ,interval}) => {
     }, slide_interval);
 
     return () => clearInterval(interval);
-  }, [currentIndex,]);
+  }, [currentIndex]);
 
   const currentTip = text_list[currentIndex];
 
@@ -66,7 +65,7 @@ const Tip_slide = ({ text_list, className ,interval}) => {
             <circle
               className={styles.tipCircle}
               value={item.id}
-              fill={selectedCircle == item.id ? "white" : "#B2B2B2"}
+              fill={selectedCircle == item.id ? "#D4AF37" : "#B2B2B2"}
             />
           </svg>
         ))}

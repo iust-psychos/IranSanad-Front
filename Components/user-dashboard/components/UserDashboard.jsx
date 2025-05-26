@@ -54,14 +54,14 @@ export default function UserDashboard() {
     <div className="user-dashboard">
       <menu className="navbar">
         <button className="menu-logo">
-          <IconLogo />
+          <IconLogo data-testid="icon-logo" />
         </button>
-        <UserProfileDropdown />
+        <UserProfileDropdown data-testid="user-profile" />
       </menu>
       <menu className="utility">
         <div className="menu-search">
           <button onClick={handleSearch}>
-            <IconSearch />
+            <IconSearch data-testid="icon-search" />
           </button>
           <input
             type="text"
@@ -98,7 +98,7 @@ export default function UserDashboard() {
                   : ""}
               </th>
               <th>
-                <IconPlus />
+                <IconPlus data-testid="icon-plus-fill" />
               </th>
             </tr>
           </thead>

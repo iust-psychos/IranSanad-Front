@@ -2,8 +2,8 @@ import { IconVerticalOptions } from "./Icons.jsx";
 import { Menu } from "@base-ui-components/react/menu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { deleteDocument } from "../../../Managers/user-dashboard-manager.js";
-import { useDeleteDocument } from "../../../hooks/useDeleteDocument.js";
+import { deleteDocument } from "@/Managers/user-dashboard-manager.js";
+import { useDeleteDocument } from "@/hooks/useDeleteDocument.js";
 import DocumentRenameModal from "./DocumentRenameModal.jsx";
 import { useState } from "react";
 
@@ -22,6 +22,7 @@ export default function DocumentOptionsDropdown({
         <Menu.Trigger
           className="user-dashboard-dropdown dropdown-button"
           onClick={handleIgnoreClick}
+          data-testid="document-options-trigger"
         >
           <IconVerticalOptions />
         </Menu.Trigger>

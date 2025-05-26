@@ -15,6 +15,8 @@ import { Tooltip } from "react-tooltip";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 import { RingLoader } from "react-spinners";
 import CookieManager from "../Managers/CookieManager.js";
+import LogoIcon from "../src/icons/logo.svg";
+
 const SignUp = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -93,9 +95,13 @@ const SignUp = () => {
         showErrorToast(err.response.data.message);
       } else {
         const validationErrors = {};
-        err.inner.forEach((error) => {
-          validationErrors[error.path] = error.message;
-        });
+        if (err.inner !== undefined) {
+          err.inner.forEach((error) => {
+            validationErrors[error.path] = error.message;
+          });
+        } else {
+          validationErrors[0] = "مشکلی پیش آمد.";
+        }
         setErrors(validationErrors);
       }
     } finally {
@@ -127,8 +133,10 @@ const SignUp = () => {
       navigate("/dashboard");
     } catch (err) {
       if (err.name == "AxiosError") {
-        showErrorToast(err.response.data.message);
+        console.log(err);
+        showErrorToast(err.response.data.code[0]);
       } else {
+        console.log(err);
         setErrorValidationCode(err.message);
       }
     } finally {
@@ -158,12 +166,10 @@ const SignUp = () => {
         )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
-            <img src="../Images/" className={styles.ImageTitle} />
-            <div className={styles.Title}>
-              ایران
-              <br />
-              سند
-            </div>
+            <img src={LogoIcon} className={styles.ImageTitle} />
+            {/* <div className={styles.Title}>
+              <img src={LogoIcon} alt="ایران سند" />
+            </div> */}
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
@@ -199,6 +205,7 @@ const SignUp = () => {
                     id="username_tooltip"
                     className={styles.errors}
                     content={errors.username}
+                    data-testid="username-error"
                   />
                 )}
               </div>
@@ -339,7 +346,7 @@ const SignUp = () => {
                   className={styles.inputsBoxLabels}
                   htmlFor="validationCode"
                 >
-                  کد ارسال شده به ایمیل
+                  کد تایید
                 </label>
                 <br />
                 <Input

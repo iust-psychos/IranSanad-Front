@@ -1,0 +1,27 @@
+// import { render, screen } from '@testing-library/react';
+// import { describe, it, expect, vi, beforeEach } from 'vitest';
+// import ContentEditor from '../Components/ContentEdit/ContentEditor';
+// import { MemoryRouter } from 'react-router-dom';
+
+// vi.mock('react-router-dom', async () => {
+//   const actual = await vi.importActual('react-router-dom');
+//   return {
+//     ...actual,
+//     useLoaderData: vi.fn(() => ({ title: 'Test Document' })),
+//     useParams: () => ({ doc_uuid: '123' })
+//   };
+// });
+
+// describe('ContentEditor', () => {
+//   it('renders all main elements', () => {
+//     render(
+//       <MemoryRouter>
+//         <ContentEditor />
+//       </MemoryRouter>
+//     );
+
+//     expect(screen.getByRole('textbox', { name: /content-name/i })).toBeInTheDocument();
+//     expect(screen.getByText(/اشتراک گذاری/i)).toBeInTheDocument();
+//     expect(screen.getByTestId('logo-button')).toBeInTheDocument();
+//   });
+// });

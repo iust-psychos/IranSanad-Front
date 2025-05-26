@@ -14,6 +14,7 @@ import { Tooltip } from "react-tooltip";
 import CookieManager from "../Managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
 import { RingLoader } from "react-spinners";
+import LogoIcon from "../src/icons/logo.svg";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -100,12 +101,7 @@ const Login = () => {
         )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
-            <img src="../Images/" className={styles.ImageTitle} />
-            <div className={styles.Title}>
-              ایران
-              <br />
-              سند
-            </div>
+            <img src={LogoIcon} className={styles.ImageTitle} />
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}
@@ -115,8 +111,8 @@ const Login = () => {
             <span className={styles.loginTitle}>ورود به حساب</span>
 
             <form onSubmit={handleSubmit} className={styles.inputsBox}>
-              <div>
-                <label className={styles.inputsBoxLabels} htmlFor="username">
+              <div className={styles.inputsBoxUsername}>
+                <label className={styles.inputsBoxLabels} htmlFor="email">
                   ایمیل
                 </label>
                 <br />
@@ -155,7 +151,8 @@ const Login = () => {
                   content={
                     "کلمه عبور باید حداقل به طول 8 و شامل حروف بزرگ و کوچک و حداقل یک عدد و یک کارکتر خاص باشد"
                   }
-                  place="left-end"
+                  place="left"
+                  positionStrategy="fixed"
                 />
                 <br />
                 <div className={styles.passwordInputWrapper}>
