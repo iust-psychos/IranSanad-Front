@@ -109,6 +109,17 @@ function Root() {
   return isLoading ? <Loading /> : <Navigate to="/landing" />;
 }
 
+function updateFavicon(mode) {
+  const favicon =
+    document.getElementById("favicon") || document.createElement("link");
+  favicon.id = "favicon";
+  favicon.rel = "icon";
+  favicon.type = "image";
+  favicon.href = mode ? "/logo_dark.png" : "/logo_light.png";
+  document.head.appendChild(favicon);
+  console.log(document);
+}
+
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -132,6 +143,10 @@ export default function App() {
       "data-theme",
       isDarkMode ? "dark" : "light"
     );
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    updateFavicon(isDarkMode);
   }, [isDarkMode]);
 
   return (
