@@ -22,6 +22,11 @@
     right: 5%;
 }
 
+.loading-logo {
+  width: 60px;
+  height: 60px;
+}
+
 .loading-container {
     position: fixed; 
     top: 50%;

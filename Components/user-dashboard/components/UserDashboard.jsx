@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "../styles/user-dashboard.css";
-import { IconLogo, IconPlus, IconSearch, IconPlusFill } from "./Icons.jsx";
+import { IconPlus, IconSearch, IconPlusFill } from "./Icons.jsx";
 import DocumentOptionsDropdown from "./DocumentOptionsDropdown.jsx";
 import DocumentSortByDropdown from "./DocumentSortByDropdown.jsx";
 import UserProfileDropdown from "./UserProfileDropdown.jsx";
@@ -9,6 +9,9 @@ import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { toPersianDate } from "../../../Scripts/persian-date-converter.js";
 import { createDocument } from "../../../Managers/user-dashboard-manager.js";
 import constants from "../../../Managers/constants.js";
+import { useTheme } from "../../../src/ThemeContext";
+import logo_dark from "/logo_dark.png";
+import logo_light from "/logo_light.png";
 
 export default function UserDashboard() {
   const searchRef = useRef();
@@ -16,6 +19,8 @@ export default function UserDashboard() {
   const fetchedDocuments = useLoaderData();
   const [documents, setDocuments] = useState(fetchedDocuments);
   const navigate = useNavigate();
+
+  const { isDarkMode } = useTheme();
 
   const handleSearch = () => {
     const searchValue = searchRef.current.value;
@@ -53,8 +58,12 @@ export default function UserDashboard() {
   return (
     <div className="user-dashboard">
       <menu className="navbar">
-        <button className="menu-logo">
-          <IconLogo data-testid="icon-logo" />
+        <button className="menu-logo" onClick={() => navigate("/landing")}>
+          <img
+            style={{ width: "50px", height: "50px" }}
+            src={isDarkMode ? logo_dark : logo_light}
+            alt="لوگو ایران سند"
+          />
         </button>
         <UserProfileDropdown data-testid="user-profile" />
       </menu>

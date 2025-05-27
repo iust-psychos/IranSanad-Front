@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import "../Styles/Loading.css";
-import LogoIcon from "../src/icons/logo.svg";
+import { useTheme } from "../src/ThemeContext";
+import logo_dark from "/logo_dark.png";
+import logo_light from "/logo_light.png";
 
 export default function Loading() {
+  const { isDarkMode } = useTheme();
   return (
     <>
       <motion.div className="loading-container">
@@ -45,7 +48,11 @@ export default function Loading() {
         </motion.h1>
       </motion.div>
       <motion.div className="loading-banner">
-        <img src={LogoIcon} alt="ایران سند" />
+        <img
+          src={isDarkMode ? logo_dark : logo_light}
+          alt="ایران سند"
+          className="loading-logo"
+        />
       </motion.div>
     </>
   );

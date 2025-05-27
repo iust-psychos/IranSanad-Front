@@ -4,7 +4,7 @@ import UserProfileDropdown from "../user-dashboard/components/UserProfileDropdow
 import "./content-editor.css";
 import { IconComment, IconHistory, IconShare } from "./Icons";
 import Share from "../Share";
-import { useParams, useLoaderData } from "react-router-dom";
+import { useParams, useLoaderData, useNavigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { renameDocument } from "../../Managers/user-dashboard-manager";
 import HistoryModal from "./HistoryModal";
@@ -31,6 +31,7 @@ const ContentEditor = () => {
   const [editor] = useLexicalComposerContext();
   /* Added By Erfan */
   const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
 
   const shareModalRef = useRef(null);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -97,8 +98,7 @@ const ContentEditor = () => {
       className={`content-editor ${openCommentSystem ? "with-comments" : ""}`}
     >
       <menu className="navbar">
-        <button className="menu-logo">
-          {/* <IconLogo /> */}
+        <button className="menu-logo" onClick={() => navigate("/landing")}>
           <img
             style={{ width: "50px", height: "50px" }}
             src={isDarkMode ? logo_dark : logo_light}
