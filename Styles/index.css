@@ -45,7 +45,6 @@ body {
   --toolbar-bg: #F0F0F0;
   --button-bg: #D4AF37;
   --button-hover: #B7950B;
-  /* --logo-url: url('../src/Images/logo_light.png'); */
 }
 
 [data-theme="dark"] {
@@ -67,5 +66,4 @@ body {
   --toolbar-bg: #555454;
   --button-bg: #D4AF37;
   --button-hover: #FFD700;
-  /* --logo-url: url('../src/Images/logo_dark.png'); */
 }

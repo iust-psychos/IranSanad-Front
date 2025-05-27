@@ -25,6 +25,7 @@ import Landing from "../Components/Landing";
 import { isAuthenticated } from "../Utilities/Auth/AuthManager";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { editorConfig } from "../Components/ContentEdit/editor-config";
+import { ThemeContext } from "./ThemeContext";
 
 const ProtectedRoute = ({
   isAuthenticated,
@@ -117,7 +118,6 @@ function updateFavicon(mode) {
   favicon.type = "image";
   favicon.href = mode ? "/logo_dark.png" : "/logo_light.png";
   document.head.appendChild(favicon);
-  console.log(document);
 }
 
 export default function App() {
@@ -150,7 +150,7 @@ export default function App() {
   }, [isDarkMode]);
 
   return (
-    <>
+    <ThemeContext.Provider value={{ isDarkMode }}>
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -164,6 +164,6 @@ export default function App() {
         theme="colored"
       />
       <RouterProvider router={router} />
-    </>
+    </ThemeContext.Provider>
   );
 }
