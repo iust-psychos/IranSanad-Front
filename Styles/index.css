@@ -67,8 +67,3 @@ body {
   --button-bg: #D4AF37;
   --button-hover: #FFD700;
 }
-
-/* *::selection {
-  color: white;
-  background-color: var(--color-primary);
-} */

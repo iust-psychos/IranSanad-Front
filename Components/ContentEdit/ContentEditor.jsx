@@ -1,24 +1,24 @@
 import { useRef, useState, useEffect } from "react";
 import Editor from "./Editor";
-import { IconLogo } from "../user-dashboard/components/Icons";
 import UserProfileDropdown from "../user-dashboard/components/UserProfileDropdown";
 import "./content-editor.css";
 import { IconComment, IconHistory, IconShare } from "./Icons";
 import Share from "../Share";
-import { useParams } from "react-router-dom";
-import { useLoaderData } from "react-router-dom";
+import { useParams, useLoaderData, useNavigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { renameDocument } from "../../Managers/user-dashboard-manager";
 import HistoryModal from "./HistoryModal";
 import { getMenuBlueprint } from "./menu-bar-config";
-import MenubarDropdown from "./MenuBarDropdown";
+import MenubarDropdown from "./MenubarDropdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import FindReplaceModal from "./FindReplaceModal";
-
-/* Added By Erfan */
 import Commentsystem from "../Comment/CommentSystem";
 import CookieManager from "../../Managers/CookieManager";
 import axios from "axios";
+import { useTheme } from "../../src/ThemeContext";
+import logo_dark from "/logo_dark.png";
+import logo_light from "/logo_light.png";
+
 const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
 
 const ContentEditor = () => {
@@ -29,17 +29,20 @@ const ContentEditor = () => {
   const nameRef = useRef();
   const triggeredByCode = useRef(false);
   const [editor] = useLexicalComposerContext();
-  /* Share Modal */
+  /* Added By Erfan */
+  const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
+
   const shareModalRef = useRef(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
 
-  /* Added By Erfan */
   const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
 
   const [openCommentSystem, setOpenCommentSystem] = useState(false);
   const [user, setUser] = useState(null);
   const token = CookieManager.LoadToken();
+
   useEffect(() => {
     axios
       .get(`${getUserInfoAPI}`, {
@@ -95,8 +98,12 @@ const ContentEditor = () => {
       className={`content-editor ${openCommentSystem ? "with-comments" : ""}`}
     >
       <menu className="navbar">
-        <button className="menu-logo">
-          <IconLogo />
+        <button className="menu-logo" onClick={() => navigate("/landing")}>
+          <img
+            style={{ width: "50px", height: "50px" }}
+            src={isDarkMode ? logo_dark : logo_light}
+            alt=""
+          />
         </button>
         <div className="document-header">
           <input

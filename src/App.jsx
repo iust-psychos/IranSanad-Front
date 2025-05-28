@@ -25,6 +25,7 @@ import Landing from "../Components/Landing";
 import { isAuthenticated } from "../Utilities/Auth/AuthManager";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { editorConfig } from "../Components/ContentEdit/editor-config";
+import { ThemeContext } from "./ThemeContext";
 
 const ProtectedRoute = ({
   isAuthenticated,
@@ -109,6 +110,16 @@ function Root() {
   return isLoading ? <Loading /> : <Navigate to="/landing" />;
 }
 
+function updateFavicon(mode) {
+  const favicon =
+    document.getElementById("favicon") || document.createElement("link");
+  favicon.id = "favicon";
+  favicon.rel = "icon";
+  favicon.type = "image";
+  favicon.href = mode ? "/logo_dark.png" : "/logo_light.png";
+  document.head.appendChild(favicon);
+}
+
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -134,8 +145,12 @@ export default function App() {
     );
   }, [isDarkMode]);
 
+  useEffect(() => {
+    updateFavicon(isDarkMode);
+  }, [isDarkMode]);
+
   return (
-    <>
+    <ThemeContext.Provider value={{ isDarkMode }}>
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -149,6 +164,6 @@ export default function App() {
         theme="colored"
       />
       <RouterProvider router={router} />
-    </>
+    </ThemeContext.Provider>
   );
 }
