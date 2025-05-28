@@ -9,7 +9,7 @@ import ReactDOM from "react-dom";
 import { renameDocument } from "../../Managers/user-dashboard-manager";
 import HistoryModal from "./HistoryModal";
 import { getMenuBlueprint } from "./menu-bar-config";
-import MenubarDropdown from "./MenuBarDropdown";
+import MenubarDropdown from "./MenubarDropdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import FindReplaceModal from "./FindReplaceModal";
 import Commentsystem from "../Comment/CommentSystem";
