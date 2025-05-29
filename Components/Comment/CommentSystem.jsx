@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { showErrorToast, showSuccessToast } from "../../Utilities/Toast.js";
+import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
 import "./Comment.css";
-import { IconBack } from "../ContentEdit/Icons";
+import { IconBack } from "@/pages/ContentEdit/Icons";
 import axios from "axios";
-import CookieManager from "../../Managers/CookieManager";
+import CookieManager from "@/managers/CookieManager";
 import { format, newDate } from "date-fns-jalali";
 import { parseISO } from "date-fns";
 import { faIR } from "date-fns-jalali/locale";
-import { toPersianDigit } from "../../Scripts/persian-number-converter.js";
+import { toPersianDigit } from "@/utils/persianNumberConverter.js";
 
 const commentsBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/document";
 const replyBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/commentreply";

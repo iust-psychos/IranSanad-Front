@@ -13,9 +13,9 @@
   background-color: var(--editor-outside-bg);
 }
 
-.editor-input {
+/* .editor-input {
   display: inline-block;
-}
+} */
 
 /* Styles For Paging */
 .editor-wrapper {
@@ -35,7 +35,7 @@
 .editor-page {
   background: white;
   margin-bottom: 20px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
@@ -43,10 +43,10 @@
   margin-bottom: 0;
 }
 
-.editor-input {
-  min-height: 900px; /* Leave some space for margins */
+/* .editor-input {
+  min-height: 900px; 
   outline: none;
-}
+} */
 
 .pages-container {
   scroll-behavior: smooth;
@@ -72,7 +72,7 @@
   margin-left: 10px;
   padding: 2px 8px;
   border-radius: 3px;
-  background: rgba(0,0,0,0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .editor-page {
@@ -82,15 +82,16 @@
   overflow: hidden;
 }
 
-.editor-input {
+/* .editor-input {
   min-height: calc(100% - 40px);
   padding: 0;
   margin: 0;
   outline: none;
   border: none;
-}
+} */
 
-.editor-page::before, .editor-page::after {
+.editor-page::before,
+.editor-page::after {
   content: none;
 }
 .active-users-panel {
@@ -104,7 +105,8 @@ table {
   border-collapse: collapse;
 }
 
-td, th {
+td,
+th {
   border: 1px solid #ddd;
   padding: 8px;
 }

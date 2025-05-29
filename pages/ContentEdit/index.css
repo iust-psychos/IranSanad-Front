@@ -1,0 +1,891 @@
+.content-editor * {
+  font-family: "Vazir";
+}
+
+.content-editor {
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.content-editor menu.navbar {
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  color: var(--text-primary);
+  padding: 0.25rem 1.5rem;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  /* grid-row: 1/2;
+  grid-column: 1/-1; */
+  width: 100%;
+  background-color: var(--navbar-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.content-editor .navbar .menu-logo {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.content-editor .navbar .document-header {
+  margin-left: auto;
+}
+
+.content-editor .navbar .content-name {
+  /* background-color: rgb(255, 255, 255, 0.5); */
+  color: var(--accent-gold-hover);
+  background-color: transparent;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 0.05rem solid transparent;
+  padding-inline: 0.5rem;
+  padding-block: 0.2rem;
+  /* height: 2rem; */
+  /* margin-bottom: 0.1rem; */
+}
+
+.content-editor .navbar .content-name:hover,
+.content-editor .navbar .content-name:focus {
+  border: 0.05rem solid var(--accent-gold);
+}
+
+.content-editor .navbar .menubar {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: auto;
+}
+
+.content-editor .navbar .menubar {
+  display: flex;
+  gap: 0.1rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: auto;
+}
+
+.content-editor .navbar .menubar button {
+  padding: 0.25rem;
+  background-color: transparent;
+  border: none;
+  color: var(--accent-gold);
+}
+
+.content-editor .navbar .menubar button:hover {
+  /* background-color: #ae8ee6; */
+  background-color: rgba(212, 175, 55, 0.2);
+}
+
+.content-editor menu.navbar .menu-button {
+  border-radius: 999px;
+  padding: 0.35rem 0.4rem;
+  cursor: pointer;
+  border: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  background-color: inherit;
+  border: 1px solid var(--accent-gold);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-editor menu.navbar .menu-button svg path {
+  fill: var(--accent-gold);
+}
+
+/* .content-editor .navbar .menu-share {
+  background-color: #7f62e0;
+  font-size: 1rem;
+  border-radius: 999px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.4rem;
+} */
+
+.content-editor .navbar .menu-comment {
+}
+
+.content-editor .navbar .menu-history {
+}
+
+.content-editor .navbar .menu-share {
+}
+
+.content-editor .navbar .menu-profile {
+  background: none;
+  border: none;
+  outline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.content-editor .navbar .menu-profile:hover {
+  /* box-shadow: 0 0 0 4px rgb(222, 222, 222, 0.45);
+  background-color: rgba(222, 222, 222, 0.4); */
+  cursor: pointer;
+}
+
+.content-editor .navbar .menu-profile img {
+  width: 3.2rem;
+  outline: 0;
+}
+
+/* Share Modal */
+.share-modal-overlay {
+  /* position: fixed; */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.content-editor .toolbar {
+  position: fixed;
+  display: flex;
+  top: 3.75rem;
+  width: 100%;
+  /* border-radius: 999px; */
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: auto;
+  background-color: var(--toolbar-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.content-editor .toolbar .icon-button,
+.content-editor .toolbar .icon-dropdown {
+  border: none;
+  border-radius: 0.2rem;
+  padding: 0.4rem 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+}
+
+.content-editor .toolbar .icon-button svg,
+.content-editor .toolbar .icon-dropdown svg {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content-editor .toolbar .icon-button:hover:not(:disabled),
+.content-editor .toolbar .icon-dropdown:hover:not(:disabled) {
+  background-color: rgba(212, 175, 55, 0.2);
+}
+
+.content-editor .toolbar .icon-button:disabled,
+.content-editor .toolbar .icon-dropdown:disabled {
+  cursor: default;
+}
+.content-editor .toolbar .icon-button:disabled svg path,
+.content-editor .toolbar .icon-dropdown:disabled svg path {
+  fill: hsl(0, 0%, 40%);
+}
+
+.content-editor .toolbar .icon-button.active,
+.content-editor .toolbar .icon-dropdown.active {
+  background-color: rgba(212, 175, 55, 0.3);
+}
+
+/*********************TODO************************/
+/* .user-dashboard-dropdown.item-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+}
+
+.user-dashboard-dropdown.item-indicator-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--accent-gold);
+}
+
+.user-dashboard-dropdown.scroll-arrow {
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  background-color: rgba(212, 175, 55, 0.1);
+  padding-block: 0.25rem;
+  user-select: none;
+  cursor: default;
+} */
+.content-editor-dropdown.dropdown-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+  padding-inline: 0.6rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0;
+  border-radius: 999px;
+  transition: box-shadow 0.2s ease;
+}
+
+.content-editor-dropdown.dropdown-button:hover {
+  /* background-color: rgb(187, 161, 234, 0.8);
+  transform: scale(1.15); */
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+  /* background-color: rgba(212, 175, 55, 0.2); */
+  cursor: pointer;
+}
+
+.content-editor-dropdown.dropdown-button svg,
+.content-editor-dropdown.dropdown-button path {
+  height: min-content;
+  fill: black;
+}
+
+.content-editor-dropdown.dropdown-menu {
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 0.5rem;
+  outline: 0;
+  /* box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.1); */
+  max-height: calc(100vh - 130px);
+  overflow-y: auto;
+  /* scrollbar-gutter: stable; */
+}
+
+.content-editor-dropdown.dropdown-item:hover {
+  background-color: var(--accent-gold);
+  color: var(--text-primary);
+}
+
+.content-editor-dropdown.dropdown-item {
+  /* background-color: #f2f2f2; */
+  font-size: 0.9rem;
+  outline: 0;
+  cursor: default;
+  display: flex;
+  user-select: none;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+}
+/*********************************************/
+
+.content-editor .fix-scrollbar {
+  width: 100vw;
+  height: 7.3rem;
+  flex-shrink: 0;
+}
+
+.content-editor .editor-container {
+  flex: 1;
+  width: 100vw;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding-inline: 3rem;
+  background-color: var(--editor-outside-bg);
+}
+
+.content-editor .editor-input {
+  flex-shrink: 0;
+  width: 1094px;
+  height: 1320px;
+  margin-inline: auto;
+  margin-block: 1rem;
+  padding: 3rem;
+  background: var(--editor-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  outline: none;
+  font-size: 0.75rem;
+}
+
+.content-editor .editor-input .editor-text-bold {
+  font-weight: bold;
+}
+
+.content-editor .editor-input .editor-text-italic {
+  font-style: italic;
+}
+
+.content-editor .editor-input .editor-text-underline {
+  text-decoration: underline;
+}
+
+.content-editor .editor-input .editor-text-strikethrough {
+  text-decoration: line-through;
+}
+
+.content-editor .editor-input .editor-text-underlineStrikethrough {
+  text-decoration: underline line-through;
+}
+
+.content-editor .editor-input .editor-code {
+  /* color: black; */
+  padding: 0.15rem;
+  /* background-color: #eee; */
+  border: 1px solid #ccc;
+}
+
+.content-editor .editor-input .editor-highlight {
+  /* background-color: #ffff00; */
+}
+
+.history-modal * {
+  font-family: "Vazir";
+}
+
+.history-modal.popup {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  background-color: var(--primary-bg);
+  z-index: 1000;
+  display: grid;
+  grid-template-rows: max-content max-content 1fr;
+  grid-template-columns: 22rem 1fr;
+  grid-template-areas:
+    "sidebar-title navbar"
+    "sidebar-title toolbar"
+    "sidebar-content document";
+}
+
+.history-modal .sidebar-header-container {
+  grid-area: sidebar-title;
+  background-color: var(--navbar-bg);
+  color: var(--accent-gold);
+  height: 1fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.history-modal .sidebar-title {
+  /* color: white; */
+}
+
+.history-modal .sidebar-content-container {
+  grid-area: sidebar-content;
+  background-color: var(--secondary-bg);
+}
+
+.history-modal .sidebar-content-container {
+  display: flex;
+  flex-direction: column;
+  direction: rtl;
+  font-family: sans-serif;
+  overflow-y: auto;
+}
+
+.history-modal .sidebar-content-container .timeline-item {
+  padding: 1rem;
+  display: grid;
+  background-color: transparent;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  position: relative;
+  cursor: pointer;
+  border: none;
+}
+
+.history-modal .sidebar-content-container .timeline-item:hover {
+  background-color: rgba(212, 175, 55, 0.1);
+}
+
+.history-modal .sidebar-content-container .timeline-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin-left: 0.5rem;
+}
+
+.history-modal .sidebar-content-container .timeline-circle {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--button-bg);
+  border-radius: 50%;
+  background-color: var(--primary-bg);
+}
+
+.history-modal .sidebar-content-container .timeline-circle.selected {
+  border-width: 4px;
+}
+
+.history-modal .sidebar-content-container .timeline-connector {
+  width: 2px;
+  flex-grow: 1;
+  /* background-color: #aaa; */
+  margin-top: 4px;
+  height: 100%;
+}
+
+.history-modal .sidebar-content-container .timeline-content {
+  padding-right: 0.5rem;
+}
+
+.history-modal .sidebar-content-container .timeline-header {
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: right;
+  color: var(--text-primary);
+}
+
+.history-modal .sidebar-content-container .timeline-meta {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  gap: 0.5rem;
+  margin-top: 4px;
+}
+
+.history-modal .sidebar-content-container .avatar {
+  border-radius: 50%;
+  padding: 0.3rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  width: min-content;
+}
+
+.history-modal .sidebar-content-container .avatar svg {
+  height: 1.5rem;
+  width: fit-content;
+}
+.history-modal .sidebar-content-container .avatar path {
+  /* fill: black; */
+}
+
+.history-modal .sidebar-content-container .dot {
+  font-size: 1.2rem;
+  margin: 0 0.3rem;
+}
+
+.history-modal .sidebar-content-container .timeline-menu {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.history-modal .navbar {
+  grid-area: navbar;
+  background-color: var(--navbar-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+  padding: 0 1rem;
+}
+
+.history-modal .navbar .version-name {
+  background-color: rgb(255, 255, 255, 0.5);
+  margin-left: auto;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 0.05rem solid transparent;
+  padding-inline: 0.5rem;
+  padding-block: 0.2rem;
+  width: fit-content;
+}
+
+.history-modal .navbar button.restore {
+  background-color: #4f29ce;
+  border-radius: 999px;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  outline: none;
+}
+
+.history-modal .version-name:hover {
+  border: 0.05rem solid black;
+}
+
+.history-modal .toolbar {
+  grid-area: toolbar;
+  background-color: var(--toolbar-bg);
+  height: 3rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-right: 1rem;
+  gap: 1rem;
+}
+
+.history-modal .toolbar button {
+  border: none;
+  outline: none;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.history-modal .toolbar button:hover {
+  box-shadow: 0 0 0 4px rgba(187, 161, 234, 0.45);
+  background-color: rgba(187, 161, 234, 0.4);
+  cursor: pointer;
+}
+
+.history-modal .toolbar p {
+  color: var(--text-primary);
+}
+
+.history-modal .document {
+  grid-area: document;
+  overflow: auto;
+  background-color: var(--editor-outside-bg);
+}
+
+.history-modal .document .editor-container {
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: 1rem 3rem 3rem 3rem;
+}
+
+.history-modal .document .editor-container div {
+  background-color: var(--editor-bg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+}
+
+.history-modal .document .editor-input {
+  cursor: text;
+  width: 1020px;
+  height: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3rem;
+  background: #ffffff;
+  outline: none;
+  font-size: 1.2em;
+}
+
+.history-modal .close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 999px;
+}
+
+/* .history-modal .close:hover {
+  box-shadow: 0 0 0 4px rgba(80, 51, 137, 0.45);
+  background-color: rgba(80, 51, 137, 0.4);
+  cursor: pointer;
+} */
+/* Find & Replace */
+.FindReplaceModal-Popup {
+  background: var(--primary-bg);
+  color: var(--text-primary);
+  font-family: "Vazir";
+  width: 400px;
+  max-width: 90vw;
+  padding: 1.5rem;
+  top: 10%;
+  right: 10%;
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.FindReplaceModal-Content {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.FindReplaceModal-SearchGroup,
+.FindReplaceModal-ReplaceGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin: 0.5% 0;
+}
+
+.FindReplaceModal-Input {
+  border: 1px solid var(--text-secondary);
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-family: "Vazir";
+}
+
+.FindReplaceModal-Input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.FindReplaceModal-Actions {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  justify-content: flex-end;
+}
+
+.FindReplaceModal-ActionButton {
+  background: none;
+  border: none;
+  padding: 0.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.FindReplaceModal-Icon {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.FindReplaceModal-Result {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-right: auto;
+}
+
+.FindReplaceModal-ReplaceButton {
+  background-color: var(--primary-accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.1rem;
+  font-family: "Vazir";
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.FindReplaceModal-ReplaceButton:hover {
+  background-color: var(--primary-accent-dark);
+}
+
+.FindReplaceModal-ToggleButton {
+  position: absolute;
+  right: -6%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.FindReplaceModal-ToggleIcon {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  transition: transform 0.5s ease;
+  transform: rotate(0deg);
+}
+
+.FindReplaceModal-ToggleButton[aria-expanded="true"]
+  .FindReplaceModal-ToggleIcon {
+  transform: rotate(-90deg);
+}
+
+/* Close */
+.FindReplaceModal-CloseButton {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+@keyframes gold-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(212, 175, 55, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+  }
+}
+
+.content-editor .navbar .menu-button:focus,
+.content-editor .navbar .content-name:focus {
+  animation: gold-pulse 1.5s infinite;
+}
+
+/* Find & Replace */
+.FindReplaceModal-Popup {
+  background: var(--primary-bg);
+  color: var(--text-primary);
+  font-family: "Vazir";
+  width: 400px;
+  max-width: 90vw;
+  padding: 1.5rem;
+  top: 10%;
+  right: 10%;
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.FindReplaceModal-Content {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.FindReplaceModal-SearchGroup,
+.FindReplaceModal-ReplaceGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin: 0.5% 0;
+}
+
+.FindReplaceModal-Input {
+  border: 1px solid var(--text-secondary);
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-family: "Vazir";
+}
+
+.FindReplaceModal-Input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.FindReplaceModal-Actions {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  justify-content: flex-end;
+}
+
+.FindReplaceModal-ActionButton {
+  background: none;
+  border: none;
+  padding: 0.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.FindReplaceModal-Icon {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.FindReplaceModal-Result {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-right: auto;
+}
+
+.FindReplaceModal-ReplaceButton {
+  background-color: var(--primary-accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.1rem;
+  font-family: "Vazir";
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.FindReplaceModal-ReplaceButton:hover {
+  background-color: var(--primary-accent-dark);
+}
+
+.FindReplaceModal-ToggleButton {
+  position: absolute;
+  right: -6%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.FindReplaceModal-ToggleIcon {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  transition: transform 0.5s ease;
+  transform: rotate(0deg);
+}
+
+.FindReplaceModal-ToggleButton[aria-expanded="true"]
+  .FindReplaceModal-ToggleIcon {
+  transform: rotate(-90deg);
+}
+
+/* Close */
+.FindReplaceModal-CloseButton {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+}

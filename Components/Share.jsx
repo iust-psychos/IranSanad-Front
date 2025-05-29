@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import "../Styles/Share.css";
+import "@/styles/Share.css";
 import { GrAttachment } from "react-icons/gr";
 import { FaUser } from "react-icons/fa";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
@@ -10,8 +10,8 @@ import { HiChevronUpDown } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
-import CookieManager from "../Managers/CookieManager";
-import { showErrorToast, showSuccessToast } from "../Utilities/Toast.js";
+import CookieManager from "@/managers/CookieManager";
+import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
 
 const baseAPI = "http://iransanad.fiust.ir";
 const postPermissionsAPI =

@@ -4,28 +4,27 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom";
-import SignUp from "../Components/Sign_up";
-import Login from "../Components/Login";
-import Forgot_password from "../Components/Forgot_password";
-import UserDashboard from "../Components/user-dashboard/components/UserDashboard";
-import { userDashboardLoader } from "../Managers/user-dashboard-manager";
-import Loading from "../Components/Loading";
-import UserProfile from "../Components/UserProfile";
+import SignUp from "@/pages/SignUp/index";
+import Login from "@/pages/Login/index";
+import Forgot_password from "@/pages/ForgetPassword/index";
+import UserDashboard from "@/pages/UserDashboard/index";
+import { userDashboardLoader } from "@/managers/UserDashboardManager";
+import Loading from "@/components/Loading";
 import { ToastContainer } from "react-toastify";
-import ContentEditor from "../Components/ContentEdit/ContentEditor";
-import EmailVerification from "../Components/EmailVerification";
-import ErrorPage from "../Components/error/ErrorPage";
-import Share from "../Components/Share";
+import ContentEditor from "@/pages/ContentEdit/index";
+import EmailVerification from "@/Components/EmailVerification";
+import ErrorPage from "@/pages/Error/index";
+import Share from "@/components/Share";
+import UserProfile from "@/pages/UserProfile/index";
 import { useState, useEffect } from "react";
-import "../Styles/App.css";
+import "@/styles/App.css";
 import "react-toastify/dist/ReactToastify.css";
-import { contentEditorLoader } from "../Managers/content-editor-manager";
-import cookieManager from "../Managers/CookieManager";
-import Landing from "../Components/Landing";
-import { isAuthenticated } from "../Utilities/Auth/AuthManager";
+import { contentEditorLoader } from "@/managers/ContentEditorManager";
+import Landing from "@/pages/Landing/index";
+import { isAuthenticated } from "@/utils/AuthManager";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { editorConfig } from "../Components/ContentEdit/editor-config";
-import { ThemeContext } from "./ThemeContext";
+import { editorConfig } from "@/pages/ContentEdit/EditorConfig";
+import { ThemeContext } from "@/src/ThemeContext";
 
 const ProtectedRoute = ({
   isAuthenticated,

@@ -7,7 +7,7 @@
 
 @font-face {
   font-family: "Vazir";
-  src: url("../src/fonts/Vazir/fonts/webfonts/Vazirmatn-Regular.woff2")
+  src: url("/fonts/Vazir/fonts/webfonts/Vazirmatn-Regular.woff2")
     format("woff2");
   font-weight: normal;
   font-style: normal;
@@ -27,43 +27,43 @@ body {
 }
 
 :root {
-  --primary-bg: #FFFFFF;
-  --secondary-bg: #F8F8F8;
+  --primary-bg: #ffffff;
+  --secondary-bg: #f8f8f8;
   --text-primary: #333333;
   --text-secondary: #666666;
-  --accent-gold: #D4AF37;
-  --accent-gold-hover: #B7950B;
-  --border: #E0E0E0;
-  --card-bg: #FFFFFF;
-  --stats-bg: #F8F8F8;
-  --error: #D32F2F;
-  --table-header-bg: #1E1E1E;
-  --table-row-hover: #F0F0F0;
-  --navbar-bg: #1E1E1E;
-  --editor-bg: #FFFFFF;
-  --editor-outside-bg: #EAECF1;
-  --toolbar-bg: #F0F0F0;
-  --button-bg: #D4AF37;
-  --button-hover: #B7950B;
+  --accent-gold: #d4af37;
+  --accent-gold-hover: #b7950b;
+  --border: #e0e0e0;
+  --card-bg: #ffffff;
+  --stats-bg: #f8f8f8;
+  --error: #d32f2f;
+  --table-header-bg: #1e1e1e;
+  --table-row-hover: #f0f0f0;
+  --navbar-bg: #1e1e1e;
+  --editor-bg: #ffffff;
+  --editor-outside-bg: #eaecf1;
+  --toolbar-bg: #f0f0f0;
+  --button-bg: #d4af37;
+  --button-hover: #b7950b;
 }
 
 [data-theme="dark"] {
   --primary-bg: #121212;
-  --secondary-bg: #1E1E1E;
-  --text-primary: #E0E0E0;
-  --text-secondary: #A0A0A0;
-  --accent-gold: #D4AF37;
-  --accent-gold-hover: #FFD700;
+  --secondary-bg: #1e1e1e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --accent-gold: #d4af37;
+  --accent-gold-hover: #ffd700;
   --border: #333333;
-  --card-bg: #1E1E1E;
+  --card-bg: #1e1e1e;
   --stats-bg: #121212;
-  --error: #F44336;
-  --table-header-bg: #2A2A2A;
-  --table-row-hover: #2A2A2A;
-  --navbar-bg: #2A2a2a;
+  --error: #f44336;
+  --table-header-bg: #2a2a2a;
+  --table-row-hover: #2a2a2a;
+  --navbar-bg: #2a2a2a;
   --editor-bg: #262626;
   --editor-outside-bg: #121416;
   --toolbar-bg: #555454;
-  --button-bg: #D4AF37;
-  --button-hover: #FFD700;
+  --button-bg: #d4af37;
+  --button-hover: #ffd700;
 }

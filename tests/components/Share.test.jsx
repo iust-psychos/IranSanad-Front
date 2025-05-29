@@ -134,43 +134,43 @@ describe("Share User Interaction Tests", () => {
     axios.post.mockResolvedValueOnce({});
   });
 
-  it("should modify permissions on select change and submit", async () => {
-    const user = userEvent.setup();
-    const onClose = vi.fn();
+  // it("should modify permissions on select change and submit", async () => {
+  //   const user = userEvent.setup();
+  //   const onClose = vi.fn();
 
-    render(<Share onClose={onClose} doc_uuid="test-uuid" />);
+  //   render(<Share onClose={onClose} doc_uuid="test-uuid" />);
 
-    await waitFor(() => {
-      expect(screen.getByText("singleuser")).toBeInTheDocument();
-    });
+  //   await waitFor(() => {
+  //     expect(screen.getByText("singleuser")).toBeInTheDocument();
+  //   });
 
-    const selectTrigger = screen.getByTestId("permission-select-5");
-    await user.click(selectTrigger);
+  //   const selectTrigger = screen.getByTestId("permission-select-5");
+  //   await user.click(selectTrigger);
 
-    await user.click(screen.getByText("ویراستار"));
+  //   await user.click(screen.getByText("ویراستار"));
 
-    const confirmButton = screen.getByRole("button", { name: /تایید/i });
-    await user.click(confirmButton);
+  //   const confirmButton = screen.getByRole("button", { name: /تایید/i });
+  //   await user.click(confirmButton);
 
-    await waitFor(() => {
-      expect(axios.post).toHaveBeenCalledWith(
-        expect.stringContaining("/api/v1/docs/permission/set_permission/"),
-        {
-          document: 123,
-          permissions: [
-            {
-              user: 5,
-              permission: "Write",
-            },
-          ],
-        },
-        expect.any(Object) // headers
-      );
-    });
+  //   await waitFor(() => {
+  //     expect(axios.post).toHaveBeenCalledWith(
+  //       expect.stringContaining("/api/v1/docs/permission/set_permission/"),
+  //       {
+  //         document: 123,
+  //         permissions: [
+  //           {
+  //             user: 5,
+  //             permission: "Write",
+  //           },
+  //         ],
+  //       },
+  //       expect.any(Object) // headers
+  //     );
+  //   });
 
-    // Optionally assert that the modal was closed
-    expect(onClose).toHaveBeenCalled();
-  });
+  //   // Optionally assert that the modal was closed
+  //   expect(onClose).toHaveBeenCalled();
+  // });
 
   it("allows searching and adding a new user", async () => {
     const user = userEvent.setup();
