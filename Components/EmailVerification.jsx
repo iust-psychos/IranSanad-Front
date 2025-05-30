@@ -1,11 +1,11 @@
 import "react";
-import styles from "../Styles/Login.module.css";
+import styles from "@/styles/Login.module.css";
 import React, { useRef, useState } from "react";
-import { login_slides } from "../Scripts/mock_data";
+import { login_slides } from "@/utils/mockData";
 import { Input } from "@base-ui-components/react/input";
 import InfoIcon from "@mui/icons-material/Info";
-import Tip_slide from "./Tip_slide";
-import LoginManager from "../Managers/LoginManager";
+import Tip_slide from "@/components/TipSlide";
+import LoginManager from "@/managers/LoginManager";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -22,9 +22,7 @@ const EmailVerification = () => {
   const icon = useRef(null);
   const passwordHintBox = useRef(null);
   const validationSchema = yup.object().shape({
-    email: yup
-      .string()
-      .required("کد اجباری است"),
+    email: yup.string().required("کد اجباری است"),
   });
 
   const handleChange = (e) => {
@@ -132,7 +130,7 @@ const EmailVerification = () => {
                       state={{ email: formData.email }}
                       className={styles.forgetpasswordlink}
                     >
-                      ایمیل اشتباه است؟ 
+                      ایمیل اشتباه است؟
                     </Link>
                   </p>
                   <button type="submit" className={styles.submitBtn}>

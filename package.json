@@ -45,7 +45,8 @@
     "toastify": "^2.0.1",
     "y-websocket": "^3.0.0",
     "yjs": "^13.6.26",
-    "yup": "^1.6.1"
+    "yup": "^1.6.1",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
