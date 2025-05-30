@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
 import "@/styles/Loading.css";
 import { useTheme } from "@/src/ThemeContext";
-import logo_dark from "/images/logo_dark.png";
-import logo_light from "/images/logo_light.png";
+import { logo_dark , logo_light } from "../Constants/ImageConstants";
 
 export default function Loading() {
   const { isDarkMode } = useTheme();

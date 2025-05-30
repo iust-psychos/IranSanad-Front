@@ -9,8 +9,7 @@ import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { toPersianDate } from "@/utils/PersianDateConverter.js";
 import { createDocument } from "@/managers/UserDashboardManager.js";
 import { useTheme } from "@/src/ThemeContext";
-import logo_dark from "/images/logo_dark.png";
-import logo_light from "/images/logo_light.png";
+import { logo_dark , logo_light } from "../../Constants/ImageConstants.js";
 
 export default function UserDashboard() {
   const searchRef = useRef();
