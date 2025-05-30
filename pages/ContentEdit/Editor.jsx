@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { createWebsocketProvider } from "./Provider";
 import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
@@ -12,7 +11,6 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import ToolbarPlugin from "@/pages/ContentEdit/ToolbarPlugin";
-import { editorConfig } from "@/pages/ContentEdit/EditorConfig";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
 import "@/styles/EditorTable.css";
