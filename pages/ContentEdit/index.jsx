@@ -8,15 +8,13 @@ import { useParams, useLoaderData, useNavigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { renameDocument } from "@/managers/userDashboardManager";
 import HistoryModal from "@/pages/ContentEdit/HistoryModal";
-import { getMenuBlueprint } from "@/pages/ContentEdit/MenubarConfig";
-import MenubarDropdown from "@/pages/ContentEdit/MenubarDropdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import FindReplaceModal from "@/pages/ContentEdit/FindReplaceModal";
 import Commentsystem from "@/components/Comment/CommentSystem";
 import { useTheme } from "@/src/ThemeContext";
 import logo_dark from "/images/logo_dark.png";
 import logo_light from "/images/logo_light.png";
 import { useUserStore } from "@/store/userStore";
+import Menubar from "@/pages/ContentEdit/Menubar";
 
 const ContentEditor = () => {
   const { doc_uuid } = useParams();
@@ -33,8 +31,6 @@ const ContentEditor = () => {
   const shareModalRef = useRef(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
-
-  const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
 
   const [openCommentSystem, setOpenCommentSystem] = useState(false);
   const user = useUserStore((state) => state.user);
@@ -103,17 +99,7 @@ const ContentEditor = () => {
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
           />
-          <menu className="menubar">
-            {getMenuBlueprint(editor, () => setOpenFindReplaceDialog(true)).map(
-              (section) => (
-                <MenubarDropdown
-                  key={section.label}
-                  mainLabel={section.label}
-                  items={section.items}
-                />
-              )
-            )}
-          </menu>
+          <Menubar />
         </div>
 
         <button
@@ -152,13 +138,6 @@ const ContentEditor = () => {
 
       <HistoryModal open={openHistoryModal} setOpen={setOpenHistoryModal} />
 
-      {/* Added By Erfan  */}
-      {openFindReplaceDialog && (
-        <FindReplaceModal
-          onClose={() => setOpenFindReplaceDialog(false)}
-          isOpen={openFindReplaceDialog}
-        />
-      )}
       {openCommentSystem && (
         <Commentsystem
           documentId={doc_uuid}
@@ -169,7 +148,6 @@ const ContentEditor = () => {
 
       <div className="fix-scrollbar"></div>
       <Editor doc_uuid={doc_uuid} />
-      <HistoryModal open={openHistoryModal} setOpen={setOpenHistoryModal} />
     </div>
   );
 };
