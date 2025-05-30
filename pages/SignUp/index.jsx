@@ -166,7 +166,11 @@ const SignUp = () => {
         )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
-            <img src={LogoIcon} className={styles.ImageTitle} />
+            <img
+              src={LogoIcon}
+              style={{ width: "50px", height: "50px" }}
+              className={styles.ImageTitle}
+            />
             {/* <div className={styles.Title}>
               <img src={LogoIcon} alt="ایران سند" />
             </div> */}

@@ -101,7 +101,11 @@ const Login = () => {
         )}
         <div className={styles.InnerBox}>
           <div className={styles.detailsContainer}>
-            <img src={LogoIcon} className={styles.ImageTitle} />
+            <img
+              src={LogoIcon}
+              style={{ width: "50px", height: "50px" }}
+              className={styles.ImageTitle}
+            />
             <Tip_slide
               text_list={login_slides}
               className={styles.InformationContainer}

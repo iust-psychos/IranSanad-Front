@@ -1,5 +1,5 @@
 import { Menu } from "@base-ui-components/react/menu";
-import { DEFAULT_IMAGE } from "../../Constants/ImageConstants";
+import { DEFAULT_IMAGE } from "@/Constants/ImageConstants";
 import { IconUserProfileClose } from "./Icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
