@@ -13,8 +13,6 @@ import MenubarDropdown from "@/pages/ContentEdit/MenubarDropdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import FindReplaceModal from "@/pages/ContentEdit/FindReplaceModal";
 import Commentsystem from "@/components/Comment/CommentSystem";
-import CookieManager from "@/managers/CookieManager";
-import axios from "axios";
 import { useTheme } from "@/src/ThemeContext";
 import logo_dark from "/images/logo_dark.png";
 import logo_light from "/images/logo_light.png";
