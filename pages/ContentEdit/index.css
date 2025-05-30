@@ -329,6 +329,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   outline: none;
   font-size: 0.75rem;
+  line-height: 1.2rem;
 }
 
 .content-editor .editor-input .editor-text-bold {
@@ -354,7 +355,7 @@
 .content-editor .editor-input .editor-code {
   /* color: black; */
   padding: 0.15rem;
-  /* background-color: #eee; */
+  background-color: #eee;
   border: 1px solid #ccc;
 }
 
@@ -475,7 +476,7 @@
 
 .history-modal .sidebar-content-container .avatar {
   border-radius: 50%;
-  padding: 0.3rem;
+  /* padding: 0.3rem; */
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -512,7 +513,8 @@
 }
 
 .history-modal .navbar .version-name {
-  background-color: rgb(255, 255, 255, 0.5);
+  background-color: transparent;
+  color: var(--accent-gold-hover);
   margin-left: auto;
   border-radius: 0.5rem;
   font-size: 1rem;
@@ -520,11 +522,13 @@
   border: 0.05rem solid transparent;
   padding-inline: 0.5rem;
   padding-block: 0.2rem;
-  width: fit-content;
+}
+.history-modal .navbar .version-name:hover {
+  border: 0.05rem solid var(--accent-gold);
 }
 
 .history-modal .navbar button.restore {
-  background-color: #4f29ce;
+  background-color: var(--accent-gold);
   border-radius: 999px;
   color: white;
   padding: 0.4rem 0.8rem;
@@ -559,8 +563,8 @@
 }
 
 .history-modal .toolbar button:hover {
-  box-shadow: 0 0 0 4px rgba(187, 161, 234, 0.45);
-  background-color: rgba(187, 161, 234, 0.4);
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.3);
+  background-color: rgba(212, 175, 55, 0.3);
   cursor: pointer;
 }
 

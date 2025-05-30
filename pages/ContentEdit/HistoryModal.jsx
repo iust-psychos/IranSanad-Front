@@ -49,7 +49,7 @@ export default function HistoryModal({ open, setOpen }) {
                 <div className="timeline-line">
                   <div
                     className={`timeline-circle ${
-                      item.selected ? "selected" : ""
+                      index === 0 ? "selected" : ""
                     }`}
                   ></div>
                   {index < versions.length - 1 && (

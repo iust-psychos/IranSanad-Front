@@ -18,8 +18,7 @@ import axios from "axios";
 import { useTheme } from "@/src/ThemeContext";
 import logo_dark from "/images/logo_dark.png";
 import logo_light from "/images/logo_light.png";
-
-const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
+import { useUserStore } from "@/store/userStore";
 
 const ContentEditor = () => {
   const { doc_uuid } = useParams();
@@ -40,21 +39,11 @@ const ContentEditor = () => {
   const [openFindReplaceDialog, setOpenFindReplaceDialog] = useState(false);
 
   const [openCommentSystem, setOpenCommentSystem] = useState(false);
-  const [user, setUser] = useState(null);
-  const token = CookieManager.LoadToken();
+  const user = useUserStore((state) => state.user);
+  const fetchUser = useUserStore((state) => state.fetchUser);
 
   useEffect(() => {
-    axios
-      .get(`${getUserInfoAPI}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `JWT ${token}`,
-        },
-      })
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((error) => console.log(error));
+    fetchUser();
   }, []);
 
   useEffect(() => {
