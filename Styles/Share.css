@@ -2,7 +2,7 @@
 } */
 
 .share-area {
-    background-color: whitesmoke;
+    background-color: var(--primary-bg);
     border-radius: 10px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     position: absolute;
@@ -21,7 +21,7 @@
     font-size: 20px;
     font-weight: bold;
     margin: 2% 0;
-    color: black;
+    color: var(--text-primary);
 }
 
 .share-area-search-input {
@@ -31,7 +31,8 @@
 .share-area-search-input input {
     font-family: 'Vazir';
     font-size: 14px;
-    background-color: white;
+    background-color: var(--secondary-bg);
+    color: var(--text-primary);
     border-radius: 10px;
     border: none;
     width: 100%;
@@ -45,7 +46,7 @@
     font-size: 16px;
     font-weight: bold;
     margin: 1% 0;
-    color: black;
+    color: var(--text-primary);
 }
 
 .share-access-list {
@@ -67,7 +68,7 @@
 }
 
 .share-access-list-items::-webkit-scrollbar-thumb {
-    background: #AE8EE6;
+    background: var(--accent-gold);
     border-radius: 3px;
 }
 
@@ -78,7 +79,7 @@
 }
 
 .share-access-list-item:hover {
-    background-color: #E8E3F9;
+    background-color: var(--accent-gold);
 }
 
 .share-item-user {
@@ -113,7 +114,7 @@
     font-family: 'Vazir';
     font-size: 14px;
     font-weight: bold;
-    color: black;
+    color: var(--text-primary);
 }
 
 .share-item-email {
@@ -135,7 +136,7 @@
     font-size: 13px;
     font-weight: normal;
     margin: 0 3px 0 5px;
-    color: black;
+    color: var(--text-primary);
 }
 
 .share-item-status-tri {
@@ -155,18 +156,19 @@
 }
 
 .share-select-trigger:hover {
-    border: 1px solid #AE8EE6;
+    border: 1px solid var(--button-hover);
 }
   
 .share-select-icon {
     color: black;
+    fill: var(--text-primary);
     font-size: 16px;
 }
   
 .share-select-popup {
-    background: whitesmoke;
+    background: var(--secondary-bg);
     outline: none !important;
-    border: 0.5px solid #AE8EE6;
+    border: 0.5px solid var(--accent-gold);
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: 'Vazir';
@@ -190,7 +192,7 @@
     flex-direction: row;
     justify-content: space-between;
     padding: 0 5px;
-    color: black;
+    color: var(--text-primary);
 }
 
 .share-item-indicator {
@@ -198,7 +200,7 @@
 }
   
 .share-select-popup [data-highlighted] {
-    background-color: #E8E3F9;
+    background-color: var(--accent-gold);
     outline: none;
 }
   
@@ -280,7 +282,7 @@
 }
 
 .copy-button {
-    background-color: whitesmoke;
+    background-color: var(--text-secondary);
 }
 
 .copy-button svg {
@@ -293,8 +295,8 @@
 }
 
 .confirm-button {
-    background-color: #AE8EE6;
-    color: white;
+    background-color: var(--accent-gold);
+    color: var(--text-primary);
 }
 
 @media screen and (min-width:768px) {

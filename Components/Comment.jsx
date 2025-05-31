@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
-import "./Comment.css";
+import "../Styles/Comment.css";
 import { IconBack } from "@/pages/ContentEdit/Icons";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
@@ -12,7 +12,7 @@ import { toPersianDigit } from "@/utils/persianNumberConverter.js";
 const commentsBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/document";
 const replyBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/commentreply";
 
-export default function CommentSystem({ documentId, currentUser, onClose }) {
+export default function Comment({ documentId, currentUser, onClose }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
@@ -24,6 +24,7 @@ export default function CommentSystem({ documentId, currentUser, onClose }) {
   const [editReplyText, setEditReplyText] = useState("");
 
   const token = CookieManager.LoadToken();
+  const socketRef = useRef(null);
 
   // Convert Date
   const convertDate = (dateString) => {
@@ -32,52 +33,81 @@ export default function CommentSystem({ documentId, currentUser, onClose }) {
     return toPersianDigit(persianDate);
   };
 
-  // Get All Comments
+  // Web Socket
   useEffect(() => {
-    axios
-      .get(`${commentsBaseAPI}/${documentId}/comment`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `JWT ${token}`,
-        },
-      })
-      .then((response) => {
-        setComments(response.data);
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error("Error fetching comments:", error);
-        showErrorToast("خطا در بارگذاری یادداشت‌ها!");
+    const wsUrl = `ws://iransanad.fiust.ir/ws/comments/${documentId}/`;
+    socketRef.current = new WebSocket(wsUrl);
 
-        const mockData = [
-          {
-            id: "1",
-            text: "ابزار بالا نیاز به افزایش دارد.",
-            author: "حامد",
-            authorId: "user1",
-            createdAt: new Date(),
-            replies: [
-              {
-                id: "1-1",
-                text: "موافقم، مهران باید اصلاح کند.",
-                author: "کوروش",
-                authorId: "user2",
-                createdAt: new Date(),
-              },
-            ],
-          },
-          {
-            id: "2",
-            text: "الان عالی شد!",
-            author: "مهران",
-            authorId: "user3",
-            createdAt: new Date(),
-            replies: [],
-          },
-        ];
-        setComments(mockData);
-      });
+    socketRef.current.onopen = () => {
+      console.log("WS Connected");
+      socketRef.current.send(
+        JSON.stringify({
+          type: "authenticate",
+          token: token,
+        })
+      );
+    };
+
+    socketRef.current.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      handleWebSocketMessage(data);
+    };
+
+    socketRef.current.onclose = () => {
+      console.log("WebSocket disconnected");
+    };
+
+    socketRef.current.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    fetchComments();
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.close();
+      }
+    };
   }, [documentId]);
+
+  // Fetch Comments Initially
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(
+        `${commentsBaseAPI}/${documentId}/comment`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `JWT ${token}`,
+          },
+        }
+      );
+      setComments(response.data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      showErrorToast("خطا در بارگذاری یادداشت‌ها!");
+    }
+  };
+
+  // Get All Comments
+  // useEffect(() => {
+  //   axios
+  //     .get(`${commentsBaseAPI}/${documentId}/comment`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `JWT ${token}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       setComments(response.data);
+  //       console.log(response);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching comments:", error);
+  //       showErrorToast("خطا در بارگذاری یادداشت‌ها!");
+  //       setComments([]);
+  //     });
+  // }, [documentId]);
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();

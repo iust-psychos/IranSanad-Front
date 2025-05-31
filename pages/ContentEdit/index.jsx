@@ -9,7 +9,7 @@ import ReactDOM from "react-dom";
 import { renameDocument } from "@/managers/userDashboardManager";
 import HistoryModal from "@/pages/ContentEdit/HistoryModal";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import Commentsystem from "@/components/Comment/CommentSystem";
+import Commentsystem from "@/components/Comment";
 import { useTheme } from "@/src/ThemeContext";
 import logo_dark from "/images/logo_dark.png";
 import logo_light from "/images/logo_light.png";
