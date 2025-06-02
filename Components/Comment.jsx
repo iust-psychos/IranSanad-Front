@@ -124,55 +124,58 @@ export default function Comment({ documentId, currentUser, onClose }) {
         break;
 
       case "reply_created":
+        console.log(data);
         setComments((prev) =>
           prev.map((comment) => {
-            if (comment.id === data.comment_id) {
-              // Use data.comment_id as per backend broadcast
-              return {
-                ...comment,
-                commentreply_set: [...comment.commentreply_set, data.reply],
-              };
+            if (comment.id === data.data.comment) {
+              const exists = comment.commentreply_set.some(
+                (r) => r.id === data.data.id
+              );
+              if (!exists) {
+                return {
+                  ...comment,
+                  commentreply_set: [...comment.commentreply_set, data.data],
+                };
+              }
             }
             return comment;
           })
         );
-        showSuccessToast("پاسخ جدید دریافت شد");
+        // showSuccessToast("پاسخ جدید دریافت شد");
         break;
 
       case "reply_updated":
         setComments((prev) =>
           prev.map((comment) => {
-            if (comment.id === data.comment_id) {
-              // Use data.comment_id as per backend broadcast
+            if (comment.id === data.data.comment) {
               return {
                 ...comment,
                 commentreply_set: comment.commentreply_set.map((reply) =>
-                  reply.id === data.reply.id ? data.reply : reply
+                  reply.id === data.data.id ? data.data : reply
                 ),
               };
             }
             return comment;
           })
         );
-        showSuccessToast("پاسخ به‌روز شد");
+        // showSuccessToast("پاسخ به‌روز شد");
         break;
 
       case "reply_deleted":
         setComments((prev) =>
           prev.map((comment) => {
-            if (comment.id === data.comment_id) {
-              // Use data.comment_id as per backend broadcast
+            if (comment.id === data.data.comment) {
+              // showSuccessToast("پاسخ حذف شد");
               return {
                 ...comment,
                 commentreply_set: comment.commentreply_set.filter(
-                  (reply) => reply.id !== data.reply_id // Use data.reply_id as per backend broadcast
+                  (reply) => reply.id !== data.data.reply
                 ),
               };
             }
             return comment;
           })
         );
-        showSuccessToast("پاسخ حذف شد");
         break;
 
       default:
@@ -282,7 +285,7 @@ export default function Comment({ documentId, currentUser, onClose }) {
     setReplyText("");
   };
 
-  // 4
+  // 4 done
   const submitReply = async (commentId, e) => {
     e.preventDefault();
     if (replyText.trim()) {
@@ -302,7 +305,7 @@ export default function Comment({ documentId, currentUser, onClose }) {
           }
         );
 
-        console.log(response);
+        // console.log(response);
 
         // const added_reply = response.data;
 
@@ -319,6 +322,15 @@ export default function Comment({ documentId, currentUser, onClose }) {
 
         setReplyingToCommentId(null);
         setReplyText("");
+
+        if (
+          socketRef.current &&
+          socketRef.current.readyState === WebSocket.OPEN
+        ) {
+          socketRef.current.send(
+            JSON.stringify({ type: "reply_created", data: response.data })
+          );
+        }
       } catch (error) {
         console.log(error);
         showErrorToast("ثبت پاسخ با خطا مواجه شد!");
@@ -332,8 +344,6 @@ export default function Comment({ documentId, currentUser, onClose }) {
       const response = await axios.delete(
         `${commentsBaseAPI}/${documentId}/comment/${commentId}`
       );
-
-      console.log("res: ", response);
 
       if (
         socketRef.current &&
@@ -366,6 +376,18 @@ export default function Comment({ documentId, currentUser, onClose }) {
       // );
 
       axios.delete(`${replyBaseAPI}/${replyId}`);
+
+      if (
+        socketRef.current &&
+        socketRef.current.readyState === WebSocket.OPEN
+      ) {
+        socketRef.current.send(
+          JSON.stringify({
+            type: "reply_deleted",
+            data: { comment: commentId, reply: replyId },
+          })
+        );
+      }
     }
   };
 
@@ -381,7 +403,7 @@ export default function Comment({ documentId, currentUser, onClose }) {
     setEditReplyText("");
   };
 
-  // 5
+  // 5 done
   const submitEditReply = async (commentId, replyId, e) => {
     e.preventDefault();
     if (editReplyText.trim()) {
@@ -398,25 +420,18 @@ export default function Comment({ documentId, currentUser, onClose }) {
             },
           }
         );
-        console.log(response);
-
-        // const editted_reply = response.data;
-        // setComments(
-        //   comments.map((comment) => {
-        //     if (comment.id === commentId) {
-        //       return {
-        //         ...comment,
-        //         commentreply_set: comment.commentreply_set.map((reply) =>
-        //           reply.id === replyId ? editted_reply : reply
-        //         ),
-        //       };
-        //     }
-        //     return comment;
-        //   })
-        // );
 
         setEditingReplyId(null);
         setEditReplyText("");
+
+        if (
+          socketRef.current &&
+          socketRef.current.readyState === WebSocket.OPEN
+        ) {
+          socketRef.current.send(
+            JSON.stringify({ type: "reply_updated", data: response.data })
+          );
+        }
       } catch (error) {
         console.log(error);
         showErrorToast("ویرایش پاسخ با خطا مواجه شد!");
