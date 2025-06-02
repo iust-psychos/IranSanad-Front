@@ -95,7 +95,7 @@ export default function Comment({ documentId, currentUser, onClose }) {
         setComments((prev) => {
           const exists = prev.some((c) => c.id === data.data.id);
           if (!exists) {
-            // showSuccessToast("یادداشت جدید ثبت شد");
+            // showSuccessToast("یادداشت جدید!");
             return [...prev, data.data];
           }
           return prev;
@@ -116,7 +116,7 @@ export default function Comment({ documentId, currentUser, onClose }) {
         setComments((prev) => {
           const exists = prev.some((c) => c.id === data.data);
           if (exists) {
-            // showSuccessToast("یادداشت حذف شد");
+            // showSuccessToast("یادداشت حذف شده!");
             return prev.filter((comment) => comment.id !== data.data);
           }
           return prev;
@@ -132,6 +132,7 @@ export default function Comment({ documentId, currentUser, onClose }) {
                 (r) => r.id === data.data.id
               );
               if (!exists) {
+                // showSuccessToast("پاسخ جدید!");
                 return {
                   ...comment,
                   commentreply_set: [...comment.commentreply_set, data.data],
@@ -141,7 +142,6 @@ export default function Comment({ documentId, currentUser, onClose }) {
             return comment;
           })
         );
-        // showSuccessToast("پاسخ جدید دریافت شد");
         break;
 
       case "reply_updated":
@@ -185,7 +185,6 @@ export default function Comment({ documentId, currentUser, onClose }) {
 
   //////////////// APIS //////////////////
 
-  // 1 done
   const handleSubmitComment = async (e) => {
     e.preventDefault();
     if (newComment.trim()) {
@@ -238,7 +237,6 @@ export default function Comment({ documentId, currentUser, onClose }) {
     setEditCommentText("");
   };
 
-  // 2 done
   const submitEditComment = async (commentId, e) => {
     e.preventDefault();
     if (editCommentText.trim()) {
@@ -285,7 +283,6 @@ export default function Comment({ documentId, currentUser, onClose }) {
     setReplyText("");
   };
 
-  // 4 done
   const submitReply = async (commentId, e) => {
     e.preventDefault();
     if (replyText.trim()) {
@@ -338,7 +335,6 @@ export default function Comment({ documentId, currentUser, onClose }) {
     }
   };
 
-  // 3 done
   const deleteComment = async (commentId) => {
     if (window.confirm("آیا مطمئنید که می‌خواهید یادداشت را حذف کنید؟")) {
       const response = await axios.delete(
@@ -356,25 +352,10 @@ export default function Comment({ documentId, currentUser, onClose }) {
     }
   };
 
-  // 6
   const deleteReply = (commentId, replyId) => {
     if (
       window.confirm("آیا مطمئنید که می‌خواهید پاسخ به یادداشت را حذف کنید؟")
     ) {
-      // setComments(
-      //   comments.map((comment) => {
-      //     if (comment.id === commentId) {
-      //       return {
-      //         ...comment,
-      //         commentreply_set: comment.commentreply_set.filter(
-      //           (reply) => reply.id !== replyId
-      //         ),
-      //       };
-      //     }
-      //     return comment;
-      //   })
-      // );
-
       axios.delete(`${replyBaseAPI}/${replyId}`);
 
       if (
@@ -403,7 +384,6 @@ export default function Comment({ documentId, currentUser, onClose }) {
     setEditReplyText("");
   };
 
-  // 5 done
   const submitEditReply = async (commentId, replyId, e) => {
     e.preventDefault();
     if (editReplyText.trim()) {
