@@ -11,6 +11,7 @@ import { toPersianDigit } from "@/utils/persianNumberConverter.js";
 
 const commentsBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/document";
 const replyBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/commentreply";
+const WebsocketBaseURL = "ws://iransanad.fiust.ir/ws/docs";
 
 export default function Comment({ documentId, currentUser, onClose }) {
   const [comments, setComments] = useState([]);
@@ -33,81 +34,156 @@ export default function Comment({ documentId, currentUser, onClose }) {
     return toPersianDigit(persianDate);
   };
 
-  // Web Socket
+  // Get All Comments
   useEffect(() => {
-    const wsUrl = `ws://iransanad.fiust.ir/ws/comments/${documentId}/`;
-    socketRef.current = new WebSocket(wsUrl);
+    axios
+      .get(`${commentsBaseAPI}/${documentId}/comment`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `JWT ${token}`,
+        },
+      })
+      .then((response) => {
+        setComments(response.data);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("Error fetching comments:", error);
+        showErrorToast("خطا در بارگذاری یادداشت‌ها!");
+        setComments([]);
+      });
+  }, [documentId]);
+
+  // WebSocket Connection and Handling
+  useEffect(() => {
+    socketRef.current = new WebSocket(
+      WebsocketBaseURL + "/" + documentId + "/?Authorization=" + token
+    );
 
     socketRef.current.onopen = () => {
-      console.log("WS Connected");
-      socketRef.current.send(
-        JSON.stringify({
-          type: "authenticate",
-          token: token,
-        })
-      );
+      console.log("WebSocket connected!");
     };
 
     socketRef.current.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      handleWebSocketMessage(data);
-    };
+      try {
+        let messageData;
+        if (!(event.data instanceof Blob)) {
+          messageData = event.data;
 
-    socketRef.current.onclose = () => {
-      console.log("WebSocket disconnected");
+          const data = JSON.parse(messageData);
+          console.log("WebSocket message received:", data);
+          handleWebSocketUpdate(data);
+        }
+      } catch (error) {
+        console.error("Error processing WebSocket message:", error);
+      }
     };
 
     socketRef.current.onerror = (error) => {
       console.error("WebSocket error:", error);
+      showErrorToast("خطا در به‌روزرسانی زنده!");
     };
 
-    fetchComments();
-
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.close();
-      }
+    socketRef.current.onclose = () => {
+      console.log("WebSocket disconnected.");
     };
   }, [documentId]);
 
-  // Fetch Comments Initially
-  const fetchComments = async () => {
-    try {
-      const response = await axios.get(
-        `${commentsBaseAPI}/${documentId}/comment`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `JWT ${token}`,
-          },
-        }
-      );
-      setComments(response.data);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-      showErrorToast("خطا در بارگذاری یادداشت‌ها!");
+  const handleWebSocketUpdate = (data) => {
+    switch (data.type) {
+      case "comment_created":
+        setComments((prev) => {
+          const exists = prev.some((c) => c.id === data.data.id);
+          if (!exists) {
+            // showSuccessToast("یادداشت جدید!");
+            return [...prev, data.data];
+          }
+          return prev;
+        });
+        break;
+
+      case "comment_updated":
+        setComments((prevComments) =>
+          prevComments.map((comment) =>
+            comment.id === data.data.id
+              ? { ...comment, text: data.data.text }
+              : comment
+          )
+        );
+        break;
+
+      case "comment_deleted":
+        setComments((prev) => {
+          const exists = prev.some((c) => c.id === data.data);
+          if (exists) {
+            // showSuccessToast("یادداشت حذف شده!");
+            return prev.filter((comment) => comment.id !== data.data);
+          }
+          return prev;
+        });
+        break;
+
+      case "reply_created":
+        console.log(data);
+        setComments((prev) =>
+          prev.map((comment) => {
+            if (comment.id === data.data.comment) {
+              const exists = comment.commentreply_set.some(
+                (r) => r.id === data.data.id
+              );
+              if (!exists) {
+                // showSuccessToast("پاسخ جدید!");
+                return {
+                  ...comment,
+                  commentreply_set: [...comment.commentreply_set, data.data],
+                };
+              }
+            }
+            return comment;
+          })
+        );
+        break;
+
+      case "reply_updated":
+        setComments((prev) =>
+          prev.map((comment) => {
+            if (comment.id === data.data.comment) {
+              return {
+                ...comment,
+                commentreply_set: comment.commentreply_set.map((reply) =>
+                  reply.id === data.data.id ? data.data : reply
+                ),
+              };
+            }
+            return comment;
+          })
+        );
+        // showSuccessToast("پاسخ به‌روز شد");
+        break;
+
+      case "reply_deleted":
+        setComments((prev) =>
+          prev.map((comment) => {
+            if (comment.id === data.data.comment) {
+              // showSuccessToast("پاسخ حذف شد");
+              return {
+                ...comment,
+                commentreply_set: comment.commentreply_set.filter(
+                  (reply) => reply.id !== data.data.reply
+                ),
+              };
+            }
+            return comment;
+          })
+        );
+        break;
+
+      default:
+        console.warn("Unknown WebSocket message type:", data.type);
     }
   };
 
-  // Get All Comments
-  // useEffect(() => {
-  //   axios
-  //     .get(`${commentsBaseAPI}/${documentId}/comment`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `JWT ${token}`,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       setComments(response.data);
-  //       console.log(response);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching comments:", error);
-  //       showErrorToast("خطا در بارگذاری یادداشت‌ها!");
-  //       setComments([]);
-  //     });
-  // }, [documentId]);
+  //////////////// APIS //////////////////
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();
@@ -131,9 +207,18 @@ export default function Comment({ documentId, currentUser, onClose }) {
         );
         console.log(response);
 
-        const added_comment = response.data;
-        setComments([...comments, added_comment]);
+        // const added_comment = response.data;
+        // setComments([...comments, added_comment]);
         setNewComment("");
+
+        if (
+          socketRef.current &&
+          socketRef.current.readyState === WebSocket.OPEN
+        ) {
+          socketRef.current.send(
+            JSON.stringify({ type: "comment_created", data: response.data })
+          );
+        }
       } catch (error) {
         console.log(error);
         showErrorToast("ثبت یادداشت با خطا مواجه شد!");
@@ -169,15 +254,17 @@ export default function Comment({ documentId, currentUser, onClose }) {
           }
         );
 
-        const editted_comment = response.data;
-
-        setComments(
-          comments.map((comment) =>
-            comment.id === commentId ? editted_comment : comment
-          )
-        );
         setEditingCommentId(null);
         setEditCommentText("");
+
+        if (
+          socketRef.current &&
+          socketRef.current.readyState === WebSocket.OPEN
+        ) {
+          socketRef.current.send(
+            JSON.stringify({ type: "comment_updated", data: response.data })
+          );
+        }
       } catch (error) {
         console.log(error);
         showErrorToast("ویرایش یادداشت با خطا مواجه شد!");
@@ -215,23 +302,32 @@ export default function Comment({ documentId, currentUser, onClose }) {
           }
         );
 
-        console.log(response);
+        // console.log(response);
 
-        const added_reply = response.data;
+        // const added_reply = response.data;
 
-        const updatedComments = comments.map((comment) => {
-          if (comment.id === commentId) {
-            return {
-              ...comment,
-              commentreply_set: [...comment.commentreply_set, added_reply],
-            };
-          }
-          return comment;
-        });
+        // const updatedComments = comments.map((comment) => {
+        //   if (comment.id === commentId) {
+        //     return {
+        //       ...comment,
+        //       commentreply_set: [...comment.commentreply_set, added_reply],
+        //     };
+        //   }
+        //   return comment;
+        // });
+        // setComments(updatedComments);
 
-        setComments(updatedComments);
         setReplyingToCommentId(null);
         setReplyText("");
+
+        if (
+          socketRef.current &&
+          socketRef.current.readyState === WebSocket.OPEN
+        ) {
+          socketRef.current.send(
+            JSON.stringify({ type: "reply_created", data: response.data })
+          );
+        }
       } catch (error) {
         console.log(error);
         showErrorToast("ثبت پاسخ با خطا مواجه شد!");
@@ -239,10 +335,20 @@ export default function Comment({ documentId, currentUser, onClose }) {
     }
   };
 
-  const deleteComment = (commentId) => {
+  const deleteComment = async (commentId) => {
     if (window.confirm("آیا مطمئنید که می‌خواهید یادداشت را حذف کنید؟")) {
-      setComments(comments.filter((comment) => comment.id !== commentId));
-      axios.delete(`${commentsBaseAPI}/${documentId}/comment/${commentId}`);
+      const response = await axios.delete(
+        `${commentsBaseAPI}/${documentId}/comment/${commentId}`
+      );
+
+      if (
+        socketRef.current &&
+        socketRef.current.readyState === WebSocket.OPEN
+      ) {
+        socketRef.current.send(
+          JSON.stringify({ type: "comment_deleted", data: commentId })
+        );
+      }
     }
   };
 
@@ -250,21 +356,19 @@ export default function Comment({ documentId, currentUser, onClose }) {
     if (
       window.confirm("آیا مطمئنید که می‌خواهید پاسخ به یادداشت را حذف کنید؟")
     ) {
-      setComments(
-        comments.map((comment) => {
-          if (comment.id === commentId) {
-            return {
-              ...comment,
-              commentreply_set: comment.commentreply_set.filter(
-                (reply) => reply.id !== replyId
-              ),
-            };
-          }
-          return comment;
-        })
-      );
-
       axios.delete(`${replyBaseAPI}/${replyId}`);
+
+      if (
+        socketRef.current &&
+        socketRef.current.readyState === WebSocket.OPEN
+      ) {
+        socketRef.current.send(
+          JSON.stringify({
+            type: "reply_deleted",
+            data: { comment: commentId, reply: replyId },
+          })
+        );
+      }
     }
   };
 
@@ -296,26 +400,18 @@ export default function Comment({ documentId, currentUser, onClose }) {
             },
           }
         );
-        console.log(response);
-
-        const editted_reply = response.data;
-
-        setComments(
-          comments.map((comment) => {
-            if (comment.id === commentId) {
-              return {
-                ...comment,
-                commentreply_set: comment.commentreply_set.map((reply) =>
-                  reply.id === replyId ? editted_reply : reply
-                ),
-              };
-            }
-            return comment;
-          })
-        );
 
         setEditingReplyId(null);
         setEditReplyText("");
+
+        if (
+          socketRef.current &&
+          socketRef.current.readyState === WebSocket.OPEN
+        ) {
+          socketRef.current.send(
+            JSON.stringify({ type: "reply_updated", data: response.data })
+          );
+        }
       } catch (error) {
         console.log(error);
         showErrorToast("ویرایش پاسخ با خطا مواجه شد!");
