@@ -7,6 +7,8 @@ import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
+import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -264,7 +266,8 @@ export default function Editor({ doc_uuid }) {
           placeholder={<div className="editor-placeholder">Enter text...</div>}
           ErrorBoundary={LexicalErrorBoundary}
         />
-
+        <CheckListPlugin />
+        <TabIndentationPlugin />
         <AutoFocusPlugin />
         <HistoryPlugin />
         <ListPlugin />

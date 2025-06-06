@@ -1,4 +1,4 @@
-import { HeadingNode } from "@lexical/rich-text";
+import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { TableNode, TableRowNode, TableCellNode } from "@lexical/table";
@@ -15,11 +15,21 @@ const theme = {
   image: "editor-image",
   link: "editor-link",
   list: {
-    listitem: "editor-listitem",
+    checklist: "editor-checkList",
+    listitem: "editor-listItem",
+    listitemChecked: "editor-listItemChecked",
+    listitemUnchecked: "editor-listItemUnchecked",
     nested: {
-      listitem: "editor-nested-listitem",
+      listitem: "editor-nestedListItem",
     },
     ol: "editor-list-ol",
+    olDepth: [
+      "editor-list-ol1",
+      "editor-list-ol2",
+      "editor-list-ol3",
+      "editor-list-ol4",
+      "editor-list-ol5",
+    ],
     ul: "editor-list-ul",
   },
   ltr: "ltr",
@@ -36,7 +46,6 @@ const theme = {
     strikethrough: "editor-text-strikethrough",
     underlineStrikethrough: "editor-text-underlineStrikethrough",
     italic: "editor-text-italic",
-    code: "editor-code",
     highlight: "editor-highlight",
   },
 };
@@ -55,6 +64,9 @@ export const editorConfig = {
     TableNode,
     TableRowNode,
     TableCellNode,
+    HeadingNode,
+    QuoteNode,
+    CodeHighlightNode,
     ImageNode
   ],
 };

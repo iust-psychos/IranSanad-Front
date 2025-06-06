@@ -28,6 +28,18 @@ import {
   IconUnderline,
   IconUndo,
 } from "@/pages/ContentEdit/Icons";
+import {
+  IconCheckList,
+  IconCodeBlock,
+  IconHeading1,
+  IconHeading2,
+  IconHeading3,
+  IconNormalParagraph,
+  IconOrderedList,
+  IconQuote,
+  IconUnorderedList,
+} from "./Icons";
+import { IconDropdown } from "./Buttons";
 
 export const richTextActions = {
   Bold: "bold",
@@ -52,7 +64,99 @@ export const richTextActions = {
     Update: "fontSize-update",
   },
   ClearFormatting: "clearFormatting",
+  Block: {
+    Update: "block-update",
+    Normal: "block-normal",
+    Heading1: "block-heading1",
+    Heading2: "block-heading2",
+    Heading3: "block-heading3",
+    OrderedList: "block-orderedList",
+    UnorderedList: "block-unorderedList",
+    CheckList: "block-checkList",
+    Quote: "block-quote",
+    CodeBlock: "block-codeBlock",
+  },
 };
+
+export const blockTypeToBlockName = {
+  paragraph: richTextActions.Block.Normal,
+  h1: richTextActions.Block.Heading1,
+  h2: richTextActions.Block.Heading2,
+  h3: richTextActions.Block.Heading3,
+  number: richTextActions.Block.OrderedList,
+  bullet: richTextActions.Block.UnorderedList,
+  check: richTextActions.Block.CheckList,
+  quote: richTextActions.Block.Quote,
+  code: richTextActions.Block.CodeBlock,
+};
+
+export const blockTypeMapping = [
+  { lexical: "paragraph", id: richTextActions.Block.Normal },
+  { lexical: "h1", id: richTextActions.Block.Heading1 },
+  { lexical: "h2", id: richTextActions.Block.Heading2 },
+  { lexical: "h3", id: richTextActions.Block.Heading3 },
+  { lexical: "number", id: richTextActions.Block.OrderedList },
+  { lexical: "bullet", id: richTextActions.Block.UnorderedList },
+  { lexical: "check", id: richTextActions.Block.CheckList },
+  { lexical: "quote", id: richTextActions.Block.Quote },
+  { lexical: "code", id: richTextActions.Block.CodeBlock },
+];
+
+export const lexicalToBlockId = {};
+export const blockIdToLexical = {};
+
+blockTypeMapping.forEach(({ lexical, id }) => {
+  lexicalToBlockId[lexical] = id;
+  blockIdToLexical[id] = lexical;
+});
+
+const richTextBlockActions = [
+  {
+    id: richTextActions.Block.Normal,
+    label: "Normal",
+    Icon: (iconProps) => <IconNormalParagraph {...iconProps} />,
+  },
+  {
+    id: richTextActions.Block.Heading1,
+    label: "Heading 1",
+    Icon: (iconProps) => <IconHeading1 {...iconProps} />,
+  },
+  {
+    id: richTextActions.Block.Heading2,
+    label: "Heading 2",
+    Icon: (iconProps) => <IconHeading2 {...iconProps} />,
+  },
+  {
+    id: richTextActions.Block.Heading3,
+    label: "Heading 3",
+    Icon: (iconProps) => <IconHeading3 {...iconProps} />,
+  },
+  {
+    id: richTextActions.Block.OrderedList,
+    label: "Ordered List",
+    Icon: (iconProps) => <IconOrderedList {...iconProps} />,
+  },
+  {
+    id: richTextActions.Block.UnorderedList,
+    label: "Unordered List",
+    Icon: (iconProps) => <IconUnorderedList {...iconProps} />,
+  },
+  {
+    id: richTextActions.Block.CheckList,
+    label: "Check List",
+    Icon: (iconProps) => <IconCheckList {...iconProps} />,
+  },
+  {
+    id: richTextActions.Block.Quote,
+    label: "Quote",
+    Icon: (iconProps) => <IconQuote {...iconProps} />,
+  },
+  {
+    id: richTextActions.Block.CodeBlock,
+    label: "Code Block",
+    Icon: (iconProps) => <IconCodeBlock {...iconProps} />,
+  },
+];
 
 export const richTextOptions = [
   {
@@ -238,10 +342,18 @@ export const richTextOptions = [
       Icon: (iconProps) => <IconJustify {...iconProps} />,
     },
   },
-  // {
-  //   id: richTextActions.FontFamily,
-  //   component: (
-  //     <InputDropdown id={richTextActions.FontFamily} label="Font Family" />
-  //   ),
-  // },
+  {
+    id: richTextActions.Divider,
+    component: IconDivider1,
+  },
+  {
+    id: richTextActions.Block.Update,
+    component: IconDropdown,
+    props: {
+      id: richTextActions.Block.Update,
+      label: "Change Block format",
+      items: richTextBlockActions,
+      defaultValue: richTextActions.Block.Normal,
+    },
+  },
 ];

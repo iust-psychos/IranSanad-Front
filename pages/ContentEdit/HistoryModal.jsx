@@ -46,16 +46,9 @@ export default function HistoryModal({ open, setOpen }) {
           <div className="sidebar-content-container">
             {versions.map((item, index) => (
               <button className="timeline-item" key={index}>
-                <div className="timeline-line">
-                  <div
-                    className={`timeline-circle ${
-                      index === 0 ? "selected" : ""
-                    }`}
-                  ></div>
-                  {index < versions.length - 1 && (
-                    <div className="timeline-connector" />
-                  )}
-                </div>
+                <div
+                  className={`timeline-circle ${index === 0 ? "selected" : ""}`}
+                />
                 <div className="timeline-content">
                   <div className="timeline-header">{item.date}</div>
                   <div className="timeline-meta">

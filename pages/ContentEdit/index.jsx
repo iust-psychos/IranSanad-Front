@@ -46,17 +46,6 @@ const ContentEditor = () => {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "f") {
-        e.preventDefault();
-        setOpenFindReplaceDialog(true);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
       triggeredByCode.current = true;
