@@ -65,6 +65,14 @@
 //   },
 // ];
 
+import {
+  convertLexicalToDocx,
+  convertLexicalToHtml,
+  convertLexicalToMarkdown,
+  convertLexicalToPdf,
+  convertLexicalToPlainText,
+} from "./ImportExportUtility";
+
 export const getMenuBlueprint = (editor, openFindReplaceDialog) => [
   {
     label: "فایل",
@@ -74,7 +82,23 @@ export const getMenuBlueprint = (editor, openFindReplaceDialog) => [
       { label: "ایجاد کپی", action: () => saveDoc() },
       { label: "به اشتراک گذاری", action: () => downloadAsPdf() },
       { label: "ایمیل", action: () => downloadAsPdf() },
-      { label: "دانلود", action: () => downloadAsPdf() },
+      { label: "دانلود html", action: () => convertLexicalToHtml(editor) },
+      {
+        label: "دانلود markdown",
+        action: () => convertLexicalToMarkdown(editor),
+      },
+      {
+        label: "دانلود txt",
+        action: () => convertLexicalToPlainText(editor),
+      },
+      {
+        label: "دانلود pdf",
+        action: () => convertLexicalToPdf(editor),
+      },
+      // {
+      //   label: "دانلود docx",
+      //   action: () => convertLexicalToDocx(editor),
+      // },
     ],
   },
   {
