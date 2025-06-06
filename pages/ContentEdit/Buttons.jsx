@@ -14,18 +14,70 @@ export const IconButton = ({ id, label, Icon, ...props }) => (
     {Icon && <Icon {...props?.iconProps} />}
   </button>
 );
-export const IconDropdown = ({ id, label, icon, items, ...props }) => {
-  <button
-    key={id}
-    aria-label={label}
-    onClick={() => props.onAction(id)}
-    disabled={props.disableMap[id]}
-    className={`icon-dropdown ${props.className} ${
-      props.selectionMap[id] ? "active" : null
-    }`}
-  >
-    {icon}
-  </button>;
+export const IconDropdown = ({
+  id,
+  label,
+  items,
+  defaultValue,
+  selectionMap,
+  disableMap = {},
+  onAction,
+  className,
+}) => {
+  const selected =
+    items.find((item) => item.id === selectionMap[id]) ||
+    items.find((item) => item.id === defaultValue);
+  const [valueVisible, setValueVisible] = useState(selected);
+
+  useEffect(() => {
+    const updated =
+      items.find((item) => item.id === selectionMap[id]) ||
+      items.find((item) => item.id === defaultValue);
+    setValueVisible(updated);
+  }, [selectionMap, id, items, defaultValue]);
+
+  return (
+    <Menu.Root disabled={disableMap[id]}>
+      <Menu.Trigger
+        className={`content-editor-dropdown dropdown-button ${
+          className || ""
+        } ${selectionMap[id] ? "active" : ""}`}
+        aria-label={label}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+          {valueVisible?.Icon && <valueVisible.Icon />}
+          <span>{valueVisible?.label}</span>
+        </div>
+        <IconDropDown />
+      </Menu.Trigger>
+
+      <Menu.Portal>
+        <Menu.Positioner sideOffset={8}>
+          <Menu.Popup className="content-editor-dropdown dropdown-menu">
+            {items.map((item) => (
+              <Menu.Item
+                key={item.id}
+                value={item.id}
+                className="content-editor-dropdown dropdown-item"
+                onClick={() => onAction(item.id, "", valueVisible.id)}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.4rem",
+                  }}
+                >
+                  {item.Icon && <item.Icon />}
+                  <span>{item.label}</span>
+                </div>
+              </Menu.Item>
+            ))}
+          </Menu.Popup>
+        </Menu.Positioner>
+      </Menu.Portal>
+    </Menu.Root>
+  );
 };
 
 export const IconButtonDropdown = ({ id, label, icon }) => {};

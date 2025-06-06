@@ -4,7 +4,7 @@ import {
   richTextActions,
   richTextOptions,
 } from "@/pages/ContentEdit/RichTextActions";
-import { mergeRegister } from "@lexical/utils";
+import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import InsertTableButton from "@/pages/ContentEdit/InsertTableButton";
 import {
   $getSelection,
@@ -18,6 +18,7 @@ import {
   CAN_REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   $getRoot,
+  $isNodeSelection,
 } from "lexical";
 import {
   $patchStyleText,
@@ -28,7 +29,9 @@ import { $isTableSelection } from "@lexical/table";
 import {
   INSERT_UNORDERED_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
+  ListNode,
 } from "@lexical/list";
+import { $isHeadingNode } from "@lexical/rich-text";
 import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
 import {
   clearFormatting,
@@ -36,6 +39,21 @@ import {
   updateFontSize,
 } from "@/pages/ContentEdit/FontUtility";
 import { DEFAULT_FONT_SIZE } from "@/pages/ContentEdit/EditorConfig";
+import {
+  $findTopLevelElement,
+  formatBulletList,
+  formatCheckList,
+  formatCode,
+  formatHeading,
+  formatNumberedList,
+  formatParagraph,
+  formatQuote,
+} from "./BlockUtility";
+import {
+  blockIdToLexical,
+  blockTypeToBlockName,
+  lexicalToBlockId,
+} from "./RichTextActions";
 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -45,11 +63,59 @@ function ToolbarPlugin() {
   });
   const [selectionMap, setSelectionMap] = useState({});
 
+  const $handleBlockNode = useCallback(
+    (selectedElement) => {
+      const type = $isHeadingNode(selectedElement)
+        ? selectedElement.getTag()
+        : selectedElement.getType();
+
+      console.log(`${richTextActions.Block.Update}:${lexicalToBlockId[type]}`);
+      if (type in lexicalToBlockId) {
+        setSelectionMap((prev) => ({
+          ...prev,
+          [richTextActions.Block.Update]: lexicalToBlockId[type],
+        }));
+      }
+    },
+    [editor]
+  );
+
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
+    const anchorNode = selection.anchor.getNode();
+    const element = $findTopLevelElement(anchorNode);
+    const elementKey = element.getKey();
+    const elementDOM = editor.getElementByKey(elementKey);
     let newSelectionMap = {};
+
+    if (elementDOM !== null) {
+      const nodes = selection.getNodes();
+      for (const selectedNode of nodes) {
+        const parentList = $getNearestNodeOfType(selectedNode, ListNode);
+        let type = null;
+        if (parentList) {
+          type = parentList.getListType();
+          newSelectionMap = {
+            [richTextActions.Block.Update]: lexicalToBlockId[type],
+          };
+        } else {
+          const selectedElement = $findTopLevelElement(selectedNode);
+          type = $isHeadingNode(selectedElement)
+            ? selectedElement.getTag()
+            : selectedElement.getType();
+
+          if (type in lexicalToBlockId) {
+            newSelectionMap = {
+              [richTextActions.Block.Update]: lexicalToBlockId[type],
+            };
+          }
+        }
+      }
+    }
+
     if ($isRangeSelection(selection)) {
       newSelectionMap = {
+        ...newSelectionMap,
         [richTextActions.FontFamily]: $getSelectionStyleValueForProperty(
           selection,
           "font-family",
@@ -76,6 +142,25 @@ function ToolbarPlugin() {
       };
       setSelectionMap(newSelectionMap);
     }
+
+    // if ($isNodeSelection(selection)) {
+    //   console.log("there");
+    //   const nodes = selection.getNodes();
+    //   for (const selectedNode of nodes) {
+    //     const parentList = $getNearestNodeOfType(selectedNode, ListNode);
+    //     if (parentList) {
+    //       const type = parentList.getListType();
+    //       setSelectionMap((prev) => ({
+    //         ...prev,
+    //         [richTextActions.Block.Update]: lexicalToBlockId[type],
+    //       }));
+    //     } else {
+    //       const selectedElement = $findTopLevelElement(selectedNode);
+    //       $handleBlockNode(selectedElement);
+    //       // $handleCodeNode(selectedElement);
+    //     }
+    //   }
+    // }
   }, [editor, setSelectionMap]);
 
   useEffect(() => {
@@ -176,6 +261,34 @@ function ToolbarPlugin() {
         break;
       case richTextActions.ClearFormatting:
         clearFormatting(editor);
+        break;
+      case richTextActions.Block.Normal:
+        formatParagraph(editor);
+        break;
+      case richTextActions.Block.Heading1:
+        formatHeading(editor, blockIdToLexical[value], "h1");
+        break;
+      case richTextActions.Block.Heading2:
+        formatHeading(editor, blockIdToLexical[value], "h2");
+        break;
+      case richTextActions.Block.Heading3:
+        formatHeading(editor, blockIdToLexical[value], "h3");
+        break;
+      case richTextActions.Block.OrderedList:
+        formatNumberedList(editor, blockIdToLexical[value]);
+        break;
+      case richTextActions.Block.UnorderedList:
+        console.log(blockIdToLexical[value]);
+        formatBulletList(editor, blockIdToLexical[value]);
+        break;
+      case richTextActions.Block.CheckList:
+        formatCheckList(editor, blockIdToLexical[value]);
+        break;
+      case richTextActions.Block.Quote:
+        formatQuote(editor, blockIdToLexical[value]);
+        break;
+      case richTextActions.Block.CodeBlock:
+        formatCode(editor, blockIdToLexical[value]);
         break;
       default:
         break;
