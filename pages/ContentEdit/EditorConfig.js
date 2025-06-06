@@ -2,6 +2,7 @@ import { HeadingNode } from "@lexical/rich-text";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { TableNode, TableRowNode, TableCellNode } from "@lexical/table";
+import { ImageNode } from "./ImagePlugin";
 const theme = {
   code: "editor-code",
   heading: {
@@ -54,6 +55,7 @@ export const editorConfig = {
     TableNode,
     TableRowNode,
     TableCellNode,
+    ImageNode
   ],
 };
 
