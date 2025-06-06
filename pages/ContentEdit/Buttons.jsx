@@ -44,7 +44,14 @@ export const IconDropdown = ({
         } ${selectionMap[id] ? "active" : ""}`}
         aria-label={label}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-around",
+            gap: "0.8rem",
+          }}
+        >
           {valueVisible?.Icon && <valueVisible.Icon />}
           <span>{valueVisible?.label}</span>
         </div>
@@ -65,7 +72,8 @@ export const IconDropdown = ({
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "0.4rem",
+                    justifyContent: "space-around",
+                    gap: "0.8rem",
                   }}
                 >
                   {item.Icon && <item.Icon />}

@@ -19,6 +19,8 @@ import {
   SELECTION_CHANGE_COMMAND,
   $getRoot,
   $isNodeSelection,
+  INDENT_CONTENT_COMMAND,
+  OUTDENT_CONTENT_COMMAND,
 } from "lexical";
 import {
   $patchStyleText,
@@ -289,6 +291,12 @@ function ToolbarPlugin() {
         break;
       case richTextActions.Block.CodeBlock:
         formatCode(editor, blockIdToLexical[value]);
+        break;
+      case richTextActions.LeftIndent:
+        editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined);
+        break;
+      case richTextActions.LeftOutdent:
+        editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
         break;
       default:
         break;
