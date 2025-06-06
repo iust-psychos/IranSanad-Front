@@ -1215,10 +1215,14 @@
 .editor-header {
   font-size: 1.5em;
   font-weight: bold;
-  border-bottom: 2px solid #ccc;
   padding: 10px 0;
   margin-bottom: 20px;
   color: var(--text-primary);
+  user-select: text;
+  cursor: text;
+  pointer-events: none; /* Disable all mouse events by default */
+  min-height: 40px;
+  border-bottom: 1px solid var(--border); /* for header */
 }
 
 .editor-footer {
@@ -1227,4 +1231,25 @@
   border-top: 1px solid var(--border);
   padding: 10px 0;
   margin-top: 20px;
+  user-select: text;
+  cursor: text;
+  pointer-events: none; /* Disable all mouse events by default */
+  min-height: 40px;
+}
+
+.editor-header.editable, .editor-footer.editable {
+  pointer-events: auto; /* Enable only when focused */
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.editor-footer:focus {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.editor-header:focus {
+  border-bottom: 2px solid #ccc;
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
 }

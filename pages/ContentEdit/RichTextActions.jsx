@@ -84,8 +84,8 @@ export const richTextActions = {
   LeftOutdent: "leftOutdent",
   RightIndent: "rightIndent",
   RightOutdent: "rightOutdent",
-  InsertHeader: "insertHeader",
-  InsertFooter: "insertFooter",
+  ToggleHeader: "toggleHeader",
+  ToggleFooter: "toggleFooter",
 };
 
 export const blockTypeToBlockName = {
@@ -388,22 +388,22 @@ export const richTextOptions = [
       Icon: (iconProps) => <IconLeftOutdent {...iconProps} />,
     },
   },
-  // {
-  //   id: richTextActions.InsertHeader,
-  //   component: IconButton,
-  //   props: {
-  //     id: richTextActions.InsertHeader,
-  //     label: "Insert Header",
-  //     Icon: (iconProps) => <IconHeader {...iconProps} />,
-  //   },
-  // },
-  // {
-  //   id: richTextActions.InsertFooter,
-  //   component: IconButton,
-  //   props: {
-  //     id: richTextActions.InsertFooter,
-  //     label: "Insert Footer",
-  //     Icon: (iconProps) => <IconFooter {...iconProps} />,
-  //   },
-  // },
+  {
+    id: richTextActions.ToggleHeader,
+    component: IconButton,
+    props: {
+      id: richTextActions.ToggleHeader,
+      label: "Toggle Header",
+      Icon: (iconProps) => <IconHeader {...iconProps} />,
+    },
+  },
+  {
+    id: richTextActions.ToggleFooter,
+    component: IconButton,
+    props: {
+      id: richTextActions.ToggleFooter,
+      label: "Toggle Footer",
+      Icon: (iconProps) => <IconFooter {...iconProps} />,
+    },
+  },
 ];
