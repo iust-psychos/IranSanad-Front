@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { createWebsocketProvider } from "./Provider";
 import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
@@ -15,6 +15,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import ToolbarPlugin from "@/pages/ContentEdit/ToolbarPlugin";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
+import { ImageNode, ImagePlugin, INSERT_IMAGE_COMMAND } from "./ImagePlugin";
 import "@/styles/EditorTable.css";
 
 function PageContentManager({ currentPage, pageContents }) {
@@ -39,6 +40,7 @@ function PageContentManager({ currentPage, pageContents }) {
 
 export default function Editor({ doc_uuid }) {
   const containerRef = useRef(null);
+  const [editor] = useLexicalComposerContext();
   const [yjsProvider, setYjsProvider] = useState(null);
   const [connected, setConnected] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
@@ -47,10 +49,92 @@ export default function Editor({ doc_uuid }) {
   const [totalPages, setTotalPages] = useState(1);
   const [pageContents, setPageContents] = useState([""]);
 
+  const uploadImage = async (file) => {
+    try {
+      // این می تونه حذف بشه اگه تو بک نیاریم
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const token = CookieManager.LoadToken();
+      const response = await axios.post(
+        "http://your-api-endpoint/upload",
+        formData,
+        {
+          headers: {
+            Authorization: `JWT ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return {
+        src: response.data.url,
+        altText: file.name,
+      };
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      // Fallback to local URL if upload fails
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve({
+            src: reader.result,
+            altText: file.name,
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const handlePaste = useCallback(
+    (event) => {
+      const items = event.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.type.indexOf("image") !== -1) {
+          const file = item.getAsFile();
+          if (file) {
+            event.preventDefault();
+            uploadImage(file).then(({ src, altText }) => {
+              editor.dispatchCommand(INSERT_IMAGE_COMMAND, { src, altText });
+            });
+          }
+        }
+      }
+    },
+    [editor]
+  );
+
+  const handleDragOver = useCallback((event) => {
+    event.preventDefault();
+  }, []);
+
+  const handleDrop = useCallback(
+    (event) => {
+      event.preventDefault();
+      const files = event.dataTransfer?.files;
+      if (!files || files.length === 0) return;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.type.startsWith("image/")) {
+          uploadImage(file).then(({ src, altText }) => {
+            editor.dispatchCommand(INSERT_IMAGE_COMMAND, { src, altText });
+          });
+        }
+      }
+    },
+    [editor]
+  );
+
+  // User info handling
   const handleGetUserInformation = async () => {
     try {
-      let token = CookieManager.LoadToken();
-      let response = await axios.get(
+      const token = CookieManager.LoadToken();
+      const response = await axios.get(
         "http://iransanad.fiust.ir/api/v1/auth/info/",
         {
           headers: {
@@ -64,6 +148,7 @@ export default function Editor({ doc_uuid }) {
       return null;
     }
   };
+
   useEffect(() => {
     if (userInfo === null) {
       handleGetUserInformation().then((data) => {
@@ -78,10 +163,11 @@ export default function Editor({ doc_uuid }) {
     if (userInfo && yjsProvider) {
       yjsProvider.awareness.setLocalStateField("user", {
         name: userInfo.username,
-        color: "#" + Math.floor(Math.random() * 16777215).toString(16), // Random color
+        color: "#" + Math.floor(Math.random() * 16777215).toString(16),
       });
     }
   }, [userInfo, yjsProvider]);
+
   const handleAwarenessUpdate = useCallback(() => {
     if (!yjsProvider) return;
     const awareness = yjsProvider.awareness;
@@ -103,7 +189,6 @@ export default function Editor({ doc_uuid }) {
     };
   }, [yjsProvider, handleAwarenessUpdate]);
 
-  // ... (keep all other existing useEffect hooks and functions the same)
   const providerFactory = useCallback((id, yjsDocMap) => {
     const provider = createWebsocketProvider(id, yjsDocMap);
     provider.on("status", (event) => {
@@ -115,13 +200,9 @@ export default function Editor({ doc_uuid }) {
     setTimeout(() => setYjsProvider(provider), 0);
     return provider;
   }, []);
+
   const handlePageChange = (newPage) => {
-    // Save current content before switching
-    setPageContents((prev) => {
-      const updated = [...prev];
-      // We'll update the current page content via OnChangePlugin
-      return updated;
-    });
+    setPageContents((prev) => [...prev]);
     setCurrentPage(newPage);
   };
 
@@ -135,7 +216,12 @@ export default function Editor({ doc_uuid }) {
     <>
       <ToolbarPlugin />
 
-      <div className="editor-container" ref={containerRef}>
+      <div
+        className="editor-container"
+        ref={containerRef}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div className="page-controls">
             <button
@@ -157,7 +243,7 @@ export default function Editor({ doc_uuid }) {
           </div>
 
           <div className="active-users">
-            <h4>کاربران فعال:</h4>
+            <h4>Active Users:</h4>
             <ul>
               {activeUsers.map((user) => (
                 <li key={user.userId} style={{ color: user.color }}>
@@ -168,13 +254,16 @@ export default function Editor({ doc_uuid }) {
           </div>
         </div>
 
-        {/* <div className="editor-inner" ref={containerRef}> */}
         <PageContentManager
           currentPage={currentPage}
           pageContents={pageContents}
         />
+
         <RichTextPlugin
-          contentEditable={<ContentEditable className="editor-input" />}
+          contentEditable={
+            <ContentEditable className="editor-input" onPaste={handlePaste} />
+          }
+          placeholder={<div className="editor-placeholder">Enter text...</div>}
           ErrorBoundary={LexicalErrorBoundary}
         />
         <CheckListPlugin />
@@ -182,6 +271,8 @@ export default function Editor({ doc_uuid }) {
         <AutoFocusPlugin />
         <HistoryPlugin />
         <ListPlugin />
+        <ImagePlugin />
+
         <OnChangePlugin
           onChange={(editorState) => {
             editorState.read(() => {
@@ -204,7 +295,6 @@ export default function Editor({ doc_uuid }) {
           cursorsContainerRef={containerRef}
         />
       </div>
-      {/* </div> */}
     </>
   );
 }
