@@ -36,6 +36,8 @@ import {
   IconHeading1,
   IconHeading2,
   IconHeading3,
+  IconLeftIndent,
+  IconLeftOutdent,
   IconNormalParagraph,
   IconOrderedList,
   IconQuote,
@@ -78,6 +80,10 @@ export const richTextActions = {
     Quote: "block-quote",
     CodeBlock: "block-codeBlock",
   },
+  LeftIndent: "leftIndent",
+  LeftOutdent: "leftOutdent",
+  RightIndent: "rightIndent",
+  RightOutdent: "rightOutdent",
   InsertHeader: "insertHeader",
   InsertFooter: "insertFooter",
 };
@@ -360,6 +366,27 @@ export const richTextOptions = [
       defaultValue: richTextActions.Block.Normal,
     },
   },
+  {
+    id: richTextActions.Divider,
+    component: IconDivider1,
+  },
+  {
+    id: richTextActions.LeftIndent,
+    component: IconButton,
+    props: {
+      id: richTextActions.LeftIndent,
+      label: "Left Indent",
+      Icon: (iconProps) => <IconLeftIndent {...iconProps} />,
+    },
+  },
+  {
+    id: richTextActions.LeftOutdent,
+    component: IconButton,
+    props: {
+      id: richTextActions.LeftOutdent,
+      label: "Left Outdent",
+      Icon: (iconProps) => <IconLeftOutdent {...iconProps} />,
+  }
   {
     id: richTextActions.InsertHeader,
     component: IconButton,

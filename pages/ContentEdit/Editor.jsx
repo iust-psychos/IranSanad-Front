@@ -8,8 +8,8 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
-import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { $getRoot, $createParagraphNode, $createTextNode } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import ToolbarPlugin from "@/pages/ContentEdit/ToolbarPlugin";
@@ -264,11 +264,10 @@ export default function Editor({ doc_uuid }) {
           contentEditable={
             <ContentEditable className="editor-input" onPaste={handlePaste} />
           }
-          placeholder={<div className="editor-placeholder">Enter text...</div>}
           ErrorBoundary={LexicalErrorBoundary}
         />
         <CheckListPlugin />
-        <TabIndentationPlugin />
+        <TabIndentationPlugin maxIndent={7} />
         <AutoFocusPlugin />
         <HistoryPlugin />
         <ListPlugin />
