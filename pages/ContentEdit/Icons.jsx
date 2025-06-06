@@ -673,3 +673,30 @@ export const IconMinus = () => (
     <path d="M0 1V0H18V1H0Z" fill="black" />
   </svg>
 );
+
+export const IconFooter = () => (
+    <svg
+    width="18"
+    height="1"
+    viewBox="0 0 18 1"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M0 1V0H18V1H0Z" fill="black" />
+  </svg>
+);
+
+export const IconHeader = () => (
+    <svg
+    width="18"
+    height="17"
+    viewBox="0 0 18 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M0 9.15385V7.84615H8.30769V0H9.69231V7.84615H18V9.15385H9.69231V17H8.30769V9.15385H0Z"
+      fill="black"
+    />
+  </svg>
+);

@@ -56,6 +56,8 @@ import {
   blockTypeToBlockName,
   lexicalToBlockId,
 } from "./RichTextActions";
+import { INSERT_HEADER_COMMAND } from "./HeaderPlugin";
+import { INSERT_FOOTER_COMMAND } from "./FooterPlugin";
 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -240,6 +242,12 @@ function ToolbarPlugin() {
         break;
       case richTextActions.Redo:
         editor.dispatchCommand(REDO_COMMAND, undefined);
+        break;
+      case richTextActions.InsertHeader:
+        editor.dispatchCommand(INSERT_HEADER_COMMAND, undefined);
+        break;
+      case richTextActions.InsertFooter:
+        editor.dispatchCommand(INSERT_FOOTER_COMMAND, undefined);
         break;
       case richTextActions.FontSize.Increment:
         updateFontSize(editor, "increment", "");
