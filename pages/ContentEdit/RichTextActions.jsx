@@ -27,6 +27,8 @@ import {
   IconSuperscript,
   IconUnderline,
   IconUndo,
+  IconHeader,
+  IconFooter,
 } from "@/pages/ContentEdit/Icons";
 import {
   IconCheckList,
@@ -76,6 +78,8 @@ export const richTextActions = {
     Quote: "block-quote",
     CodeBlock: "block-codeBlock",
   },
+  InsertHeader: "insertHeader",
+  InsertFooter: "insertFooter",
 };
 
 export const blockTypeToBlockName = {
@@ -354,6 +358,24 @@ export const richTextOptions = [
       label: "Change Block format",
       items: richTextBlockActions,
       defaultValue: richTextActions.Block.Normal,
+    },
+  },
+  {
+    id: richTextActions.InsertHeader,
+    component: IconButton,
+    props: {
+      id: richTextActions.InsertHeader,
+      label: "Insert Header",
+      Icon: (iconProps) => <IconHeader {...iconProps} />,
+    },
+  },
+  {
+    id: richTextActions.InsertFooter,
+    component: IconButton,
+    props: {
+      id: richTextActions.InsertFooter,
+      label: "Insert Footer",
+      Icon: (iconProps) => <IconFooter {...iconProps} />,
     },
   },
 ];

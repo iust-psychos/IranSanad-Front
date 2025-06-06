@@ -17,6 +17,8 @@ import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
 import { ImageNode, ImagePlugin, INSERT_IMAGE_COMMAND } from "./ImagePlugin";
 import "@/styles/EditorTable.css";
+import { HeaderPlugin } from "./HeaderPlugin";
+import { FooterPlugin } from "./FooterPlugin";
 
 function PageContentManager({ currentPage, pageContents }) {
   const [editor] = useLexicalComposerContext();
@@ -34,7 +36,6 @@ function PageContentManager({ currentPage, pageContents }) {
       root.append(paragraph);
     });
   }, [currentPage, editor]);
-
   return null;
 }
 
@@ -272,7 +273,8 @@ export default function Editor({ doc_uuid }) {
         <HistoryPlugin />
         <ListPlugin />
         <ImagePlugin />
-
+        <HeaderPlugin />
+        <FooterPlugin />
         <OnChangePlugin
           onChange={(editorState) => {
             editorState.read(() => {

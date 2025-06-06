@@ -3,6 +3,8 @@ import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { TableNode, TableRowNode, TableCellNode } from "@lexical/table";
 import { ImageNode } from "./ImagePlugin";
+import { HeaderNode } from './HeaderNode';
+import { FooterNode } from './FooterNode';
 const theme = {
   code: "editor-code",
   heading: {
@@ -48,6 +50,8 @@ const theme = {
     italic: "editor-text-italic",
     highlight: "editor-highlight",
   },
+  header: 'editor-header',
+  footer: 'editor-footer',
 };
 
 export const editorConfig = {
@@ -67,7 +71,9 @@ export const editorConfig = {
     HeadingNode,
     QuoteNode,
     CodeHighlightNode,
-    ImageNode
+    ImageNode,
+    HeaderNode,
+    FooterNode
   ],
 };
 
