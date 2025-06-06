@@ -288,7 +288,6 @@ function ToolbarPlugin() {
         formatNumberedList(editor, blockIdToLexical[value]);
         break;
       case richTextActions.Block.UnorderedList:
-        console.log(blockIdToLexical[value]);
         formatBulletList(editor, blockIdToLexical[value]);
         break;
       case richTextActions.Block.CheckList:

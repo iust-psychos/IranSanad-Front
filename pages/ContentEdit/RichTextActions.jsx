@@ -386,23 +386,24 @@ export const richTextOptions = [
       id: richTextActions.LeftOutdent,
       label: "Left Outdent",
       Icon: (iconProps) => <IconLeftOutdent {...iconProps} />,
-  }
-  {
-    id: richTextActions.InsertHeader,
-    component: IconButton,
-    props: {
-      id: richTextActions.InsertHeader,
-      label: "Insert Header",
-      Icon: (iconProps) => <IconHeader {...iconProps} />,
     },
   },
-  {
-    id: richTextActions.InsertFooter,
-    component: IconButton,
-    props: {
-      id: richTextActions.InsertFooter,
-      label: "Insert Footer",
-      Icon: (iconProps) => <IconFooter {...iconProps} />,
-    },
-  },
+  // {
+  //   id: richTextActions.InsertHeader,
+  //   component: IconButton,
+  //   props: {
+  //     id: richTextActions.InsertHeader,
+  //     label: "Insert Header",
+  //     Icon: (iconProps) => <IconHeader {...iconProps} />,
+  //   },
+  // },
+  // {
+  //   id: richTextActions.InsertFooter,
+  //   component: IconButton,
+  //   props: {
+  //     id: richTextActions.InsertFooter,
+  //     label: "Insert Footer",
+  //     Icon: (iconProps) => <IconFooter {...iconProps} />,
+  //   },
+  // },
 ];
