@@ -1,5 +1,5 @@
 // HeaderNode.js
-import { ElementNode } from 'lexical';
+import { ElementNode, $isElementNode, $applyNodeReplacement } from 'lexical';
 
 export class HeaderNode extends ElementNode {
   static getType() {
@@ -13,10 +13,11 @@ export class HeaderNode extends ElementNode {
   createDOM(config) {
     const element = document.createElement('header');
     element.className = config.theme.header || 'editor-header';
+    element.contentEditable = 'true';
     return element;
   }
 
-  updateDOM() {
+  updateDOM(prevNode, dom) {
     return false;
   }
 
@@ -31,6 +32,13 @@ export class HeaderNode extends ElementNode {
       version: 1,
     };
   }
+
+  remove() {
+    return false;
+  }
+
+  canInsertTextBefore() { return false; }
+  canInsertTextAfter() { return true; }
 }
 
 export function $createHeaderNode() {
