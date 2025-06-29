@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "@/styles/UserProfile.css";
 import userProfileIcon from "/images/user-profile.png";
 import { toJalaali } from "jalaali-js";
@@ -6,17 +6,15 @@ import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "@/utils/Toast.js";
 import { convertToBase64 } from "@/utils/Base64ImageConverter.js";
-import { FaEye } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa";
-import { FaEdit } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaEdit } from "react-icons/fa";
 import { TiDelete } from "react-icons/ti";
-
-const getUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
-const changePasswordAPI =
-  "http://iransanad.fiust.ir/api/v1/auth/change_password/";
-const changeUserInfoAPI = "http://iransanad.fiust.ir/api/v1/auth/info/";
-const changeProfileImageAPI = "http://iransanad.fiust.ir/api/v1/auth/profile/";
-const baseAPI = "http://iransanad.fiust.ir";
+import {
+  getUserInfoAPI,
+  changePasswordAPI,
+  changeUserInfoAPI,
+  changeProfileImageAPI,
+  baseAPI,
+} from "@/managers/UserProfileManager.js";
 
 const initialPassword = {
   old_password: "",
