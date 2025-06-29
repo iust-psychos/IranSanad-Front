@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "@/styles/Share.css";
 import { GrAttachment } from "react-icons/gr";
 import { FaUser } from "react-icons/fa";
@@ -12,24 +11,19 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
-
-const baseAPI = "http://iransanad.fiust.ir";
-const postPermissionsAPI =
-  "http://iransanad.fiust.ir/api/v1/docs/permission/set_permission/";
-const getPermissionsAPI =
-  "http://iransanad.fiust.ir/api/v1/docs/permission/get_permission_list/";
-const checkValidUserAPI = "http://iransanad.fiust.ir/api/v1/auth/user_lookup/";
-const getDocAPI = "http://iransanad.fiust.ir/api/v1/docs/";
+import {
+  baseAPI,
+  postPermissionsAPI,
+  getPermissionsAPI,
+  checkValidUserAPI,
+  getDocAPI,
+} from "@/managers/ShareManager.js";
 
 const Share = ({ onClose, doc_uuid }) => {
   const token = CookieManager.LoadToken();
 
   const [isLoading, setIsLoading] = useState(false);
-
-  // Document
   const [document, setDocument] = useState({});
-
-  // Permission
   const [permissionList, setPermissionList] = useState([]);
 
   useEffect(() => {
