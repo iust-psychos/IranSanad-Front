@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { deleteDocument } from "../Managers/user-dashboard-manager";
+import { deleteDocument } from "@/Managers/userDashboardManager";
 
 export function useDeleteDocument(updateStateFunction, document) {
   const queryClient = useQueryClient();

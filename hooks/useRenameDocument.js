@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { renameDocument } from "../Managers/user-dashboard-manager";
+import { renameDocument } from "@/Managers/userDashboardManager";
 
 export function useRenameDocument(updateStateFunction, document) {
   const queryClient = useQueryClient();

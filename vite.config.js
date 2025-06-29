@@ -14,6 +14,9 @@ export default defineConfig({
     setupFiles: "./src/setupTests.js",
     css: true,
   },
+  server: {
+    allowedHosts: true
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./"),

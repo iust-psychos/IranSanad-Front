@@ -1,5 +1,5 @@
-import { IconLogo } from "./user-dashboard/components/Icons";
-import UserProfileDropdown from "./user-dashboard/components/UserProfileDropdown";
+import { IconLogo } from "@/pages/UserDashboard/components/Icons";
+import UserProfileDropdown from "@/pages/UserDashboard/components/UserProfileDropdown";
 
 const Header = () => {
   <menu className="navbar">

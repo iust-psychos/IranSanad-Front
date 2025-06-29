@@ -1,5 +1,5 @@
 import React from "react";
-import "../Styles/AnimatedSVG.css";
+import "@/styles/AnimatedSVG.css";
 
 const AnimatedSVG = ({ width = 400, height = 300 }) => {
   return (
