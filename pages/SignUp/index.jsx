@@ -92,7 +92,7 @@ const SignUp = () => {
       );
     } catch (err) {
       if (err.name == "AxiosError") {
-        showErrorToast(err.response.data.message);
+        showErrorToast(err.message);
       } else {
         const validationErrors = {};
         if (err.inner !== undefined) {
