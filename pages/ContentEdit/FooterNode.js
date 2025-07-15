@@ -1,4 +1,4 @@
-import { ElementNode } from 'lexical';
+import { ElementNode, $applyNodeReplacement } from 'lexical';
 
 export class FooterNode extends ElementNode {
   static getType() {
@@ -12,10 +12,11 @@ export class FooterNode extends ElementNode {
   createDOM(config) {
     const element = document.createElement('footer');
     element.className = config.theme.Footer || 'editor-footer';
+    element.contentEditable = 'true';
     return element;
   }
 
-  updateDOM() {
+  updateDOM(prevNode, dom) {
     return false;
   }
 
@@ -30,10 +31,17 @@ export class FooterNode extends ElementNode {
       version: 1,
     };
   }
+
+  remove() {
+    return false;
+  }
+
+  canInsertTextBefore() { return true; }
+  canInsertTextAfter() { return false; }
 }
 
 export function $createFooterNode() {
-  return new FooterNode();
+  return $applyNodeReplacement(new FooterNode());
 }
 
 export function $isFooterNode(node) {

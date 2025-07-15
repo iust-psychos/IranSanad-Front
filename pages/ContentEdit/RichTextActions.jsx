@@ -280,4 +280,76 @@ export const richTextOptions = [
       Icon: (iconProps) => <IconDirectionRTL {...iconProps} />,
     },
   },
+  {
+    id: richTextActions.LeftAlign,
+    component: IconButton,
+    props: {
+      id: richTextActions.LeftAlign,
+      label: "Align Left",
+      Icon: (iconProps) => <IconLeftAlign {...iconProps} />,
+    },
+  },
+  {
+    id: richTextActions.JustifyAlign,
+    component: IconButton,
+    props: {
+      id: richTextActions.JustifyAlign,
+      label: "Justify Align",
+      Icon: (iconProps) => <IconJustify {...iconProps} />,
+    },
+  },
+  {
+    id: richTextActions.Divider,
+    component: IconDivider1,
+  },
+  {
+    id: richTextActions.Block.Update,
+    component: IconDropdown,
+    props: {
+      id: richTextActions.Block.Update,
+      label: "Change Block format",
+      items: richTextBlockActions,
+      defaultValue: richTextActions.Block.Normal,
+    },
+  },
+  {
+    id: richTextActions.Divider,
+    component: IconDivider1,
+  },
+  {
+    id: richTextActions.LeftIndent,
+    component: IconButton,
+    props: {
+      id: richTextActions.LeftIndent,
+      label: "Left Indent",
+      Icon: (iconProps) => <IconLeftIndent {...iconProps} />,
+    },
+  },
+  {
+    id: richTextActions.LeftOutdent,
+    component: IconButton,
+    props: {
+      id: richTextActions.LeftOutdent,
+      label: "Left Outdent",
+      Icon: (iconProps) => <IconLeftOutdent {...iconProps} />,
+    },
+  },
+  {
+    id: richTextActions.ToggleHeader,
+    component: IconButton,
+    props: {
+      id: richTextActions.ToggleHeader,
+      label: "Toggle Header",
+      Icon: (iconProps) => <IconHeader {...iconProps} />,
+    },
+  },
+  {
+    id: richTextActions.ToggleFooter,
+    component: IconButton,
+    props: {
+      id: richTextActions.ToggleFooter,
+      label: "Toggle Footer",
+      Icon: (iconProps) => <IconFooter {...iconProps} />,
+    },
+  },
 ];

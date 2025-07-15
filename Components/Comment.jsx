@@ -8,10 +8,11 @@ import { format, newDate } from "date-fns-jalali";
 import { parseISO } from "date-fns";
 import { faIR } from "date-fns-jalali/locale";
 import { toPersianDigit } from "@/utils/persianNumberConverter.js";
-
-const commentsBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/document";
-const replyBaseAPI = "http://iransanad.fiust.ir/api/v1/docs/commentreply";
-const WebsocketBaseURL = "ws://iransanad.fiust.ir/ws/docs";
+import {
+  commentsBaseAPI,
+  replyBaseAPI,
+  WebsocketBaseURL,
+} from "@/managers/CommentManager.js";
 
 export default function Comment({ documentId, currentUser, onClose }) {
   const [comments, setComments] = useState([]);

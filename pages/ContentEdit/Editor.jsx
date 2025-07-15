@@ -19,6 +19,7 @@ import { ImageNode, ImagePlugin, INSERT_IMAGE_COMMAND } from "./ImagePlugin";
 import "@/styles/EditorTable.css";
 import { HeaderPlugin } from "./HeaderPlugin";
 import { FooterPlugin } from "./FooterPlugin";
+import constants from "../../Managers/constants";
 
 function PageContentManager({ currentPage, pageContents }) {
   const [editor] = useLexicalComposerContext();
@@ -135,14 +136,11 @@ export default function Editor({ doc_uuid }) {
   const handleGetUserInformation = async () => {
     try {
       const token = CookieManager.LoadToken();
-      const response = await axios.get(
-        "http://iransanad.fiust.ir/api/v1/auth/info/",
-        {
-          headers: {
-            Authorization: `JWT ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${constants.baseUrl}auth/info/`, {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("Failed to fetch user info:", error);

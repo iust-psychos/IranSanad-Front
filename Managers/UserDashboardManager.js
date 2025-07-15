@@ -1,4 +1,5 @@
 import { apiFetch } from "@/utils/apiFetch";
+import constants from "./constants.js";
 
 export const initialDocuments = [
   {
@@ -32,28 +33,28 @@ export const initialDocuments = [
 ];
 
 export const userDashboardLoader = async () => {
-  return apiFetch("http://iransanad.fiust.ir/api/v1/docs/");
+  return apiFetch(`${constants.baseUrl}docs/`);
 };
 
 export const userInfoLoader = async () => {
-  return apiFetch("http://iransanad.fiust.ir/api/v1/auth/info/");
+  return apiFetch(`${constants.baseUrl}auth/info/`);
 };
 
 export const deleteDocument = async (uuid) => {
-  return await apiFetch(`http://iransanad.fiust.ir/api/v1/docs/${uuid}/`, {
+  return await apiFetch(`${constants.baseUrl}docs/${uuid}/`, {
     method: "DELETE",
   });
 };
 
 export const renameDocument = async (uuid, name) => {
-  return await apiFetch(`http://iransanad.fiust.ir/api/v1/docs/${uuid}/`, {
+  return await apiFetch(`${constants.baseUrl}docs/${uuid}/`, {
     method: "PATCH",
     body: JSON.stringify({ title: name }),
   });
 };
 
 export const createDocument = async () => {
-  return await apiFetch(`http://iransanad.fiust.ir/api/v1/docs/`, {
+  return await apiFetch(`${constants.baseUrl}docs/`, {
     method: "Post",
   });
 };
