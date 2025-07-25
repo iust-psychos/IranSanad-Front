@@ -9,7 +9,6 @@ import Login from "@/pages/Login/index";
 import Forgot_password from "@/pages/ForgetPassword/index";
 import UserDashboard from "@/pages/UserDashboard/index";
 import { userDashboardLoader } from "@/managers/UserDashboardManager";
-import Loading from "@/components/Loading";
 import { ToastContainer } from "react-toastify";
 import ContentEditor from "@/pages/ContentEdit/index";
 import EmailVerification from "@/Components/EmailVerification";
@@ -41,7 +40,7 @@ const ProtectedRoute = ({
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <Landing />,
   },
   {
     path: "/login",
@@ -58,10 +57,6 @@ const router = createBrowserRouter([
   {
     path: "/EmailVerification",
     element: <EmailVerification />,
-  },
-  {
-    path: "/landing",
-    element: <Landing />,
   },
   // Protected routes group
   {
@@ -96,18 +91,6 @@ const router = createBrowserRouter([
     element: <ErrorPage />,
   },
 ]);
-
-function Root() {
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return isLoading ? <Loading /> : <Navigate to="/landing" />;
-}
 
 function updateFavicon(mode) {
   const favicon =

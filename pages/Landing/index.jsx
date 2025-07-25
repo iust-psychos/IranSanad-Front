@@ -3,16 +3,22 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useVisibilityRatio } from "@/hooks/useVisibilityRatio";
 import "@/styles/Landing.css";
-import { Service1 , Service2 ,Service3 ,Service4 } from "../../Constants/ImageConstants";
+import {
+  Service1,
+  Service2,
+  Service3,
+  Service4,
+  LandingHero,
+} from "../../Constants/ImageConstants";
 import { Join } from "../../Constants/ImageConstants";
 import { MdEmail, MdPhoneEnabled, MdLocationPin } from "react-icons/md";
 import { TbLanguage } from "react-icons/tb";
 import { FaLocationDot } from "react-icons/fa6";
 import { HiDocumentDuplicate } from "react-icons/hi2";
 import { FaUser } from "react-icons/fa";
-import AnimatedSVG from "@/components/AnimatedSVG";
 import CountUp from "react-countup";
 import { toPersianDigit } from "@/utils/PersianNumberConverter";
+import Navbar from "../../Components/Navbar";
 // import { useInView } from "react-intersection-observer";
 
 const Landing = () => {
@@ -57,9 +63,7 @@ const Landing = () => {
 
   return (
     <div className="landing">
-      {/* <div className="landing-navbar">
-        به دلیل مشکلات فنی نوبار در حال حاضر در دسترس نیست...
-      </div> */}
+      <Navbar />
       <div className="landing-hero">
         <div className="landing-hero-text">
           <h1 className="landing-hero-header">
@@ -78,10 +82,13 @@ const Landing = () => {
             شروع کنید 🚀
           </button>
         </div>
-        <AnimatedSVG
-          width={isMobile ? "100%" : "50%"}
+        {/********* */}
+        <div
           className="landing-hero-image"
-        />
+          style={{ width: isMobile ? "100%" : "50%" }}
+        >
+          <img src={LandingHero} alt="ایران سند\nساده، هوشمند و قدرتمند" />
+        </div>
       </div>
       <div className="landing-services">
         <h1 className="landing-services-title">خدمات ایران‌سند</h1>
