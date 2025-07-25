@@ -1,4 +1,9 @@
+import { useState } from "react";
+import { IoEye, IoEyeOff } from "react-icons/io5";
+
 const LabelInput = ({ type, name, label, value1, value2, onChange }) => {
+  const [show, setShow] = useState(false);
+
   return (
     <div className="user-profile-forms-labelinput">
       {name === "name" ? (
@@ -24,17 +29,43 @@ const LabelInput = ({ type, name, label, value1, value2, onChange }) => {
           />{" "}
         </>
       ) : type === "password" ? (
-        <>
-          <label htmlFor={name}>{label}</label>
-          <input
-            id={name}
-            name={name}
-            type={type}
-            className="user-profile-forms-labelinput-input"
-            dir="ltr"
-            onChange={onChange}
-          />{" "}
-        </>
+        show ? (
+          <>
+            <label htmlFor={name}>{label}</label>
+            <button
+              className="user-profile-forms-labelinput-button"
+              onClick={() => setShow(false)}
+            >
+              <IoEyeOff />
+            </button>
+            <input
+              id={name}
+              name={name}
+              type="text"
+              className="user-profile-forms-labelinput-input"
+              dir="ltr"
+              onChange={onChange}
+            />
+          </>
+        ) : (
+          <>
+            <label htmlFor={name}>{label}</label>
+            <button
+              className="user-profile-forms-labelinput-button"
+              onClick={() => setShow(true)}
+            >
+              <IoEye />
+            </button>
+            <input
+              id={name}
+              name={name}
+              type="password"
+              className="user-profile-forms-labelinput-input"
+              dir="ltr"
+              onChange={onChange}
+            />
+          </>
+        )
       ) : (
         <>
           <label htmlFor={name}>{label}</label>

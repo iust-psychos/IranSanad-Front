@@ -181,6 +181,17 @@
     font-family: 'Vazir';
 }
 
+.user-profile-forms-labelinput-button {
+    background: none;
+    border: none;
+    margin-left: -7%;
+    z-index: 1;
+}
+
+.user-profile-forms-labelinput-button > * {
+    vertical-align: middle;
+}
+
 .user-profile-content-forms-buttons {
     display: flex;
     flex-direction: row;
