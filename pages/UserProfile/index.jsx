@@ -125,7 +125,10 @@ const UserProfile = () => {
   };
 
   const handleDeleteImage = () => {
-    setUpdatedUser((user) => ({ ...user, profile_image: " " }));
+    setUpdatedUser((user) => ({
+      ...user,
+      profile_image: "",
+    }));
   };
 
   const getErrorMessage = (error) => {
