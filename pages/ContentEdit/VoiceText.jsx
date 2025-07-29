@@ -1,14 +1,11 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import "@/pages/ContentEdit/index.css";
-import APIS from "@/Managers/constants.js";
+import { voiceTextAPI } from "../../Managers/Voice2TextManager";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
 
 const VoiceText = () => {
-  const baseUrl = APIS.baseUrl;
-  const voiceTextAPI = baseUrl + "stt/transcriptions/";
-
   const token = CookieManager.LoadToken();
 
   const [audioFile, setAudioFile] = useState(null);
@@ -22,7 +19,7 @@ const VoiceText = () => {
     console.log(file);
     if (file && file.type.includes("audio")) {
       setAudioFile(file);
-      console.log("in");
+      console.log("in: ", audioFile);
     } else {
       showErrorToast("لطفاً یک فایل صوتی معتبر انتخاب کنید");
       setAudioFile(null);
@@ -75,13 +72,22 @@ const VoiceText = () => {
       </p>
       <input
         ref={fileInputRef}
-        className="SideTool-Voice-File SideTool-Voice-Item"
         type="file"
+        accept="audio/*"
+        style={{ display: "none" }}
         name="SideTool-Voice"
         id="SideTool-Voice"
-        accept="audio/*"
         onChange={handleFileChange}
       />
+      <label htmlFor="SideTool-Voice">
+        <button
+          className="SideTool-Voice-File SideTool-Voice-Item"
+          type="button"
+          onClick={() => document.getElementById("SideTool-Voice").click()}
+        >
+          {audioFile ? audioFile.name : " بارگذاری فایل صوتی"}
+        </button>
+      </label>
 
       <button
         className="SideTool-Voice-Button SideTool-Voice-Item"
