@@ -4,6 +4,8 @@ import { voiceTextAPI } from "../../Managers/Voice2TextManager";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
+import VoiceRecorder from "./VoiceRecorder";
+import { FiUpload } from "react-icons/fi";
 
 const VoiceText = () => {
   const token = CookieManager.LoadToken();
@@ -85,7 +87,7 @@ const VoiceText = () => {
           type="button"
           onClick={() => document.getElementById("SideTool-Voice").click()}
         >
-          {audioFile ? audioFile.name : " بارگذاری فایل صوتی"}
+          {audioFile ? audioFile.name : <FiUpload />}
         </button>
       </label>
 
@@ -119,6 +121,19 @@ const VoiceText = () => {
           </button>{" "}
         </>
       )}
+
+      <p className="SideTool-Voice-Text SideTool-Voice-Item">
+        به صورت زنده فایل صوتی را در این قسمت ضبط کرده و متن آن را دریافت کنید.
+      </p>
+      <VoiceRecorder />
+      <button
+        className="SideTool-Voice-Button SideTool-Voice-Item"
+        type="submit"
+        onClick={convertVoice2Text}
+        disabled={!audioFile || isLoading}
+      >
+        {isLoading ? "در حال پردازش..." : "تبدیل"}
+      </button>
     </div>
   );
 };
