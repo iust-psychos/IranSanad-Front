@@ -1209,8 +1209,79 @@
   resize: none;
   overflow-y: hidden;
   width: 100%;
+}
+
+.SideTool-Voice-Recorder-Container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--button-text);
   background-color: var(--secondary-bg);
-  color: var(--text-primary);
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.SideTool-Voice-Recorder-Icon-Button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--button-text);
+  background-color: var(--secondary-bg);
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center; 
+  justify-content: center;
+}
+
+.SideTool-Voice-Recorder-Icon-Button:hover {
+  background: var(--text-secondary);
+  color: var(--secondary-bg);
+  box-shadow: 0 var(--text-secondary);
+}
+
+.SideTool-Voice-Recorder-Record-Button {
+  color: var(--button-text);
+  background-color: var(--secondary-bg);
+}
+
+.SideTool-Voice-Recorder-Stop-Button {
+  color: var(--button-text);
+  background-color: var(--secondary-bg);
+}
+
+.SideTool-Voice-Recording-Status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--button-text);
+  background-color: var(--secondary-bg);
+  text-align: center;
+}
+
+.SideTool-Voice-Recorder-Pulse-Icon {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.SideTool-Voice-Recorder-Audio-Player {
+  margin-left: 10px;
+  height: 40px;
+  border: 1px solid var(--text-secondary);
+  border-radius: 20px;
 }
 
 .editor-header {
