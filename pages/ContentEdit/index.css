@@ -1186,18 +1186,19 @@
 }
 
 .SideTool-Voice-File {
-  cursor: pointer;
   background-color: var(--secondary-bg);
   width: 100%;
-}
-
-.SideTool-Voice-File::-webkit-file-upload-button {
-  background-color: var(--button-bg);
+  box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px, rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.04) 0px 6px 6px -3px, rgba(14, 63, 126, 0.04) 0px 12px 12px -6px, rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;
   color: var(--button-text);
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
-  cursor: pointer;
+}
+
+.SideTool-Voice-File:hover {
+  background: var(--text-secondary);
+  color: var(--secondary-bg);
+  box-shadow: 0 var(--text-secondary);
 }
 
 .SideTool-Voice-Output {
@@ -1208,8 +1209,79 @@
   resize: none;
   overflow-y: hidden;
   width: 100%;
+}
+
+.SideTool-Voice-Recorder-Container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--button-text);
   background-color: var(--secondary-bg);
-  color: var(--text-primary);
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.SideTool-Voice-Recorder-Icon-Button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--button-text);
+  background-color: var(--secondary-bg);
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center; 
+  justify-content: center;
+}
+
+.SideTool-Voice-Recorder-Icon-Button:hover {
+  background: var(--text-secondary);
+  color: var(--secondary-bg);
+  box-shadow: 0 var(--text-secondary);
+}
+
+.SideTool-Voice-Recorder-Record-Button {
+  color: var(--button-text);
+  background-color: var(--secondary-bg);
+}
+
+.SideTool-Voice-Recorder-Stop-Button {
+  color: var(--button-text);
+  background-color: var(--secondary-bg);
+}
+
+.SideTool-Voice-Recording-Status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--button-text);
+  background-color: var(--secondary-bg);
+  text-align: center;
+}
+
+.SideTool-Voice-Recorder-Pulse-Icon {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.SideTool-Voice-Recorder-Audio-Player {
+  margin-left: 10px;
+  height: 40px;
+  border: 1px solid var(--text-secondary);
+  border-radius: 20px;
 }
 
 .editor-header {
