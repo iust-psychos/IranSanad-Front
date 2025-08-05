@@ -6,6 +6,8 @@ export const slideImage4 = "/images/Slider/slideImage4.svg";
 export const DEFAULT_IMAGE = "/images/UserProfile/Default.png";
 export const userProfileIcon = "/images/user-profile.png";
 
+export const LandingHero = "/images/Landing/hero.svg";
+
 export const Service1 = "/images/Landing/service1.svg";
 export const Service2 = "/images/Landing/service2.svg";
 export const Service3 = "/images/Landing/service3.svg";

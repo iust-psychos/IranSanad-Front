@@ -1,19 +1,29 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useVisibilityRatio } from "@/hooks/useVisibilityRatio";
-import "@/styles/Landing.css";
-import { Service1 , Service2 ,Service3 ,Service4 } from "../../Constants/ImageConstants";
-import { Join } from "../../Constants/ImageConstants";
-import { MdEmail, MdPhoneEnabled, MdLocationPin } from "react-icons/md";
-import { TbLanguage } from "react-icons/tb";
-import { FaLocationDot } from "react-icons/fa6";
-import { HiDocumentDuplicate } from "react-icons/hi2";
-import { FaUser } from "react-icons/fa";
-import AnimatedSVG from "@/components/AnimatedSVG";
 import CountUp from "react-countup";
 import { toPersianDigit } from "@/utils/PersianNumberConverter";
-// import { useInView } from "react-intersection-observer";
+import "@/styles/Landing.css";
+import {
+  Service1,
+  Service2,
+  Service3,
+  Service4,
+  LandingHero,
+  Join,
+} from "../../Constants/ImageConstants";
+import {
+  MdEmail,
+  MdPhoneEnabled,
+  MdLocationPin,
+  TbLanguage,
+  FaLocationDot,
+  HiDocumentDuplicate,
+  FaUser,
+} from "@/managers/LandingManager.js";
+import Navbar from "../../Components/Navbar";
+import ServiceItem from "./ServiceItem";
 
 const Landing = () => {
   const [ref1, ratio1] = useVisibilityRatio();
@@ -50,16 +60,9 @@ const Landing = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // const { ref, inView } = useInView({
-  //   triggerOnce: false,
-  //   threshold: 0.5,
-  // });
-
   return (
     <div className="landing">
-      {/* <div className="landing-navbar">
-        به دلیل مشکلات فنی نوبار در حال حاضر در دسترس نیست...
-      </div> */}
+      <Navbar />
       <div className="landing-hero">
         <div className="landing-hero-text">
           <h1 className="landing-hero-header">
@@ -78,112 +81,63 @@ const Landing = () => {
             شروع کنید 🚀
           </button>
         </div>
-        <AnimatedSVG
-          width={isMobile ? "100%" : "50%"}
+        <div
           className="landing-hero-image"
-        />
+          style={{ width: isMobile ? "100%" : "50%" }}
+        >
+          <img src={LandingHero} alt="ایران سند\nساده، هوشمند و قدرتمند" />
+        </div>
       </div>
       <div className="landing-services">
         <h1 className="landing-services-title">خدمات ایران‌سند</h1>
         <div className="landing-services-grid">
-          <motion.div
+          <ServiceItem
             ref={ref1}
-            style={{ scale: scale1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="landing-services-grid-item"
-          >
-            <img
-              className="landing-services-grid-item-img"
-              src={Service4}
-              alt="ویرایش برخط اسناد"
-            />
-            <h2 className="landing-services-grid-item-title">
-              ویرایش آنلاین اسناد
-            </h2>
-            <div className="landing-services-grid-item-body">
-              <p>
-                ویرایش همزمان اسناد به صورت برخط با قابلیت ذخیره‌سازی خودکار و
-                تاریخچه تغییرات
-              </p>
-            </div>
-          </motion.div>
-          <motion.div
+            scale={scale1}
+            pic={Service4}
+            title="ویرایش آنلاین اسناد"
+            alt="ویرایش برخط اسناد"
+            desc="ویرایش همزمان اسناد به صورت برخط با قابلیت ذخیره‌سازی خودکار و
+                تاریخچه تغییرات"
+          />
+          <ServiceItem
             ref={ref2}
-            style={{ scale: scale2 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="landing-services-grid-item"
-          >
-            <img
-              className="landing-services-grid-item-img"
-              src={Service1}
-              alt="همکاری تیمی"
-            />
-            <h2 className="landing-services-grid-item-title">همکاری تیمی</h2>
-            <div className="landing-services-grid-item-body">
-              <p>
-                امکان کار تیمی روی اسناد با تعیین سطح دسترسی مختلف برای هر عضو
-                تیم
-              </p>
-            </div>
-          </motion.div>
-          <motion.div
+            scale={scale2}
+            pic={Service1}
+            title="همکاری تیمی"
+            alt="همکاری تیمی"
+            desc="امکان کار تیمی روی اسناد با تعیین سطح دسترسی مختلف برای هر عضو
+                تیم"
+          />
+          <ServiceItem
             ref={ref3}
-            style={{ scale: scale3 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="landing-services-grid-item"
-          >
-            <img
-              className="landing-services-grid-item-img"
-              src={Service2}
-              alt="قالب‌های آماده"
-            />
-            <h2 className="landing-services-grid-item-title">قالب‌های آماده</h2>
-            <div className="landing-services-grid-item-body">
-              <p>
-                مجموعه‌ای از قالب‌های حرفه‌ای برای انواع سندهای اداری، آموزشی و
-                تجاری
-              </p>
-            </div>
-          </motion.div>
-          <motion.div
+            scale={scale3}
+            pic={Service2}
+            title="قالب‌های آماده"
+            alt="قالب‌های آماده"
+            desc="مجموعه‌ای از قالب‌های حرفه‌ای برای انواع سندهای اداری، آموزشی و
+                تجاری"
+          />
+          <ServiceItem
             ref={ref4}
-            style={{ scale: scale4 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="landing-services-grid-item"
-          >
-            <img
-              className="landing-services-grid-item-img"
-              src={Service3}
-              alt="همگام‌سازی لحظه‌ای"
-            />
-            <h2 className="landing-services-grid-item-title">
-              همگام‌سازی لحظه‌ای
-            </h2>
-            <div className="landing-services-grid-item-body">
-              <p>
-                دسترسی به اسناد از هر دستگاه و هر مکان با همگام‌سازی خودکار
-                تغییرات
-              </p>
-            </div>
-          </motion.div>
+            scale={scale4}
+            pic={Service3}
+            title="همگام‌سازی لحظه‌ای"
+            alt="همگام‌سازی لحظه‌ای"
+            desc="دسترسی به اسناد از هر دستگاه و هر مکان با همگام‌سازی خودکار
+                تغییرات"
+          />
         </div>
       </div>
       <div className="landing-stats">
-        <div
-          className="landing-stats-item"
-          // ref={ref}
-        >
+        <div className="landing-stats-item">
           <h1 className="landing-stats-item-number">
-            {/* {inView ? ( */}
             <CountUp
               end={10}
               duration={3}
               separator=","
               formattingFn={toPersianDigit}
             />
-            {/* ) : (
-              "۱۰۰۰۰۰"
-            )} */}
           </h1>
           <p className="landing-stats-item-desc">کاربر فعال</p>
           <FaUser className="landing-stats-item-icon" />
@@ -278,8 +232,8 @@ const Landing = () => {
             <li className="landing-footer-list-item">
               {" "}
               <MdLocationPin />
-              تهران، تهران، خیابان رسالت، خیابان هنگام، خیابان دانشگاه علم و
-              صنعت ایران، دانشگاه علم و صنعت ایران، دانشکده مهندسی کامپیوتر
+              تهران، خیابان رسالت، خیابان هنگام، دانشگاه علم و صنعت ایران،
+              دانشکده مهندسی کامپیوتر
             </li>
           </ul>
         </div>

@@ -700,3 +700,27 @@ export const IconHeader = () => (
     />
   </svg>
 );
+
+export const IconDirectionLTR = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path d="M4 4v16h2V4H4zm6 4h7a1 1 0 1 0 0-2h-7a1 1 0 1 0 0 2zm0 4h7a1 1 0 1 0 0-2h-7a1 1 0 1 0 0 2zm0 4h7a1 1 0 1 0 0-2h-7a1 1 0 1 0 0 2zm0 4h7a1 1 0 1 0 0-2h-7a1 1 0 1 0 0 2z" />
+  </svg>
+);
+
+export const IconDirectionRTL = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path d="M18 4v16h2V4h-2zM14 8H7a1 1 0 1 1 0-2h7a1 1 0 1 1 0 2zm0 4H7a1 1 0 1 1 0-2h7a1 1 0 1 1 0 2zm0 4H7a1 1 0 1 1 0-2h7a1 1 0 1 1 0 2zm0 4H7a1 1 0 1 1 0-2h7a1 1 0 1 1 0 2z" />
+  </svg>
+);

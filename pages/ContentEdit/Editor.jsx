@@ -286,7 +286,7 @@ export default function Editor({ doc_uuid }) {
         />
 
         <CollaborationPlugin
-          id={`${doc_uuid}-page-${currentPage}`}
+          id={`${doc_uuid}/page-${currentPage}`}
           providerFactory={providerFactory}
           shouldBootstrap={true}
           username={userInfo?.username || "Anonymous"}

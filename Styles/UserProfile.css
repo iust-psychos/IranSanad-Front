@@ -1,382 +1,209 @@
 .user-profile {
     height: 100vh;
-    background-color: #E8E3F9;
+    background-color: var(--primary-bg);
     align-items: center;
+}
+
+.user-profile * {
+    font-family: 'Vazir';
+    color: var(--text-primary);
 }
 
 .user-profile-area {
-    width: 65%;
-    height: 85%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: whitesmoke;
-    border-radius: 30px;
-    box-shadow: -4px -4px 4px 2px rgba(0, 0, 0, 0.25), 4px 4px 4px 2px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: column;
-    padding: 2% 3%;
-}
-
-.user-profile-area-header {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
+    margin: 2% auto 0 auto;
+    padding: 2px;
+    width: 450px;
+    background-color: var(--secondary-bg);
+    border-radius: 15px;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
 }
 
-.user-profile-area-header > h2 {
-    font-size: 22px;
-    font-family: 'Vazir';
-    font-weight: bold;
-}
-
-.user-profile-area-header > p {
-    font-size: 0.9rem;
-    font-family: 'Vazir';
-    font-weight: 100;
-    color: #C9BEBE;
-}
-
-.user-profile-area-body {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    height: 92%;
-    width: 100%;
-    margin-top: 1%;
-    border-radius: 10px;
-}
-
-.user-profile-area-body > .color-tape {
-    background: linear-gradient(to right, #E8E3F9, #AE8EE6);
-    width: 100%;
-    height: 9%;
-    border-radius: 10px 10px 0px 0px;
-}
-
-.user-profile-area-body-content {
-    display: flex;
-    flex-direction: column;
-    height: 91%;
-    padding: 2% 5% 0 5%;
-}
-
-.user-profile-info-1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 15%;
-}
-
-/* Button */
-
-.user-profile-info-1 > button {
-    background-color: #AE8EE6;
-    color: white;
-    border-radius: 10px;
-    width: 70px;
-    height: 35px;
-    border: none;
-    font-family: 'Vazir';
-    font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
-    position: relative;
-    z-index: 0;
-}
-
-.user-profile-info-1 > button:before {
-    content: '';
-    background: linear-gradient(45deg, #E8E3F9, #e2d2fd, #d5befc, #c4a1fe, #b38cf4, #a37edf, #8b66c8, #9478c3, #AE8EE6);
-    position: absolute;
-    top: -2px;
-    left:-2px;
-    background-size: 400%;
-    z-index: -1;
-    filter: blur(5px);
-    width: calc(100% + 4px);
-    height: calc(100% + 4px);
-    animation: glowing 10s linear infinite;
-    opacity: 0;
-    transition: opacity .3s ease-in-out;
-    border-radius: 10px;
-}
-
-.user-profile-info-1 > button:active {
-    color: white;
-}
-
-.user-profile-info-1 > button:active:after {
-    background: transparent;
-}
-
-.user-profile-info-1 > button:hover:before {
-    opacity: 1;
-}
-
-.user-profile-info-1 > button:after {
-    z-index: -1;
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #AE8EE6;
-    left: 0;
-    top: 0;
-    border-radius: 10px;
-}
-
-@keyframes glowing {
-    0% { background-position: 0 0; }
-    50% { background-position: 400% 0; }
-    100% { background-position: 0 0; }
-}
-
-/* ----- */
-
-.user-profile-batch {
+.user-profile-header {
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-
-.user-profile-image-container {
-    margin-left: 5%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* align-items: center; */
-}
-
-.user-profile-image-editors {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: absolute;
-    bottom: 0;
     justify-content: space-between;
     width: 100%;
+    background: linear-gradient(to bottom, var(--accent-gold), var(--secondary-bg));
+    border-radius: 15px;
+    height: 80px;
 }
 
-.user-profile-image-editor {
-    margin-bottom: -12%;
-    margin-left: -8%;
-    margin-right: -8%;
-    width: 20px;
-    height: 20px;
-}
-
-.user-profile-image-container img {
-    transition: 0.5s ease-out;
+.user-profile-header-image {
     border-radius: 50%;
-    width: 64px;
-    height: 64px;
+    width: 100px;
+    height: 100px;
+    border-top: 3px solid var(--accent-gold);
+    border-bottom: 3px solid var(--secondary-bg);
+    margin: 10% 3% 0 3%;
+    cursor: pointer;
 }
 
-.user-profile-image-container img:hover {
-    opacity: 0.8;
-    scale: 1.1;
+.user-profile-header-image:hover {
+    transform: scale(1.1);
+    transition: ease-in-out 0.3s;
 }
 
-.user-profile-titles {
-    display: flex;
-    flex-direction: column;
+.user-profile-header-buttons {
+    margin: 25% 3% 0 3%;
 }
 
-.user-profile-titles > h3 {
-    font-family: 'Vazir';
-    font-weight: bold;
-    font-size: 20px;
-    white-space: nowrap;
-}
-
-.user-profile-titles > p {
-    color: #C9BEBE;
-    font-family: 'Vazir';
-    font-weight: 100;
-    font-size: 15px;
-    white-space: nowrap;
-}
-
-.user-profile-info-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    align-content: center;
-    gap: 10% 5%;
-    margin: 3% 0;
-}
-
-.user-profile-label-input {
-    display: flex;
-    flex-direction: column;
-}
-
-.user-profile-label-input > label {
-    margin-bottom: 1%;
-}
-
-.user-profile-label-input > input, select{
-    border-radius: 10px;
-    background-color: #F5F5F5;
-    color: #C9BEBE;
-    font-family: 'Vazir';
+.user-profile-header-buttons > button,
+.user-profile-header-buttons > label > button, 
+.user-profile-content-forms-buttons > button {
     border: none;
-    height: 40px;
-    padding: 0 2%;
+    width: 90px;
+    height: 30px;
+    border-radius: 5px;
+    box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px, rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.04) 0px 6px 6px -3px, rgba(14, 63, 126, 0.04) 0px 12px 12px -6px, rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;
+    margin: 0 5px;
+    background-color: var(--primary-bg);
+    color: var(--button-bg);
 }
 
-.user-profile-label-input > input {
-    width: 95%;
+.user-profile-header-buttons > button:hover,
+.user-profile-header-buttons > label > button:hover,
+.user-profile-content-forms-buttons > button:hover {
+    background: var(--button-hover);
+    color: var(--primary-bg);
+    box-shadow: 0 var(--button-bg);
 }
 
-.user-profile-label-input > select {
+.user-profile-content {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    padding: 1% 3%;
+    margin-top: 10%;
 }
 
-.user-profile-info-3 {
+.user-profile-content-text {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.user-profile-content-right {
     display: flex;
     flex-direction: column;
 }
 
-.user-profile-info-3 > h3 {
-    margin-bottom: 1%;
+.user-profile-content-name {
     font-size: 18px;
+    margin: 2.5px 0;
 }
 
-.user-profile-info-3-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    align-content: center;
-    gap: 10% 5%;
+.user-profile-content-email {
+    font-size: 10px;
+    font-weight: 300;
+    font-family: monospace;
+    margin: 2.5px 0;
+    color: var(--text-secondary);
 }
 
-.password-box {
+.user-profile-content-left {
     display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-profile-content-datejoined {
+    font-size: 10px;
+    font-weight: 200;
+}
+
+.user-profile-content-forms-selector {
+    display: flex;
+    flex-direction: row;
+    margin: 2% 0;
+    border-bottom: 1px solid var(--accent-gold);
+}
+
+.user-profile-content-forms-selector > button {
+    height: 30px;
+    margin: 1% 0 0 5px;
+    padding: 5px;
+    color: var(--button-bg);
+    background: none;
+    border: none;
+    border-radius: 5px 5px 0 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-profile-content-forms-selector > button:hover {
+    background: var(--button-hover);
+    color: var(--primary-bg);
+    transition: ease-in 0.3s;
+}
+
+.user-profile-content-forms-selector > button.activeSelector {
+    background: var(--accent-gold);
+    color: var(--primary-bg);
+    font-weight: bold;
+}
+
+.user-profile-forms-labelinput {
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    position: relative;
+    padding: 7.5px 3px;
+    border-bottom: 1px solid var(--border);
 }
 
-.user-profile-label-input > .password-box > input {
-    border-radius: 10px;
-    background-color: #F5F5F5;
-    color: #C9BEBE;
+.user-profile-forms-labelinput > label {
+    width: 30%;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.user-profile-forms-labelinput-input {
+    width: 70%;
+    border: 1px solid var(--border);
+    height: 30px;
+    padding: 3px 6px;
+    border-radius: 5px;
+    background-color: var(--secondary-bg);
+    color: var(--text-primary);
+    font-family: monospace;
+}
+
+.user-profile-forms-labelinput-input.name {
+    width: 35%;
+    margin: 0 0.5%;
     font-family: 'Vazir';
-    border: none;
-    height: 40px;
-    padding: 0 2%;
-    width: 100%;
-    z-index: 0;
 }
 
-.password-toggle {
-    width: 40px;
-    height: 40px;
-    background-color: inherit;
-    outline: none;
+.user-profile-forms-labelinput-button {
+    background: none;
     border: none;
+    margin-left: -7%;
     z-index: 1;
-    position: absolute;
-    left: 0;
 }
 
-.password-toggle > svg {
-    width: 60%;
+.user-profile-forms-labelinput-button > * {
     vertical-align: middle;
 }
 
-@media screen and (max-width: 550px) {
-    .user-profile-area {
-        width: 75%;
-    }
-
-    .user-profile-area-header > h2 {
-        font-size: 18px;
-    }
-    
-    .user-profile-area-header > p {
-        font-size: 0.7rem;
-    }
-
-    .user-profile-area-body {
-        overflow-y: scroll;
-        overflow-x: hidden;
-    }
-
-    .user-profile-area-body::-webkit-scrollbar {
-        width: 4px;
-    }
-    
-    .user-profile-area-body::-webkit-scrollbar-thumb {
-        background: #AE8EE6;
-        border-radius: 3px;
-    }
-    
-    .user-profile-titles > h3 {
-        font-size: 16px;
-    }
-    
-    .user-profile-titles > p {
-        font-size: 11px;
-    }
-
-    .user-profile-info-1 > button {
-        border-radius: 5px;
-        width: 55px;
-        height: 27px;
-        font-size: 13px;
-    }
-
-    .user-profile-info-2 {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr;
-        align-content: center;
-        gap: 10px;
-        margin: 2.5% 0;
-    }
-
-    .user-profile-info-3-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-        align-content: center;
-        gap: 10px;
-        margin: 2.5% 0;
-    }
+.user-profile-content-forms-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: 2.5% 0;
 }
 
-/* Small Device */
-@media screen and (max-width: 320px) {
-    .user-profile-area {
-        width: 86%;
-    }
+.user-profile-content-forms-buttons > button {
+    width: 60px;
+}
 
-    .user-profile-area-header > h2 {
-        font-size: 15px;
-    }
-    
-    .user-profile-area-header > p {
-        font-size: 0.65rem;
-    }
-
-    .user-profile-titles > h3 {
-        font-size: 14px;
-    }
-    
-    .user-profile-titles > p {
-        font-size: 10px;
-    }
-
-    .user-profile-info-1 > button {
-        border-radius: 5px;
-        width: 45px;
-        height: 22px;
-        font-size: 11px;
-    }
+.user-profile-button-save {
+    color: var(--primary-bg) !important;
+    background-color: var(--accent-gold) !important;
 }
