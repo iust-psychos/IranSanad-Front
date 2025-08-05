@@ -1,25 +1,29 @@
-.navbar {
+.navbar-global {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  background-color: inherit;
   position: sticky;
   top: 0;
   z-index: 10;
   border-bottom: 1px solid var(--accent-gold);
+  margin: 0 8%;
+  /* background-color: inherit; */
+  background-color: var(--global-navbar-bg); 
+  backdrop-filter: blur(10px); 
+  -webkit-backdrop-filter: blur(10px); 
 }
 
-.navbar-logo {
+.navbar-global-logo {
   font-size: 1.6rem;
   font-weight: bold;
 }
 
-.navbar-logo-image {
+.navbar-global-logo-image {
     width: 50px;
 }
 
-.navbar-menu-toggle {
+.navbar-global-menu-toggle {
   display: none;
   font-size: 1.6rem;
   cursor: pointer;
@@ -39,6 +43,7 @@
   position: relative;
   font-size: 1rem;
   transition: color 0.3s;
+  color: var(--text-primary);
 }
 
 .nav-link:hover {
@@ -60,7 +65,7 @@
   width: 100%;
 }
 
-.navbar-theme-btn {
+.navbar-global-theme-btn {
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -71,7 +76,7 @@
 
 
 @media screen and (max-width: 768px) {
-  .navbar-menu-toggle {
+  .navbar-global-menu-toggle {
     display: block;
   }
 

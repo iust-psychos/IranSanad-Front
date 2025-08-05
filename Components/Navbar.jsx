@@ -13,12 +13,18 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-logo">
-        <img className="navbar-logo-image" src={logo_light} alt="ایران سند" />
+    <nav className="navbar-global">
+      <div className="navbar-global-logo">
+        <Link to="/">
+          <img
+            className="navbar-global-logo-image"
+            src={logo_light}
+            alt="ایران سند"
+          />
+        </Link>
       </div>
 
-      <div className="navbar-menu-toggle" onClick={toggleMenu}>
+      <div className="navbar-global-menu-toggle" onClick={toggleMenu}>
         ☰
       </div>
 
@@ -44,7 +50,7 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-          <button className="navbar-theme-btn" onClick={() => {}}>
+          <button className="navbar-global-theme-btn" onClick={() => {}}>
             {isDarkMode ? "☀️" : "🌙"}
           </button>
         </li>
