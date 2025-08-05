@@ -1214,11 +1214,13 @@
 .SideTool-Voice-Recorder-Container {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 2px;
   color: var(--button-text);
   background-color: var(--secondary-bg);
-  padding: 5px 10px;
-  border-radius: 15px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  max-width: 90%;
+  margin: 2% 0;
 }
 
 .SideTool-Voice-Recorder-Icon-Button {
@@ -1236,6 +1238,42 @@
   justify-content: center;
 }
 
+.SideTool-Voice-Type-Selector {
+  display: flex;
+  flex-direction: row;
+  margin: 2% 0;
+  width: 100%;
+  justify-content: space-around;
+  border-bottom: 1px solid var(--accent-gold);
+}
+
+.SideTool-Voice-Type-Selector > button {
+  height: 30px;
+  margin: 1% 0 0 5px;
+  padding: 5px;
+  color: var(--button-bg);
+  background: none;
+  border: none;
+  border-radius: 5px 5px 0 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SideTool-Voice-Type-Selector > button:hover {
+  background: var(--button-hover);
+  color: var(--primary-bg);
+  transition: ease-in 0.3s;
+}
+
+.SideTool-Voice-Type-Selector > button.activeSelector {
+  background: var(--accent-gold);
+  color: var(--primary-bg);
+  font-weight: bold;
+}
+
 .SideTool-Voice-Recorder-Icon-Button:hover {
   background: var(--text-secondary);
   color: var(--secondary-bg);
@@ -1245,6 +1283,7 @@
 .SideTool-Voice-Recorder-Record-Button {
   color: var(--button-text);
   background-color: var(--secondary-bg);
+  /* width: 100%; */
 }
 
 .SideTool-Voice-Recorder-Stop-Button {
