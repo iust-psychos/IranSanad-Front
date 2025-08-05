@@ -4,7 +4,7 @@ import { IoMdMic } from "react-icons/io";
 import { BsRecordCircleFill } from "react-icons/bs";
 import { toPersianDigit } from "../../utils/PersianNumberConverter";
 
-const VoiceRecorder = () => {
+const VoiceRecorder = ({ onRecordingComplete }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
@@ -46,6 +46,9 @@ const VoiceRecorder = () => {
         const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
         setAudioUrl(URL.createObjectURL(audioBlob));
         audioChunks.current = [];
+        if (onRecordingComplete) {
+          onRecordingComplete(audioBlob);
+        }
       };
     } catch (err) {
       alert("Microphone access denied!");
@@ -65,22 +68,17 @@ const VoiceRecorder = () => {
 
   const togglePause = () => {
     if (isPaused) {
-      // Resume recording
       mediaRecorder.current?.resume();
-      // Restart timer
       timerRef.current = setInterval(() => {
         setRecordingTime((prev) => prev + 1);
       }, 1000);
     } else {
-      // Pause recording
       mediaRecorder.current?.pause();
-      // Clear timer
       clearInterval(timerRef.current);
     }
     setIsPaused(!isPaused);
   };
 
-  // Format time (00:00)
   const formatTime = (seconds) => {
     const mins = toPersianDigit(
       Math.floor(seconds / 60)
@@ -103,7 +101,6 @@ const VoiceRecorder = () => {
       >
         {isRecording ? <FaStop /> : <IoMdMic />}
       </button>
-
       {isRecording && (
         <div className="SideTool-Voice-Recording-Status">
           <BsRecordCircleFill className="SideTool-Voice-Recorder-Pulse-Icon" />
@@ -118,7 +115,6 @@ const VoiceRecorder = () => {
           </button>
         </div>
       )}
-
       {audioUrl && !isRecording && (
         <audio
           src={audioUrl}
