@@ -5,7 +5,6 @@ import { FaUser } from "react-icons/fa";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
 import { AiOutlineGlobal } from "react-icons/ai";
 import { Select } from "@base-ui-components/react/select";
-import { HiChevronUpDown } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
 import { toast } from "react-toastify";
@@ -17,7 +16,6 @@ import {
   baseAPI,
   postPermissionsAPI,
   getPermissionsAPI,
-  checkValidUserAPI,
   getDocAPI,
 } from "@/managers/ShareManager.js";
 import Notify from "./Notify";
@@ -354,6 +352,7 @@ const Share = ({ onClose, doc_uuid }) => {
           doc={document}
           users={searchInput}
           onClose={() => setShowNotify(false)}
+          setPermissionList={setPermissionList}
         />
       )}
     </>

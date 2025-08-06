@@ -11,7 +11,7 @@ import {
   token,
 } from "@/managers/ShareManager.js";
 
-const Notify = ({ doc, users, onClose }) => {
+const Notify = ({ doc, users, onClose, setPermissionList }) => {
   const [list, setList] = useState(null);
   const [document, setDocument] = useState(doc);
 
@@ -46,7 +46,9 @@ const Notify = ({ doc, users, onClose }) => {
   };
 
   const handleAddUser = async (event) => {
-    for (let user in list) {
+    event.preventDefault();
+
+    for (let user of list) {
       const body = isEmailValid(user.trim())
         ? {
             email: user.trim(),
@@ -76,6 +78,8 @@ const Notify = ({ doc, users, onClose }) => {
                   permission: "ReadOnly",
                 },
               ],
+              send_email: notifyValue,
+              email_message: textValue,
             },
             {
               headers: {
@@ -96,12 +100,11 @@ const Notify = ({ doc, users, onClose }) => {
           );
 
           setPermissionList(updatedPermissions.data);
-          setSearchInput("");
-          toast.success("دسترسی کاربر با موفقیت اضافه شد");
+          showSuccessToast("دسترسی کاربر با موفقیت اضافه شد");
         }
       } catch (error) {
         console.log(error);
-        toast.error("خطا در اضافه کردن کاربر");
+        showErrorToast("خطا در اضافه کردن کاربر");
       }
     }
   };
