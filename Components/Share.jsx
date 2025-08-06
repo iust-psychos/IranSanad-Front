@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
+import { Dialog } from "@base-ui-components/react/dialog";
 import {
   baseAPI,
   postPermissionsAPI,
@@ -215,19 +216,6 @@ const Share = ({ onClose, doc_uuid }) => {
       });
   };
 
-  // Close on ESCAPE
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose]);
-
   const handleUserImageAddress = (imageUrl) => {
     return baseAPI.slice(0, -1) + imageUrl;
   };
@@ -235,118 +223,238 @@ const Share = ({ onClose, doc_uuid }) => {
   return (
     <>
       {isLoading && <div> در حال بارگذاری ... </div>}
-      <div className="share">
-        <div className="share-area">
-          <div className="share-area-title">
-            اشتراک گذاری "{document.title}"
-          </div>
-          <div className="share-area-search">
-            <form
-              className="share-area-search-input"
-              onSubmit={handleSubmitSearch}
-            >
-              <input
-                type="search"
-                placeholder="نام کاربری یا ایمیل افراد را وارد کنید"
-                value={searchInput}
-                onChange={handleChangeSearch}
-                disabled={isSearching}
-              />
-              {isSearching && <span>در حال جستجو...</span>}
-            </form>
-          </div>
-          <div className="share-access-list">
-            <h1 className="share-access-title">افراد دارای دسترسی</h1>
-            <div className="share-access-list-items">
-              {permissionList.map((permissionItem) => (
-                <div
-                  className="share-access-list-item"
-                  key={permissionItem.user.email}
+      <Dialog.Root open onOpenChange={(open) => !open && onClose()}>
+        <Dialog.Backdrop />
+        <Dialog.Portal>
+          <Dialog.Popup className="share">
+            <div className="share-area">
+              <div className="share-area-title">
+                اشتراک گذاری "{document.title}"
+              </div>
+              <div className="share-area-search">
+                <form
+                  className="share-area-search-input"
+                  onSubmit={handleSubmitSearch}
                 >
-                  <div className="share-item-user">
-                    <div className="share-item-icon">
-                      {permissionItem.user.profile_image ? (
-                        <img
-                          src={handleUserImageAddress(
-                            permissionItem.user.profile_image
+                  <input
+                    type="search"
+                    placeholder="نام کاربری یا ایمیل افراد را وارد کنید"
+                    value={searchInput}
+                    onChange={handleChangeSearch}
+                    disabled={isSearching}
+                  />
+                  {isSearching && <span>در حال جستجو...</span>}
+                </form>
+              </div>
+              <div className="share-access-list">
+                <h1 className="share-access-title">افراد دارای دسترسی</h1>
+                <div className="share-access-list-items">
+                  {permissionList.map((permissionItem) => (
+                    <div
+                      className="share-access-list-item"
+                      key={permissionItem.user.email}
+                    >
+                      <div className="share-item-user">
+                        <div className="share-item-icon">
+                          {permissionItem.user.profile_image ? (
+                            <img
+                              src={handleUserImageAddress(
+                                permissionItem.user.profile_image
+                              )}
+                              alt={permissionItem.user.username}
+                              style={{
+                                width: "32px",
+                                height: "32px",
+                                borderRadius: "50%",
+                              }}
+                            />
+                          ) : (
+                            <FaUser fill="black" />
                           )}
-                          alt={permissionItem.user.username}
-                          style={{
-                            width: "32px",
-                            height: "32px",
-                            borderRadius: "50%",
-                          }}
-                        />
-                      ) : (
-                        <FaUser fill="black" />
-                      )}
+                        </div>
+                        <div className="share-item-name-email">
+                          <h2 className="share-item-name">
+                            {permissionItem.user.username}
+                          </h2>
+                          <p className="share-item-email">
+                            {permissionItem.user.email}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="share-item-status">
+                        {permissionItem.access_level === "Owner" ? (
+                          <>
+                            <p
+                              className="share-item-status-label"
+                              style={{ color: "gray" }}
+                            >
+                              مالک
+                            </p>
+                            <TbTriangleInvertedFilled
+                              className="share-item-status-tri"
+                              style={{ display: "none" }}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <Select.Root
+                              defaultValue={permissionItem.access_level}
+                              onValueChange={(value) =>
+                                handlePermissionChange(
+                                  permissionItem.user.id,
+                                  value
+                                )
+                              }
+                            >
+                              <Select.Trigger
+                                className="share-select-trigger"
+                                data-testid={`permission-select-${permissionItem.user.id}`}
+                              >
+                                <Select.Value
+                                  placeholder={
+                                    permissionItem.access_level === "ReadOnly"
+                                      ? "نظاره‌گر"
+                                      : "ویراستار"
+                                  }
+                                  className="share-item-status-label"
+                                />
+                                <HiChevronUpDown className="share-select-icon" />
+                              </Select.Trigger>
+                              <Select.Portal container={document.body}>
+                                <Select.Backdrop />
+                                <Select.Positioner>
+                                  <Select.Popup className="share-select-popup">
+                                    <Select.Item
+                                      value="ReadOnly"
+                                      className="share-select-item"
+                                    >
+                                      <Select.ItemText>
+                                        نظاره‌گر
+                                      </Select.ItemText>
+                                      <Select.ItemIndicator className="share-item-indicator">
+                                        <FaCheck size={12} />
+                                      </Select.ItemIndicator>
+                                    </Select.Item>
+                                    <Select.Item
+                                      value="Writer"
+                                      className="share-select-item"
+                                    >
+                                      <Select.ItemText>
+                                        ویراستار
+                                      </Select.ItemText>
+                                      <Select.ItemIndicator className="share-item-indicator">
+                                        <FaCheck size={12} />
+                                      </Select.ItemIndicator>
+                                    </Select.Item>
+                                  </Select.Popup>
+                                </Select.Positioner>
+                              </Select.Portal>
+                            </Select.Root>
+                          </>
+                        )}
+                      </div>
                     </div>
-                    <div className="share-item-name-email">
-                      <h2 className="share-item-name">
-                        {permissionItem.user.username}
-                      </h2>
-                      <p className="share-item-email">
-                        {permissionItem.user.email}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="share-item-status">
-                    {permissionItem.access_level === "Owner" ? (
-                      <>
-                        <p
-                          className="share-item-status-label"
-                          style={{ color: "gray" }}
-                        >
-                          مالک
-                        </p>
-                        <TbTriangleInvertedFilled
-                          className="share-item-status-tri"
-                          style={{ display: "none" }}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <Select.Root
-                          defaultValue={permissionItem.access_level}
-                          onValueChange={(value) =>
-                            handlePermissionChange(
-                              permissionItem.user.id,
-                              value
-                            )
-                          }
-                        >
-                          <Select.Trigger
-                            className="share-select-trigger"
-                            data-testid={`permission-select-${permissionItem.user.id}`}
+                  ))}
+                </div>
+              </div>
+              <div className="share-bottom">
+                <div className="share-access-general">
+                  <h1 className="share-access-title">دسترسی عمومی</h1>
+                  <div className="share-access-general-item">
+                    <div
+                      className="share-item-user"
+                      style={{ cursor: "default" }}
+                    >
+                      <div className="share-item-icon">
+                        <AiOutlineGlobal fill="black" />
+                      </div>
+                      <div className="share-item-general-title-desc">
+                        <div className="share-item-title-status">
+                          <Select.Root
+                            value={documentAccessLevel}
+                            onValueChange={setDocumentAccessLevel}
                           >
+                            <Select.Trigger className="share-select-trigger">
+                              <Select.Value
+                                placeholder={
+                                  documentAccessLevel === "public"
+                                    ? "همگانی"
+                                    : "محدود"
+                                }
+                                className="share-item-title"
+                              />
+                              <TbTriangleInvertedFilled
+                                className="share-item-status-tri"
+                                fill="black"
+                              />
+                            </Select.Trigger>
+                            <Select.Portal>
+                              <Select.Backdrop />
+                              <Select.Positioner>
+                                <Select.Popup className="share-select-popup">
+                                  <Select.Item
+                                    value="public"
+                                    className="share-item-title general"
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <Select.ItemText>همگانی</Select.ItemText>
+                                    <Select.ItemIndicator className="share-item-indicator">
+                                      <FaCheck size={12} />
+                                    </Select.ItemIndicator>
+                                  </Select.Item>
+                                  <Select.Item
+                                    value="restricted"
+                                    className="share-item-title general"
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <Select.ItemText>محدود</Select.ItemText>
+                                    <Select.ItemIndicator className="share-item-indicator">
+                                      <FaCheck size={12} />
+                                    </Select.ItemIndicator>
+                                  </Select.Item>
+                                </Select.Popup>
+                              </Select.Positioner>
+                            </Select.Portal>
+                          </Select.Root>
+                        </div>
+                        <p className="share-item-desc">
+                          {generalDescriptionText}
+                        </p>
+                      </div>
+                    </div>
+                    {documentAccessLevel === "public" && (
+                      <div className="share-item-status">
+                        <Select.Root
+                          value={userAccessLevel}
+                          onValueChange={setUserAccessLevel}
+                        >
+                          <Select.Trigger className="share-select-trigger">
                             <Select.Value
                               placeholder={
-                                permissionItem.access_level === "ReadOnly"
-                                  ? "نظاره‌گر"
-                                  : "ویراستار"
+                                userAccessLevel === "view" ? "مشاهده" : "ویرایش"
                               }
                               className="share-item-status-label"
                             />
                             <HiChevronUpDown className="share-select-icon" />
                           </Select.Trigger>
-                          <Select.Portal container={document.body}>
+                          <Select.Portal>
                             <Select.Backdrop />
                             <Select.Positioner>
                               <Select.Popup className="share-select-popup">
                                 <Select.Item
-                                  value="ReadOnly"
+                                  value="view"
                                   className="share-select-item"
                                 >
-                                  <Select.ItemText>نظاره‌گر</Select.ItemText>
+                                  <Select.ItemText>مشاهده</Select.ItemText>
                                   <Select.ItemIndicator className="share-item-indicator">
                                     <FaCheck size={12} />
                                   </Select.ItemIndicator>
                                 </Select.Item>
                                 <Select.Item
-                                  value="Writer"
+                                  value="edit"
                                   className="share-select-item"
                                 >
-                                  <Select.ItemText>ویراستار</Select.ItemText>
+                                  <Select.ItemText>ویرایش</Select.ItemText>
                                   <Select.ItemIndicator className="share-item-indicator">
                                     <FaCheck size={12} />
                                   </Select.ItemIndicator>
@@ -355,138 +463,32 @@ const Share = ({ onClose, doc_uuid }) => {
                             </Select.Positioner>
                           </Select.Portal>
                         </Select.Root>
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-          <div className="share-bottom">
-            <div className="share-access-general">
-              <h1 className="share-access-title">دسترسی عمومی</h1>
-              <div className="share-access-general-item">
-                <div className="share-item-user" style={{ cursor: "default" }}>
-                  <div className="share-item-icon">
-                    <AiOutlineGlobal fill="black" />
-                  </div>
-                  <div className="share-item-general-title-desc">
-                    <div className="share-item-title-status">
-                      <Select.Root
-                        value={documentAccessLevel}
-                        onValueChange={setDocumentAccessLevel}
-                      >
-                        <Select.Trigger className="share-select-trigger">
-                          <Select.Value
-                            placeholder={
-                              documentAccessLevel === "public"
-                                ? "همگانی"
-                                : "محدود"
-                            }
-                            className="share-item-title"
-                          />
-                          <TbTriangleInvertedFilled
-                            className="share-item-status-tri"
-                            fill="black"
-                          />
-                        </Select.Trigger>
-                        <Select.Portal>
-                          <Select.Backdrop />
-                          <Select.Positioner>
-                            <Select.Popup className="share-select-popup">
-                              <Select.Item
-                                value="public"
-                                className="share-item-title general"
-                                style={{ cursor: "pointer" }}
-                              >
-                                <Select.ItemText>همگانی</Select.ItemText>
-                                <Select.ItemIndicator className="share-item-indicator">
-                                  <FaCheck size={12} />
-                                </Select.ItemIndicator>
-                              </Select.Item>
-                              <Select.Item
-                                value="restricted"
-                                className="share-item-title general"
-                                style={{ cursor: "pointer" }}
-                              >
-                                <Select.ItemText>محدود</Select.ItemText>
-                                <Select.ItemIndicator className="share-item-indicator">
-                                  <FaCheck size={12} />
-                                </Select.ItemIndicator>
-                              </Select.Item>
-                            </Select.Popup>
-                          </Select.Positioner>
-                        </Select.Portal>
-                      </Select.Root>
-                    </div>
-                    <p className="share-item-desc">{generalDescriptionText}</p>
-                  </div>
+                <div className="share-area-buttons">
+                  <button
+                    type="button"
+                    className="share-btn copy-button"
+                    onClick={handleCopyLink}
+                  >
+                    <GrAttachment fill="black" />
+                    رونویس پیوند
+                  </button>
+                  <button
+                    type="submit"
+                    className="share-btn confirm-button"
+                    onClick={handleSubmit}
+                  >
+                    تایید
+                  </button>
                 </div>
-                {documentAccessLevel === "public" && (
-                  <div className="share-item-status">
-                    <Select.Root
-                      value={userAccessLevel}
-                      onValueChange={setUserAccessLevel}
-                    >
-                      <Select.Trigger className="share-select-trigger">
-                        <Select.Value
-                          placeholder={
-                            userAccessLevel === "view" ? "مشاهده" : "ویرایش"
-                          }
-                          className="share-item-status-label"
-                        />
-                        <HiChevronUpDown className="share-select-icon" />
-                      </Select.Trigger>
-                      <Select.Portal>
-                        <Select.Backdrop />
-                        <Select.Positioner>
-                          <Select.Popup className="share-select-popup">
-                            <Select.Item
-                              value="view"
-                              className="share-select-item"
-                            >
-                              <Select.ItemText>مشاهده</Select.ItemText>
-                              <Select.ItemIndicator className="share-item-indicator">
-                                <FaCheck size={12} />
-                              </Select.ItemIndicator>
-                            </Select.Item>
-                            <Select.Item
-                              value="edit"
-                              className="share-select-item"
-                            >
-                              <Select.ItemText>ویرایش</Select.ItemText>
-                              <Select.ItemIndicator className="share-item-indicator">
-                                <FaCheck size={12} />
-                              </Select.ItemIndicator>
-                            </Select.Item>
-                          </Select.Popup>
-                        </Select.Positioner>
-                      </Select.Portal>
-                    </Select.Root>
-                  </div>
-                )}
               </div>
             </div>
-            <div className="share-area-buttons">
-              <button
-                type="button"
-                className="share-btn copy-button"
-                onClick={handleCopyLink}
-              >
-                <GrAttachment fill="black" />
-                رونویس پیوند
-              </button>
-              <button
-                type="submit"
-                className="share-btn confirm-button"
-                onClick={handleSubmit}
-              >
-                تایید
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
     </>
   );
 };

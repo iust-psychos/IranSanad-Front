@@ -5,7 +5,6 @@ import "@/pages/ContentEdit/index.css";
 import { IconComment, IconHistory, IconShare } from "@/pages/ContentEdit/Icons";
 import Share from "@/Components/Share";
 import { useParams, useLoaderData, useNavigate } from "react-router-dom";
-import ReactDOM from "react-dom";
 import { renameDocument } from "@/managers/userDashboardManager";
 import HistoryModal from "@/pages/ContentEdit/HistoryModal";
 import SideTool from "./SideTool";
@@ -34,7 +33,6 @@ const ContentEditor = () => {
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
 
-  const shareModalRef = useRef(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
 
@@ -118,18 +116,9 @@ const ContentEditor = () => {
         <UserProfileDropdown />
       </menu>
 
-      {showShareModal &&
-        ReactDOM.createPortal(
-          <div className="share-modal-overlay">
-            <div ref={shareModalRef}>
-              <Share
-                onClose={() => setShowShareModal(false)}
-                doc_uuid={doc_uuid}
-              />
-            </div>
-          </div>,
-          document.body
-        )}
+      {showShareModal && (
+        <Share onClose={() => setShowShareModal(false)} doc_uuid={doc_uuid} />
+      )}
 
       <HistoryModal open={openHistoryModal} setOpen={setOpenHistoryModal} />
 
