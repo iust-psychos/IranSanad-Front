@@ -21,6 +21,7 @@ import {
   getDocAPI,
 } from "@/managers/ShareManager.js";
 import Notify from "./Notify";
+import SelectBox from "./SelectBox";
 
 const Share = ({ onClose, doc_uuid }) => {
   const token = CookieManager.LoadToken();
@@ -75,9 +76,7 @@ const Share = ({ onClose, doc_uuid }) => {
     console.log(newPermission);
   };
 
-  // Search
   const [searchInput, setSearchInput] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
 
   const handleChangeSearch = (event) => {
     setSearchInput(event.target.value);
@@ -183,14 +182,12 @@ const Share = ({ onClose, doc_uuid }) => {
                     placeholder="نام کاربری یا ایمیل افراد را وارد کنید"
                     value={searchInput}
                     onChange={handleChangeSearch}
-                    disabled={isSearching}
                   />
                   <IoSearchSharp
                     name="share-search-button"
                     id="share-search-button"
                     onClick={handleSubmitSearch}
                   />
-                  {/* {isSearching && <span>در حال جستجو...</span>} */}
                 </form>
               </div>
               <div className="share-access-list">
@@ -244,59 +241,12 @@ const Share = ({ onClose, doc_uuid }) => {
                           </>
                         ) : (
                           <>
-                            <Select.Root
-                              defaultValue={permissionItem.access_level}
-                              onValueChange={(value) =>
-                                handlePermissionChange(
-                                  permissionItem.user.id,
-                                  value
-                                )
-                              }
-                            >
-                              <Select.Trigger
-                                className="share-select-trigger"
-                                data-testid={`permission-select-${permissionItem.user.id}`}
-                              >
-                                <Select.Value
-                                  placeholder={
-                                    permissionItem.access_level === "ReadOnly"
-                                      ? "نظاره‌گر"
-                                      : "ویراستار"
-                                  }
-                                  className="share-item-status-label"
-                                />
-                                <HiChevronUpDown className="share-select-icon" />
-                              </Select.Trigger>
-                              <Select.Portal container={document.body}>
-                                <Select.Backdrop />
-                                <Select.Positioner>
-                                  <Select.Popup className="share-select-popup">
-                                    <Select.Item
-                                      value="ReadOnly"
-                                      className="share-select-item"
-                                    >
-                                      <Select.ItemText>
-                                        نظاره‌گر
-                                      </Select.ItemText>
-                                      <Select.ItemIndicator className="share-item-indicator">
-                                        <FaCheck size={12} />
-                                      </Select.ItemIndicator>
-                                    </Select.Item>
-                                    <Select.Item
-                                      value="Writer"
-                                      className="share-select-item"
-                                    >
-                                      <Select.ItemText>
-                                        ویراستار
-                                      </Select.ItemText>
-                                      <Select.ItemIndicator className="share-item-indicator">
-                                        <FaCheck size={12} />
-                                      </Select.ItemIndicator>
-                                    </Select.Item>
-                                  </Select.Popup>
-                                </Select.Positioner>
-                              </Select.Portal>
-                            </Select.Root>
+                            <SelectBox
+                              body={document.body}
+                              permissionItem={permissionItem}
+                              handlePermissionChange={handlePermissionChange}
+                              mode={"1"}
+                            />
                           </>
                         )}
                       </div>
@@ -368,45 +318,11 @@ const Share = ({ onClose, doc_uuid }) => {
                     </div>
                     {documentAccessLevel === "public" && (
                       <div className="share-item-status">
-                        <Select.Root
-                          value={userAccessLevel}
-                          onValueChange={setUserAccessLevel}
-                        >
-                          <Select.Trigger className="share-select-trigger">
-                            <Select.Value
-                              placeholder={
-                                userAccessLevel === "view" ? "مشاهده" : "ویرایش"
-                              }
-                              className="share-item-status-label"
-                            />
-                            <HiChevronUpDown className="share-select-icon" />
-                          </Select.Trigger>
-                          <Select.Portal>
-                            <Select.Backdrop />
-                            <Select.Positioner>
-                              <Select.Popup className="share-select-popup">
-                                <Select.Item
-                                  value="view"
-                                  className="share-select-item"
-                                >
-                                  <Select.ItemText>مشاهده</Select.ItemText>
-                                  <Select.ItemIndicator className="share-item-indicator">
-                                    <FaCheck size={12} />
-                                  </Select.ItemIndicator>
-                                </Select.Item>
-                                <Select.Item
-                                  value="edit"
-                                  className="share-select-item"
-                                >
-                                  <Select.ItemText>ویرایش</Select.ItemText>
-                                  <Select.ItemIndicator className="share-item-indicator">
-                                    <FaCheck size={12} />
-                                  </Select.ItemIndicator>
-                                </Select.Item>
-                              </Select.Popup>
-                            </Select.Positioner>
-                          </Select.Portal>
-                        </Select.Root>
+                        <SelectBox
+                          mode="2"
+                          userAccessLevel={userAccessLevel}
+                          setUserAccessLevel={setUserAccessLevel}
+                        />
                       </div>
                     )}
                   </div>
@@ -434,7 +350,11 @@ const Share = ({ onClose, doc_uuid }) => {
         </Dialog.Portal>
       </Dialog.Root>
       {showNotify && (
-        <Notify users={searchInput} onClose={() => setShowNotify(false)} />
+        <Notify
+          doc={document}
+          users={searchInput}
+          onClose={() => setShowNotify(false)}
+        />
       )}
     </>
   );
