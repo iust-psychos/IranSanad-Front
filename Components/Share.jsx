@@ -7,6 +7,7 @@ import { AiOutlineGlobal } from "react-icons/ai";
 import { Select } from "@base-ui-components/react/select";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { FaCheck } from "react-icons/fa";
+import { IoSearchSharp } from "react-icons/io5";
 import { toast } from "react-toastify";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
@@ -237,13 +238,20 @@ const Share = ({ onClose, doc_uuid }) => {
                   onSubmit={handleSubmitSearch}
                 >
                   <input
+                    name="share-search-input"
+                    id="share-search-input"
                     type="search"
                     placeholder="نام کاربری یا ایمیل افراد را وارد کنید"
                     value={searchInput}
                     onChange={handleChangeSearch}
                     disabled={isSearching}
                   />
-                  {isSearching && <span>در حال جستجو...</span>}
+                  <IoSearchSharp
+                    name="share-search-button"
+                    id="share-search-button"
+                    onClick={handleSubmitSearch}
+                  />
+                  {/* {isSearching && <span>در حال جستجو...</span>} */}
                 </form>
               </div>
               <div className="share-access-list">
