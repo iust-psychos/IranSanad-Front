@@ -228,6 +228,10 @@ const Share = ({ onClose, doc_uuid }) => {
     };
   }, [onClose]);
 
+  const handleUserImageAddress = (imageUrl) => {
+    return baseAPI.slice(0, -1) + imageUrl;
+  };
+
   return (
     <>
       {isLoading && <div> در حال بارگذاری ... </div>}
@@ -263,8 +267,10 @@ const Share = ({ onClose, doc_uuid }) => {
                     <div className="share-item-icon">
                       {permissionItem.user.profile_image ? (
                         <img
-                          src={baseAPI + permissionItem.user.profile_image}
-                          alt="user profile image"
+                          src={handleUserImageAddress(
+                            permissionItem.user.profile_image
+                          )}
+                          alt={permissionItem.user.username}
                           style={{
                             width: "32px",
                             height: "32px",
