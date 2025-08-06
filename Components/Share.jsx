@@ -20,6 +20,7 @@ import {
   checkValidUserAPI,
   getDocAPI,
 } from "@/managers/ShareManager.js";
+import Notify from "./Notify";
 
 const Share = ({ onClose, doc_uuid }) => {
   const token = CookieManager.LoadToken();
@@ -78,11 +79,6 @@ const Share = ({ onClose, doc_uuid }) => {
   const [searchInput, setSearchInput] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
-  const isEmailValid = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleChangeSearch = (event) => {
     setSearchInput(event.target.value);
   };
@@ -93,66 +89,7 @@ const Share = ({ onClose, doc_uuid }) => {
       return;
     }
 
-    setIsSearching(true);
-
-    const body = isEmailValid(searchInput.trim())
-      ? {
-          email: searchInput.trim(),
-        }
-      : {
-          username: searchInput.trim(),
-        };
-
-    try {
-      const checkUserResponse = await axios.post(checkValidUserAPI, body, {
-        headers: {
-          Authorization: `JWT ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      console.log("checkUserResponse: ", checkUserResponse);
-
-      if (checkUserResponse.data) {
-        const permissionResponse = await axios.post(
-          postPermissionsAPI,
-          {
-            document: document.id,
-            permissions: [
-              {
-                user: checkUserResponse.data.user_id,
-                permission: "ReadOnly",
-              },
-            ],
-          },
-          {
-            headers: {
-              Authorization: `JWT ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const updatedPermissions = await axios.get(
-          `${getPermissionsAPI}${document.id}/`,
-          {
-            headers: {
-              Authorization: `JWT ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        setPermissionList(updatedPermissions.data);
-        setSearchInput("");
-        toast.success("دسترسی کاربر با موفقیت اضافه شد");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("خطا در اضافه کردن کاربر");
-    } finally {
-      setIsSearching(false);
-    }
+    setShowNotify(true);
   };
 
   const [documentAccessLevel, setDocumentAccessLevel] = useState(
@@ -220,6 +157,8 @@ const Share = ({ onClose, doc_uuid }) => {
   const handleUserImageAddress = (imageUrl) => {
     return baseAPI.slice(0, -1) + imageUrl;
   };
+
+  const [showNotify, setShowNotify] = useState(false);
 
   return (
     <>
@@ -391,10 +330,7 @@ const Share = ({ onClose, doc_uuid }) => {
                                 }
                                 className="share-item-title"
                               />
-                              <TbTriangleInvertedFilled
-                                className="share-item-status-tri"
-                                fill="black"
-                              />
+                              <TbTriangleInvertedFilled className="share-item-status-tri" />
                             </Select.Trigger>
                             <Select.Portal>
                               <Select.Backdrop />
@@ -497,6 +433,9 @@ const Share = ({ onClose, doc_uuid }) => {
           </Dialog.Popup>
         </Dialog.Portal>
       </Dialog.Root>
+      {showNotify && (
+        <Notify users={searchInput} onClose={() => setShowNotify(false)} />
+      )}
     </>
   );
 };

@@ -1,6 +1,3 @@
-/* .share {
-} */
-
 .share-area {
     background-color: var(--primary-bg);
     border-radius: 10px;
@@ -56,6 +53,7 @@
     position: absolute;
     left: 5%;
     cursor: pointer;
+    fill: var(--text-primary);
 }
 
 .share-access-title {
@@ -121,6 +119,7 @@
     height: 32px;
     vertical-align: middle;
     border-radius: 50%;
+    fill: var(--text-primary);
 }
 
 .share-item-icon img {
@@ -169,6 +168,7 @@
     height: 10px;
     margin: 0 1px 0 5px;
     cursor: pointer;
+    fill: var(--text-primary);
 }
 
 .share-select-trigger {
@@ -199,29 +199,32 @@
     font-family: 'Vazir';
     font-size: 13px;
     font-weight: normal;
-    z-index: 9999;
-    width: 70px;
+    width: 75px;
     padding: 4px;
     margin: 0 3px 0 5px;
     text-align: center;
     height: fit-content;
 }
 
-.Select-Portal {
-    z-index: 1003; /* Highest priority */
-  }
-
 .share-select-item {
     cursor: pointer;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0 5px;
+    align-items: center;
+    padding: 1px 3px;
+    width: 100%;
     color: var(--text-primary);
+    border-radius: 4px;
 }
 
 .share-item-indicator {
-    margin-right: 8px; 
+    margin-left: 2px; 
+    margin-right: 4px;
+}
+
+.share-item-indicator > * {
+    vertical-align: middle;
 }
   
 .share-select-popup [data-highlighted] {
@@ -269,7 +272,10 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0 5px;
+    align-items: center;
+    padding: 0 2px;
+    width: 100%;
+    border-radius: 4px;
 }
 
 .share-item-desc {
@@ -307,11 +313,6 @@
 
 .copy-button {
     background-color: var(--text-secondary);
-}
-
-.copy-button svg {
-    /* width: 16px;
-    height: 16px; */
 }
 
 .copy-button svg path {
