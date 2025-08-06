@@ -1,9 +1,9 @@
 const TokenCookieKey = "IranaSanadAuth";
 
-const baseUrl = "http://iransanad.work.gd/api/v1/";
+const baseUrl = "http://45.149.77.43:8000/api/v1/";
 
-const baseDomain = "http://iransanad.work.gd/";
+const baseDomain = "http://45.149.77.43:8000/";
 
-const baseWebsocketUrl = "ws://iransanad.work.gd/ws/";
+const baseWebsocketUrl = "ws://45.149.77.43:8000/ws/";
 
 export default { baseDomain, baseUrl, TokenCookieKey, baseWebsocketUrl };
