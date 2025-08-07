@@ -1,4 +1,4 @@
-import "@/styles/Landing.css";
+import "./index.css";
 import { motion } from "framer-motion";
 
 const ServiceItem = ({ title, desc, alt, pic, ref, scale }) => {

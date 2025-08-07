@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useVisibilityRatio } from "@/hooks/useVisibilityRatio";
 import CountUp from "react-countup";
 import { toPersianDigit } from "@/utils/PersianNumberConverter";
-import "@/styles/Landing.css";
+import "./index.css";
 import {
   Service1,
   Service2,
