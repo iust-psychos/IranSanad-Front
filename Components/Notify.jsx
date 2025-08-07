@@ -105,6 +105,8 @@ const Notify = ({ doc, users, onClose, setPermissionList }) => {
       } catch (error) {
         console.log(error);
         showErrorToast("خطا در اضافه کردن کاربر");
+      } finally {
+        onClose();
       }
     }
   };
@@ -126,7 +128,11 @@ const Notify = ({ doc, users, onClose, setPermissionList }) => {
                         value={item}
                         className="notify-body-item-user"
                       />
-                      <SelectBox className="notify-body-item-permission" />
+                      <SelectBox
+                        className="notify-body-item-permission"
+                        userAccessLevel="ReadOnly"
+                        mode="3"
+                      />
                     </div>
                   ))}
               </div>
