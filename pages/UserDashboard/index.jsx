@@ -9,7 +9,7 @@ import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { toPersianDate } from "@/utils/PersianDateConverter.js";
 import { createDocument } from "@/managers/UserDashboardManager.js";
 import { useTheme } from "@/src/ThemeContext";
-import { logo_dark , logo_light } from "../../Constants/ImageConstants.js";
+import { logo } from "../../Constants/ImageConstants.js";
 
 export default function UserDashboard() {
   const searchRef = useRef();
@@ -59,7 +59,7 @@ export default function UserDashboard() {
         <button className="menu-logo" onClick={() => navigate("/landing")}>
           <img
             style={{ width: "50px", height: "50px" }}
-            src={isDarkMode ? logo_dark : logo_light}
+            src={logo}
             alt="لوگو ایران سند"
           />
         </button>

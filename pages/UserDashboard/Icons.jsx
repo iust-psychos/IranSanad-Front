@@ -1,7 +1,7 @@
 import { useTheme } from "@/src/ThemeContext";
-import { logo_dark , logo_light } from "../../Constants/ImageConstants";
+import { logo } from "../../Constants/ImageConstants";
 
-export const IconLogo = () => <img src={logo_light} alt="Logo" />;
+export const IconLogo = () => <img src={logo} alt="Logo" />;
 
 export const IconUserProfileDefault = () => (
   <svg

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "@/src/ThemeContext";
-import { logo_light } from "../Constants/ImageConstants";
+import { logo } from "../Constants/ImageConstants";
 import "@/styles/Navbar.css";
 
 const Navbar = () => {
@@ -18,7 +18,7 @@ const Navbar = () => {
         <Link to="/">
           <img
             className="navbar-global-logo-image"
-            src={logo_light}
+            src={logo}
             alt="ایران سند"
           />
         </Link>

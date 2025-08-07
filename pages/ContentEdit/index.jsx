@@ -11,8 +11,7 @@ import SideTool from "./SideTool";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import Commentsystem from "@/components/Comment";
 import { useTheme } from "@/src/ThemeContext";
-import logo_dark from "/images/logo_dark.png";
-import logo_light from "/images/logo_light.png";
+import logo from "/images/logo.png";
 import { useUserStore } from "@/store/userStore";
 import Menubar from "@/pages/ContentEdit/Menubar";
 import { TiChevronLeft, TiChevronRight } from "react-icons/ti";
@@ -75,11 +74,7 @@ const ContentEditor = () => {
     >
       <menu className="navbar">
         <button className="menu-logo" onClick={() => navigate("/landing")}>
-          <img
-            style={{ width: "50px", height: "50px" }}
-            src={isDarkMode ? logo_dark : logo_light}
-            alt=""
-          />
+          <img style={{ width: "50px", height: "50px" }} src={logo} alt="" />
         </button>
         <div className="document-header">
           <input
