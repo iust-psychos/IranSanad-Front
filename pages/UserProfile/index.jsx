@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "@/styles/UserProfile.css";
+import "./index.css";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "@/utils/Toast.js";
@@ -234,100 +234,105 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="user-profile">
-      <Navbar />
-      <div className="user-profile-area">
-        <div className="user-profile-header">
-          {updatedUser.profile_image || updatedUser.profile_image_preview ? (
-            <img
-              className="user-profile-header-image"
-              src={
-                updatedUser.profile_image_preview
-                  ? updatedUser.profile_image_preview
-                  : imagePathReader(updatedUser.profile_image)
-              }
-              alt={updatedUser.first_name}
-            />
-          ) : (
-            <CiUser className="user-profile-header-image" size={100} />
-          )}
-          <div className="user-profile-header-buttons">
-            <input
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              id="user-profile-image-upload"
-              onChange={handleChangeImage}
-            />
-            <label htmlFor="user-profile-image-upload">
-              <button
-                type="button"
-                onClick={() =>
-                  document.getElementById("user-profile-image-upload").click()
+    <>
+      <div className="user-profile">
+        <Navbar />
+        <div className="user-profile-area">
+          <div className="user-profile-header">
+            {updatedUser.profile_image || updatedUser.profile_image_preview ? (
+              <img
+                className="user-profile-header-image"
+                src={
+                  updatedUser.profile_image_preview
+                    ? updatedUser.profile_image_preview
+                    : imagePathReader(updatedUser.profile_image)
                 }
-              >
-                تغییر تصویر
-              </button>
-            </label>
-            <button onClick={handleDeleteImage}>حذف تصویر</button>
-          </div>
-        </div>
-        <div className="user-profile-content">
-          <div className="user-profile-content-text">
-            <div className="user-profile-content-right">
-              <h1 className="user-profile-content-name">
-                {updatedUser.first_name + " " + updatedUser.last_name}
-              </h1>
-              <h2 className="user-profile-content-email">
-                {updatedUser.email}
-              </h2>
-            </div>
-            <div className="user-profile-content-left">
-              <h3 className="user-profile-content-datejoined">
-                تاریخ عضویت: {toPersianDate(updatedUser.date_joined)}
-              </h3>
-            </div>
-          </div>
-          <div className="user-profile-content-forms">
-            <div className="user-profile-content-forms-selector">
-              <button
-                className={form === "Info" ? "activeSelector" : ""}
-                onClick={() => {
-                  handleChangeForm("Info");
-                }}
-              >
-                اطلاعات شخصی
-              </button>
-              <button
-                className={form === "Pass" ? "activeSelector" : ""}
-                onClick={() => {
-                  handleChangeForm("Pass");
-                }}
-              >
-                تغییر رمزعبور
-              </button>
-            </div>
-            <div className="user-profile-content-forms-component">
-              {form === "Info" ? (
-                <InfoForm user={updatedUser} onUpdate={handleChangeUserInfo} />
-              ) : (
-                <PasswordForm onUpdate={handleChangeUserPass} />
-              )}
-              <div className="user-profile-content-forms-buttons">
-                <button onClick={handleCancelButton}>لغو</button>
+                alt={updatedUser.first_name}
+              />
+            ) : (
+              <CiUser className="user-profile-header-image" size={100} />
+            )}
+            <div className="user-profile-header-buttons">
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                id="user-profile-image-upload"
+                onChange={handleChangeImage}
+              />
+              <label htmlFor="user-profile-image-upload">
                 <button
-                  className="user-profile-button-save"
-                  type="submit"
-                  onClick={handleSubmitButton}
+                  type="button"
+                  onClick={() =>
+                    document.getElementById("user-profile-image-upload").click()
+                  }
                 >
-                  ذخیره
+                  تغییر تصویر
                 </button>
+              </label>
+              <button onClick={handleDeleteImage}>حذف تصویر</button>
+            </div>
+          </div>
+          <div className="user-profile-content">
+            <div className="user-profile-content-text">
+              <div className="user-profile-content-right">
+                <h1 className="user-profile-content-name">
+                  {updatedUser.first_name + " " + updatedUser.last_name}
+                </h1>
+                <h2 className="user-profile-content-email">
+                  {updatedUser.email}
+                </h2>
+              </div>
+              <div className="user-profile-content-left">
+                <h3 className="user-profile-content-datejoined">
+                  تاریخ عضویت: {toPersianDate(updatedUser.date_joined)}
+                </h3>
+              </div>
+            </div>
+            <div className="user-profile-content-forms">
+              <div className="user-profile-content-forms-selector">
+                <button
+                  className={form === "Info" ? "activeSelector" : ""}
+                  onClick={() => {
+                    handleChangeForm("Info");
+                  }}
+                >
+                  اطلاعات شخصی
+                </button>
+                <button
+                  className={form === "Pass" ? "activeSelector" : ""}
+                  onClick={() => {
+                    handleChangeForm("Pass");
+                  }}
+                >
+                  تغییر رمزعبور
+                </button>
+              </div>
+              <div className="user-profile-content-forms-component">
+                {form === "Info" ? (
+                  <InfoForm
+                    user={updatedUser}
+                    onUpdate={handleChangeUserInfo}
+                  />
+                ) : (
+                  <PasswordForm onUpdate={handleChangeUserPass} />
+                )}
+                <div className="user-profile-content-forms-buttons">
+                  <button onClick={handleCancelButton}>لغو</button>
+                  <button
+                    className="user-profile-button-save"
+                    type="submit"
+                    onClick={handleSubmitButton}
+                  >
+                    ذخیره
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

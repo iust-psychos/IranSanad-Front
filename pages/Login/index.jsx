@@ -14,7 +14,7 @@ import { Tooltip } from "react-tooltip";
 import CookieManager from "@/managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
 import { RingLoader } from "react-spinners";
-import LogoIcon from "/images/logo_light.png";
+import LogoIcon from "/images/logo.png";
 
 const Login = () => {
   const navigate = useNavigate();

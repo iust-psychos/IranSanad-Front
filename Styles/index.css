@@ -31,7 +31,7 @@ body {
   --secondary-bg: #f8f8f8;
   --text-primary: #333333;
   --text-secondary: #666666;
-  --accent-gold: #d4af37;
+  --accent-gold: #FFD700;
   --accent-gold-hover: #b7950b;
   --border: #e0e0e0;
   --card-bg: #ffffff;
@@ -45,6 +45,7 @@ body {
   --toolbar-bg: #f0f0f0;
   --button-bg: #d4af37;
   --button-hover: #b7950b;
+  --global-navbar-bg: rgba(255, 255, 255, 0.8);
 }
 
 [data-theme="dark"] {
@@ -52,7 +53,7 @@ body {
   --secondary-bg: #1e1e1e;
   --text-primary: #e0e0e0;
   --text-secondary: #a0a0a0;
-  --accent-gold: #d4af37;
+  --accent-gold: #FFD700;
   --accent-gold-hover: #ffd700;
   --border: #333333;
   --card-bg: #1e1e1e;
@@ -64,6 +65,7 @@ body {
   --editor-bg: #262626;
   --editor-outside-bg: #121416;
   --toolbar-bg: #555454;
-  --button-bg: #d4af37;
+  --button-bg: #FFD700;
   --button-hover: #ffd700;
+  --global-navbar-bg: rgba(30, 30, 30, 0.8);
 }
