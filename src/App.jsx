@@ -13,7 +13,7 @@ import { ToastContainer } from "react-toastify";
 import ContentEditor from "@/pages/ContentEdit/index";
 import EmailVerification from "@/Components/EmailVerification";
 import ErrorPage from "@/pages/Error/index";
-import Share from "@/components/Share";
+import Share from "@/pages/Share/index";
 import UserProfile from "@/pages/UserProfile/index";
 import { useState, useEffect } from "react";
 import "@/styles/App.css";

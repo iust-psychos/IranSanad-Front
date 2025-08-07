@@ -3,7 +3,7 @@ import Editor from "./Editor";
 import UserProfileDropdown from "@/pages/UserDashboard/UserProfileDropdown";
 import "@/pages/ContentEdit/index.css";
 import { IconComment, IconHistory, IconShare } from "@/pages/ContentEdit/Icons";
-import Share from "@/Components/Share";
+import Share from "@/pages/Share";
 import { useParams, useLoaderData, useNavigate } from "react-router-dom";
 import { renameDocument } from "@/managers/userDashboardManager";
 import HistoryModal from "@/pages/ContentEdit/HistoryModal";
