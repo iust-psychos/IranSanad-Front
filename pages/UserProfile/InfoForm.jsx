@@ -1,4 +1,4 @@
-import "@/styles/UserProfile.css";
+import "./index.css";
 import LabelInput from "./LabelInput";
 
 const InfoForm = ({ user, onUpdate }) => {

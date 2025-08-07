@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "@/styles/UserProfile.css";
+import "./index.css";
 import axios from "axios";
 import CookieManager from "@/managers/CookieManager";
 import { showErrorToast, showSuccessToast } from "@/utils/Toast.js";
