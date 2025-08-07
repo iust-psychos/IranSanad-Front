@@ -12,12 +12,19 @@ import {
 } from "@/managers/ShareManager.js";
 
 const Notify = ({ doc, users, onClose, setPermissionList }) => {
-  const [list, setList] = useState(null);
   const [document, setDocument] = useState(doc);
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     const handleUsers = (usersList) => {
-      return usersList.replace(/\s+/g, "").split(",");
+      return usersList
+        .replace(/\s+/g, "")
+        .split(",")
+        .filter((user) => user.trim() !== "")
+        .map((user) => ({
+          email: user.trim(),
+          permission: "ReadOnly",
+        }));
     };
     setList(handleUsers(users));
   }, [users]);
@@ -30,7 +37,7 @@ const Notify = ({ doc, users, onClose, setPermissionList }) => {
   }, [doc]);
 
   const [notifyValue, setNotifyValue] = useState(false);
-  const [textValue, setTextValue] = useState("");
+  const [textValue, setTextValue] = useState("ایران سند");
 
   const handleChangeNotify = (e) => {
     setNotifyValue(e.target.checked);
@@ -38,6 +45,14 @@ const Notify = ({ doc, users, onClose, setPermissionList }) => {
 
   const handleChangeText = (e) => {
     setTextValue(e.target.value);
+  };
+
+  const handleChangePermission = (email, newPermission) => {
+    setList((prevList) =>
+      prevList.map((user) =>
+        user.email === email ? { ...user, permission: newPermission } : user
+      )
+    );
   };
 
   const isEmailValid = (email) => {
@@ -48,66 +63,72 @@ const Notify = ({ doc, users, onClose, setPermissionList }) => {
   const handleAddUser = async (event) => {
     event.preventDefault();
 
-    for (let user of list) {
-      const body = isEmailValid(user.trim())
-        ? {
-            email: user.trim(),
-          }
-        : {
-            username: user.trim(),
-          };
+    try {
+      const results = await Promise.all(
+        list.map(async (user) => {
+          const body = isEmailValid(user.email)
+            ? { email: user.email }
+            : { username: user.email };
 
-      try {
-        const checkUserResponse = await axios.post(checkValidUserAPI, body, {
+          const checkUserResponse = await axios.post(checkValidUserAPI, body, {
+            headers: {
+              Authorization: `JWT ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (checkUserResponse.data) {
+            await axios.post(
+              postPermissionsAPI,
+              {
+                document: document.id,
+                permissions: [
+                  {
+                    user: checkUserResponse.data.user_id,
+                    permission: user.permission,
+                  },
+                ],
+                send_email: notifyValue,
+                email_message: textValue,
+              },
+              {
+                headers: {
+                  Authorization: `JWT ${token}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            return { success: true, email: user.email };
+          }
+          return { success: false, email: user.email };
+        })
+      );
+
+      const updatedPermissions = await axios.get(
+        `${getPermissionsAPI}${document.id}/`,
+        {
           headers: {
             Authorization: `JWT ${token}`,
             "Content-Type": "application/json",
           },
-        });
-
-        console.log("checkUserResponse: ", checkUserResponse);
-
-        if (checkUserResponse.data) {
-          const permissionResponse = await axios.post(
-            postPermissionsAPI,
-            {
-              document: document.id,
-              permissions: [
-                {
-                  user: checkUserResponse.data.user_id,
-                  permission: "ReadOnly",
-                },
-              ],
-              send_email: notifyValue,
-              email_message: textValue,
-            },
-            {
-              headers: {
-                Authorization: `JWT ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          const updatedPermissions = await axios.get(
-            `${getPermissionsAPI}${document.id}/`,
-            {
-              headers: {
-                Authorization: `JWT ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          setPermissionList(updatedPermissions.data);
-          showSuccessToast("دسترسی کاربر با موفقیت اضافه شد");
         }
-      } catch (error) {
-        console.log(error);
-        showErrorToast("خطا در اضافه کردن کاربر");
-      } finally {
-        onClose();
+      );
+
+      setPermissionList(updatedPermissions.data);
+
+      const failedUsers = results.filter((result) => !result.success);
+      if (failedUsers.length > 0) {
+        showErrorToast(
+          `Failed to add users: ${failedUsers.map((u) => u.email).join(", ")}`
+        );
+      } else {
+        showSuccessToast("دسترسی کاربران با موفقیت اضافه شد");
       }
+    } catch (error) {
+      console.error(error);
+      showErrorToast("خطا در اضافه کردن کاربران");
+    } finally {
+      onClose();
     }
   };
 
@@ -121,16 +142,19 @@ const Notify = ({ doc, users, onClose, setPermissionList }) => {
             <div className="notify-body">
               <div className="notify-body-items">
                 {list &&
-                  list.map((item) => (
-                    <div key={item} className="notify-body-item">
+                  list.map((user) => (
+                    <div key={user.email} className="notify-body-item">
                       <input
                         type="text"
-                        value={item}
+                        value={user.email}
                         className="notify-body-item-user"
                       />
                       <SelectBox
                         className="notify-body-item-permission"
-                        userAccessLevel="ReadOnly"
+                        userAccessLevel={user.permission}
+                        setUserAccessLevel={(permission) =>
+                          handleChangePermission(user.email, permission)
+                        }
                         mode="3"
                       />
                     </div>
