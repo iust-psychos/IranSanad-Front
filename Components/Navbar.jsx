@@ -1,16 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useTheme } from "@/src/ThemeContext";
 import { logo } from "../Constants/ImageConstants";
+import { token, getUserImageAPI } from "@/Managers/NavbarManager";
+import UserProfileDropdown from "../pages/UserDashboard/UserProfileDropdown";
 import "@/styles/Navbar.css";
+import axios from "axios";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isDarkMode } = useTheme();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  const [profileImage, setProfileImage] = useState("");
+
+  useEffect(() => {
+    if (token) {
+      axios
+        .get(`${getUserImageAPI}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `JWT ${token}`,
+          },
+        })
+        .then((response) => {
+          setProfileImage(response.data.profile_image);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [token]);
 
   return (
     <nav className="navbar-global">
@@ -45,14 +64,13 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/login" className="nav-link">
-            ثبت‌نام | ورود
-          </Link>
-        </li>
-        <li>
-          <button className="navbar-global-theme-btn" onClick={() => {}}>
-            {isDarkMode ? "☀️" : "🌙"}
-          </button>
+          {token ? (
+            <UserProfileDropdown profile_image={profileImage} />
+          ) : (
+            <Link to="/login" className="nav-link">
+              ثبت‌نام | ورود
+            </Link>
+          )}
         </li>
       </ul>
     </nav>

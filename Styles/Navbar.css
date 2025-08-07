@@ -8,7 +8,6 @@
   z-index: 10;
   border-bottom: 1px solid var(--accent-gold);
   margin: 0 8%;
-  /* background-color: inherit; */
   background-color: var(--global-navbar-bg); 
   backdrop-filter: blur(10px); 
   -webkit-backdrop-filter: blur(10px); 
@@ -65,15 +64,26 @@
   width: 100%;
 }
 
-.navbar-global-theme-btn {
-  background: none;
+.menu-profile {
   border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: var(--accent-gold);
-  padding: 4px;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
 }
 
+.menu-profile-image {
+  border-radius: 50%;
+  transition: box-shadow 0.2s ease;
+}
+
+.menu-profile-image:hover {
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.3);
+  background-color: rgba(212, 175, 55, 0.2);
+  cursor: pointer;
+}
 
 @media screen and (max-width: 768px) {
   .navbar-global-menu-toggle {
