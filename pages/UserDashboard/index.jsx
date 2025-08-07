@@ -56,7 +56,7 @@ export default function UserDashboard() {
   return (
     <div className="user-dashboard">
       <menu className="navbar">
-        <button className="menu-logo" onClick={() => navigate("/landing")}>
+        <button className="menu-logo" onClick={() => navigate("/")}>
           <img
             style={{ width: "50px", height: "50px" }}
             src={logo}

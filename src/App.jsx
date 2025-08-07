@@ -98,7 +98,7 @@ function updateFavicon(mode) {
   favicon.id = "favicon";
   favicon.rel = "icon";
   favicon.type = "image";
-  favicon.href = mode ? "/logo_dark.png" : "/logo_light.png";
+  favicon.href = "/logo.png";
   document.head.appendChild(favicon);
 }
 
