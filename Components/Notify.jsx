@@ -36,6 +36,7 @@ const Notify = ({ doc, users, onClose, permissionList, setPermissionList }) => {
 
           if (isDuplicateInPermissions) {
             showErrorToast(`کاربر ${trimmed} قبلاً اضافه شده است`);
+            onClose();
             return false;
           }
 
@@ -96,6 +97,7 @@ const Notify = ({ doc, users, onClose, permissionList, setPermissionList }) => {
           .map((u) => u.email)
           .join(", ")}`
       );
+      onClose();
       return;
     }
 
