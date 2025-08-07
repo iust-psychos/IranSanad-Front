@@ -11,23 +11,47 @@ import {
   token,
 } from "@/managers/ShareManager.js";
 
-const Notify = ({ doc, users, onClose, setPermissionList }) => {
+const Notify = ({ doc, users, onClose, permissionList, setPermissionList }) => {
   const [document, setDocument] = useState(doc);
   const [list, setList] = useState([]);
 
+  const isUserAlreadyAdded = (email) => {
+    return permissionList?.some(
+      (permission) =>
+        permission.user.email?.toLowerCase() === email.toLowerCase() ||
+        permission.user.username?.toLowerCase() === email.toLowerCase()
+    );
+  };
+
   useEffect(() => {
     const handleUsers = (usersList) => {
+      const uniqueUsers = new Set();
       return usersList
         .replace(/\s+/g, "")
         .split(",")
-        .filter((user) => user.trim() !== "")
+        .filter((user) => {
+          const trimmed = user.trim();
+          const isDuplicateInInput = uniqueUsers.has(trimmed.toLowerCase());
+          const isDuplicateInPermissions = isUserAlreadyAdded(trimmed);
+
+          if (isDuplicateInPermissions) {
+            showErrorToast(`کاربر ${trimmed} قبلاً اضافه شده است`);
+            return false;
+          }
+
+          return (
+            trimmed !== "" &&
+            !isDuplicateInInput &&
+            uniqueUsers.add(trimmed.toLowerCase())
+          );
+        })
         .map((user) => ({
           email: user.trim(),
           permission: "ReadOnly",
         }));
     };
     setList(handleUsers(users));
-  }, [users]);
+  }, [users, permissionList]);
 
   useEffect(() => {
     const doSetDoc = () => {
@@ -62,6 +86,18 @@ const Notify = ({ doc, users, onClose, setPermissionList }) => {
 
   const handleAddUser = async (event) => {
     event.preventDefault();
+
+    const duplicateUsers = list.filter((user) =>
+      isUserAlreadyAdded(user.email)
+    );
+    if (duplicateUsers.length > 0) {
+      showErrorToast(
+        `این کاربران قبلاً اضافه شده‌اند: ${duplicateUsers
+          .map((u) => u.email)
+          .join(", ")}`
+      );
+      return;
+    }
 
     try {
       const results = await Promise.all(
@@ -114,12 +150,17 @@ const Notify = ({ doc, users, onClose, setPermissionList }) => {
         }
       );
 
+      console.log("inital: ", permissionList);
+      console.log("calculated: ", updatedPermissions.data);
       setPermissionList(updatedPermissions.data);
+      console.log("final: ", permissionList);
 
       const failedUsers = results.filter((result) => !result.success);
       if (failedUsers.length > 0) {
         showErrorToast(
-          `Failed to add users: ${failedUsers.map((u) => u.email).join(", ")}`
+          `خطا در اضافه کردن کاربر: ${failedUsers
+            .map((u) => u.email)
+            .join(", ")}`
         );
       } else {
         showSuccessToast("دسترسی کاربران با موفقیت اضافه شد");

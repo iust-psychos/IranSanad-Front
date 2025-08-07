@@ -352,6 +352,7 @@ const Share = ({ onClose, doc_uuid }) => {
           doc={document}
           users={searchInput}
           onClose={() => setShowNotify(false)}
+          permissionList={permissionList}
           setPermissionList={setPermissionList}
         />
       )}
