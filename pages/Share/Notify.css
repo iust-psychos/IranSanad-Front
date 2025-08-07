@@ -1,0 +1,107 @@
+.notify {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+    background-color: var(--primary-bg);
+    border-radius: 10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.notify-title {
+    margin-bottom: 2%;
+    margin-right: 10px;
+}
+
+.notify-body {
+    display: flex;
+    flex-direction: column;
+    margin: 1% 0;
+    padding: 1%;
+}
+
+.notify-body-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.notify-body-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid var(--text-primary);
+    border-radius: 5px;
+    margin: 2% 0;
+    padding: 5px;
+    height: 40px;
+    width: 300px;
+}
+
+.notify-body-item-user {
+    border: 1px solid var(--text-secondary);
+    border-radius: 4px;
+    padding: 2px;
+    width: 200px;
+}
+
+.notify-body-checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 2px;
+    margin: 2% 0;
+}
+
+.notify-body-checkbox-select {
+    margin-left: 5px;
+    accent-color: var(--accent-gold);
+    cursor: pointer;
+    width: 13px;
+    height: 13px;
+    text-align: center;
+}
+
+.notify-body-checkbox-label {
+    font-size: small;
+    color: var(--text-primary);
+}
+
+.notify-body-text {
+    margin-top: 2%;
+    font-family: 'Vazir';
+    font-size: small;
+    padding: 5px;
+    border-radius: 4px;
+    resize: None;
+}
+
+.notify-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 2%;
+}
+
+.notify-button {
+    width: 60px;
+    height: 30px;
+    border: none;
+    background: none;
+    font-size: 13px;
+    font-family: 'Vazir';
+    border-radius: 10px;
+    margin: 0 5px;
+    color: var(--text-primary);
+}
+
+.notify-cancel {
+    background-color: var(--secondary-bg);
+}
+
+.notify-confirm {
+    background-color: var(--accent-gold);
+}

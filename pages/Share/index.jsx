@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "@/styles/Share.css";
+import "./index.css";
 import { GrAttachment } from "react-icons/gr";
 import { FaUser } from "react-icons/fa";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
