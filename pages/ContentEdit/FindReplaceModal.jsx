@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Dialog } from "@base-ui-components/react/dialog";
 import "@/pages/ContentEdit/index.css";
 import { IoMdClose } from "react-icons/io";
 import { LuReplace, LuReplaceAll } from "react-icons/lu";
@@ -20,7 +19,7 @@ import {
 } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
-const FindReplaceModal = ({ onClose, isOpen }) => {
+const FindReplaceModal = ({ onClose }) => {
   const [editor] = useLexicalComposerContext();
   const [findText, setFindText] = useState("");
   const [replaceText, setReplaceText] = useState("");
@@ -198,90 +197,87 @@ const FindReplaceModal = ({ onClose, isOpen }) => {
   const currentIndex = matchCount ? currentMatchIndex + 1 : 0;
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <Dialog.Portal>
-        <Dialog.Backdrop />
-        <Dialog.Popup className="FindReplaceModal-Popup">
-          <div className="FindReplaceModal-Content">
-            <div className="FindReplaceModal-SearchGroup">
-              <input
-                type="text"
-                placeholder="جست و جو ..."
-                className="FindReplaceModal-Input"
-                value={findText}
-                onChange={(e) => setFindText(e.target.value)}
-                autoFocus
-              />
-              <div className="FindReplaceModal-Actions">
-                <span className="FindReplaceModal-Result">
-                  {matchCount
-                    ? `نتیجه ${currentIndex} از ${matchCount}`
-                    : "موردی یافت نشد"}
-                </span>
-                <button
-                  className="FindReplaceModal-ActionButton"
-                  onClick={() => navigateMatch(-1)}
-                  disabled={!matchCount}
-                >
-                  <IoIosArrowRoundUp className="FindReplaceModal-Icon" />
-                </button>
-                <button
-                  className="FindReplaceModal-ActionButton"
-                  onClick={() => navigateMatch(1)}
-                  disabled={!matchCount}
-                >
-                  <IoIosArrowRoundDown className="FindReplaceModal-Icon" />
-                </button>
-              </div>
-            </div>
-
-            <div className="FindReplaceModal-ToggleContainer">
+    <div>
+      <div className="FindReplaceModal-Popup">
+        <div className="FindReplaceModal-Content">
+          <div className="FindReplaceModal-SearchGroup">
+            <input
+              type="text"
+              placeholder="جست و جو ..."
+              className="FindReplaceModal-Input"
+              value={findText}
+              onChange={(e) => setFindText(e.target.value)}
+              autoFocus
+            />
+            <div className="FindReplaceModal-Actions">
+              <span className="FindReplaceModal-Result">
+                {matchCount
+                  ? `نتیجه ${currentIndex} از ${matchCount}`
+                  : "موردی یافت نشد"}
+              </span>
               <button
-                className="FindReplaceModal-ToggleButton"
-                onClick={() => setShowReplace(!showReplace)}
-                aria-expanded={showReplace}
+                className="FindReplaceModal-ActionButton"
+                onClick={() => navigateMatch(-1)}
+                disabled={!matchCount}
               >
-                <IoIosArrowBack className="FindReplaceModal-ToggleIcon" />
+                <IoIosArrowRoundUp className="FindReplaceModal-Icon" />
+              </button>
+              <button
+                className="FindReplaceModal-ActionButton"
+                onClick={() => navigateMatch(1)}
+                disabled={!matchCount}
+              >
+                <IoIosArrowRoundDown className="FindReplaceModal-Icon" />
               </button>
             </div>
-
-            {showReplace && (
-              <div className="FindReplaceModal-ReplaceGroup">
-                <input
-                  type="text"
-                  placeholder="جایگزینی با ..."
-                  className="FindReplaceModal-Input"
-                  value={replaceText}
-                  onChange={(e) => setReplaceText(e.target.value)}
-                />
-                <div className="FindReplaceModal-Actions">
-                  <button
-                    className="FindReplaceModal-ReplaceButton"
-                    onClick={replaceCurrent}
-                    disabled={!matchCount}
-                  >
-                    <LuReplace className="FindReplaceModal-Icon" />
-                    {/* <span>جایگزینی</span> */}
-                  </button>
-                  <button
-                    className="FindReplaceModal-ReplaceButton"
-                    onClick={replaceAll}
-                    disabled={!matchCount}
-                  >
-                    <LuReplaceAll className="FindReplaceModal-Icon" />
-                    {/* <span>جایگزینی همه</span> */}
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
 
-          <button className="FindReplaceModal-CloseButton" onClick={onClose}>
-            <IoMdClose className="FindReplaceModal-Icon" />
-          </button>
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+          <div className="FindReplaceModal-ToggleContainer">
+            <button
+              className="FindReplaceModal-ToggleButton"
+              onClick={() => setShowReplace(!showReplace)}
+              aria-expanded={showReplace}
+            >
+              <IoIosArrowBack className="FindReplaceModal-ToggleIcon" />
+            </button>
+          </div>
+
+          {showReplace && (
+            <div className="FindReplaceModal-ReplaceGroup">
+              <input
+                type="text"
+                placeholder="جایگزینی با ..."
+                className="FindReplaceModal-Input"
+                value={replaceText}
+                onChange={(e) => setReplaceText(e.target.value)}
+              />
+              <div className="FindReplaceModal-Actions">
+                <button
+                  className="FindReplaceModal-ReplaceButton"
+                  onClick={replaceCurrent}
+                  disabled={!matchCount}
+                >
+                  <LuReplace className="FindReplaceModal-Icon" />
+                  {/* <span>جایگزینی</span> */}
+                </button>
+                <button
+                  className="FindReplaceModal-ReplaceButton"
+                  onClick={replaceAll}
+                  disabled={!matchCount}
+                >
+                  <LuReplaceAll className="FindReplaceModal-Icon" />
+                  {/* <span>جایگزینی همه</span> */}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <button className="FindReplaceModal-CloseButton" onClick={onClose}>
+          <IoMdClose className="FindReplaceModal-Icon" />
+        </button>
+      </div>
+    </div>
   );
 };
 
