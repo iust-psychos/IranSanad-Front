@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "@/pages/ContentEdit/index.css";
 import { IoMdClose } from "react-icons/io";
 import { LuReplace, LuReplaceAll } from "react-icons/lu";
@@ -25,13 +25,13 @@ const FindReplaceModal = ({ onClose }) => {
   const [replaceText, setReplaceText] = useState("");
   const [showReplace, setShowReplace] = useState(false);
   const [matches, setMatches] = useState([]);
-  const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
+  const [currentMatchIndex, setCurrentMatchIndex] = useState(-1);
 
   // Find all matches in the document
   useEffect(() => {
     if (!editor || findText.trim() === "") {
       setMatches([]);
-      setCurrentMatchIndex(0);
+      setCurrentMatchIndex(-1);
       return;
     }
 
@@ -64,51 +64,70 @@ const FindReplaceModal = ({ onClose }) => {
     });
 
     setMatches(foundMatches);
-    setCurrentMatchIndex(0);
-
-    // Select the first match if any
-    if (foundMatches.length > 0) {
-      selectMatch(0);
-    }
+    // Don't automatically select the first match
+    // Just reset the current index
+    setCurrentMatchIndex(-1);
   }, [findText, editor]);
 
-  // Highlight and scroll to the current match
-  const selectMatch = (index) => {
-    if (matches.length === 0 || index < 0 || index >= matches.length) return;
+  const selectMatch = useCallback(
+    (index) => {
+      if (matches.length === 0 || index < 0 || index >= matches.length) return;
 
-    const match = matches[index];
-    editor.update(() => {
-      const node = $getNodeByKey(match.nodeKey);
+      const match = matches[index];
+      editor.update(() => {
+        const node = $getNodeByKey(match.nodeKey);
 
-      if ($isTextNode(node)) {
-        // Create a range selection for the match
-        const rangeSelection = $createRangeSelection();
-        rangeSelection.anchor.set(match.nodeKey, match.start, "text");
-        rangeSelection.focus.set(match.nodeKey, match.end, "text");
-        $setSelection(rangeSelection);
+        if ($isTextNode(node)) {
+          // Create a range selection for the match
+          const rangeSelection = $createRangeSelection();
+          rangeSelection.anchor.set(match.nodeKey, match.start, "text");
+          rangeSelection.focus.set(match.nodeKey, match.end, "text");
+          $setSelection(rangeSelection);
 
-        // Scroll to the selection
-        const element = editor.getElementByKey(match.nodeKey);
-        if (element) {
-          element.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "center",
-          });
+          // Scroll to the selection
+          const element = editor.getElementByKey(match.nodeKey);
+          if (element) {
+            element.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "center",
+            });
 
-          // Add temporary highlight class
-          element.classList.add("text-match-highlight");
-          setTimeout(() => {
-            element.classList.remove("text-match-highlight");
-          }, 1000);
+            // Add temporary highlight class
+            element.classList.add("text-match-highlight");
+            setTimeout(() => {
+              element.classList.remove("text-match-highlight");
+            }, 1000);
+          }
         }
+      });
+    },
+    [matches, editor]
+  );
+
+  // Navigate to next/previous match
+  const navigateMatch = useCallback(
+    (direction) => {
+      if (matches.length === 0) return;
+
+      // If no match is currently selected, select the first one in the direction
+      let newIndex;
+      if (currentMatchIndex === -1) {
+        newIndex = direction > 0 ? 0 : matches.length - 1;
+      } else {
+        newIndex =
+          (currentMatchIndex + direction + matches.length) % matches.length;
       }
-    });
-  };
+
+      setCurrentMatchIndex(newIndex);
+      selectMatch(newIndex);
+    },
+    [matches, currentMatchIndex, selectMatch]
+  );
 
   // Replace current match
-  const replaceCurrent = () => {
-    if (matches.length === 0) return;
+  const replaceCurrent = useCallback(() => {
+    if (matches.length === 0 || currentMatchIndex === -1) return;
 
     const match = matches[currentMatchIndex];
     editor.update(() => {
@@ -153,10 +172,10 @@ const FindReplaceModal = ({ onClose }) => {
     } else {
       setFindText(""); // Reset search to refresh matches
     }
-  };
+  }, [matches, currentMatchIndex, replaceText, findText, editor, selectMatch]);
 
   // Replace all matches
-  const replaceAll = () => {
+  const replaceAll = useCallback(() => {
     if (matches.length === 0) return;
 
     editor.update(() => {
@@ -181,20 +200,11 @@ const FindReplaceModal = ({ onClose }) => {
 
     setFindText("");
     setMatches([]);
-  };
-
-  // Navigate to next/previous match
-  const navigateMatch = (direction) => {
-    if (matches.length === 0) return;
-
-    const newIndex =
-      (currentMatchIndex + direction + matches.length) % matches.length;
-    setCurrentMatchIndex(newIndex);
-    selectMatch(newIndex);
-  };
+    setCurrentMatchIndex(-1);
+  }, [matches, replaceText, editor]);
 
   const matchCount = matches.length;
-  const currentIndex = matchCount ? currentMatchIndex + 1 : 0;
+  const currentIndex = currentMatchIndex >= 0 ? currentMatchIndex + 1 : 0;
 
   return (
     <div>
@@ -255,7 +265,7 @@ const FindReplaceModal = ({ onClose }) => {
                 <button
                   className="FindReplaceModal-ReplaceButton"
                   onClick={replaceCurrent}
-                  disabled={!matchCount}
+                  disabled={!matchCount || currentMatchIndex === -1}
                 >
                   <LuReplace className="FindReplaceModal-Icon" />
                   {/* <span>جایگزینی</span> */}
