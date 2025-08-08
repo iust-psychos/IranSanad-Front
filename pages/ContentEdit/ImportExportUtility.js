@@ -6,7 +6,6 @@ import {
 import { $generateHtmlFromNodes } from "@lexical/html";
 import { $getRoot } from "lexical";
 import html2pdf from "html2pdf.js";
-
 export const getLexicalHtml = (editor) => {
   let htmlString = "";
   editor.read(() => {
@@ -86,3 +85,7 @@ export const convertToLexical = () => {};
 export const convertHtmlToLexical = () => {};
 
 export const convertMarkdownToLexical = () => {};
+
+export const insertImage = (editor , fileRefrence) => {
+      fileRefrence.current.click();
+};

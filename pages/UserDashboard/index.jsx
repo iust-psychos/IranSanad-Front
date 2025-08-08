@@ -9,7 +9,8 @@ import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { toPersianDate } from "@/utils/PersianDateConverter.js";
 import { createDocument } from "@/managers/UserDashboardManager.js";
 import { useTheme } from "@/src/ThemeContext";
-import { logo_dark , logo_light } from "../../Constants/ImageConstants.js";
+import { logo } from "../../Constants/ImageConstants.js";
+import Navbar from "../../Components/Navbar.jsx";
 
 export default function UserDashboard() {
   const searchRef = useRef();
@@ -55,16 +56,10 @@ export default function UserDashboard() {
 
   return (
     <div className="user-dashboard">
-      <menu className="navbar">
-        <button className="menu-logo" onClick={() => navigate("/landing")}>
-          <img
-            style={{ width: "50px", height: "50px" }}
-            src={isDarkMode ? logo_dark : logo_light}
-            alt="لوگو ایران سند"
-          />
-        </button>
+      {/* <menu className="navbar">
         <UserProfileDropdown data-testid="user-profile" />
-      </menu>
+      </menu> */}
+      <Navbar className="navbar" />
       <menu className="utility">
         <div className="menu-search">
           <button onClick={handleSearch}>

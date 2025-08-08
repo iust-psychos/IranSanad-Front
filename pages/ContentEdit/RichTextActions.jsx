@@ -29,6 +29,8 @@ import {
   IconUndo,
   IconHeader,
   IconFooter,
+  IconDirectionLTR,
+  IconDirectionRTL,
 } from "@/pages/ContentEdit/Icons";
 import {
   IconCheckList,
@@ -84,8 +86,10 @@ export const richTextActions = {
   LeftOutdent: "leftOutdent",
   RightIndent: "rightIndent",
   RightOutdent: "rightOutdent",
-  ToggleHeader: "toggleHeader",
-  ToggleFooter: "toggleFooter",
+  InsertHeader: "insertHeader",
+  InsertFooter: "insertFooter",
+  TextDirectionLTR: "textDirectionLTR",
+  TextDirectionRTL: "textDirectionRTL",
 };
 
 export const blockTypeToBlockName = {
@@ -170,21 +174,21 @@ const richTextBlockActions = [
 
 export const richTextOptions = [
   {
-    id: richTextActions.Redo,
-    component: IconButton,
-    props: {
-      id: richTextActions.Redo,
-      label: "Redo",
-      Icon: (iconProps) => <IconRedo {...iconProps} />,
-    },
-  },
-  {
     id: richTextActions.Undo,
     component: IconButton,
     props: {
       id: richTextActions.Undo,
       label: "Undo",
       Icon: (iconProps) => <IconUndo {...iconProps} />,
+    },
+  },
+  {
+    id: richTextActions.Redo,
+    component: IconButton,
+    props: {
+      id: richTextActions.Redo,
+      label: "Redo",
+      Icon: (iconProps) => <IconRedo {...iconProps} />,
     },
   },
   {
@@ -224,7 +228,7 @@ export const richTextOptions = [
     props: {
       id: richTextActions.Highlight,
       label: "Highlight",
-      Icon: (iconProps) => <IconHighlight {...iconProps} color="yellow" />,
+      Icon: (iconProps) => <IconHighlight {...iconProps} />,
     },
   },
   {
@@ -234,24 +238,6 @@ export const richTextOptions = [
       id: richTextActions.Strikethrough,
       label: "Strikethrough",
       Icon: (iconProps) => <IconStrikethrough {...iconProps} />,
-    },
-  },
-  {
-    id: richTextActions.Superscript,
-    component: IconButton,
-    props: {
-      id: richTextActions.Superscript,
-      label: "Superscript",
-      Icon: (iconProps) => <IconSuperscript {...iconProps} />,
-    },
-  },
-  {
-    id: richTextActions.Subscript,
-    component: IconButton,
-    props: {
-      id: richTextActions.Subscript,
-      label: "Subscript",
-      Icon: (iconProps) => <IconSubscript {...iconProps} />,
     },
   },
   {
@@ -273,65 +259,25 @@ export const richTextOptions = [
     },
   },
   {
-    id: richTextActions.FontSize.Increment,
-    component: IconButton,
-    props: {
-      id: richTextActions.FontSize.Increment,
-      label: "Increment Font Size",
-      Icon: (iconProps) => <IconPlus {...iconProps} />,
-    },
-  },
-  {
-    id: richTextActions.FontSize.Update,
-    component: Dropdown,
-    props: {
-      id: richTextActions.FontSize.Update,
-      label: "Font Size",
-      items: FONT_SIZES,
-      option: "font-size",
-      defaultValue: DEFAULT_FONT_SIZE,
-    },
-  },
-  {
-    id: richTextActions.FontSize.Decrement,
-    component: IconButton,
-    props: {
-      id: richTextActions.FontSize.Decrement,
-      label: "Decrement Font Size",
-      Icon: (iconProps) => <IconMinus {...iconProps} />,
-    },
-  },
-  {
-    id: richTextActions.FontFamily,
-    component: Dropdown,
-    props: {
-      id: richTextActions.FontFamily,
-      label: "Font Family",
-      items: FONT_FAMILY,
-      option: "font-family",
-      defaultValue: "Arial",
-    },
-  },
-  {
     id: richTextActions.Divider,
     component: IconDivider1,
   },
   {
-    id: richTextActions.RightAlign,
+    id: richTextActions.TextDirectionLTR,
     component: IconButton,
     props: {
-      id: richTextActions.RightAlign,
-      label: "Align Right",
-      Icon: (iconProps) => <IconRightAlign {...iconProps} />,
+      id: richTextActions.TextDirectionLTR,
+      label: "Left-to-Right",
+      Icon: (iconProps) => <IconDirectionLTR {...iconProps} />,
     },
   },
   {
-    id: richTextActions.CenterAlign,
+    id: richTextActions.TextDirectionRTL,
     component: IconButton,
     props: {
-      id: richTextActions.CenterAlign,
-      label: "Align Center",
-      Icon: (iconProps) => <IconCenterAlign {...iconProps} />,
+      id: richTextActions.TextDirectionRTL,
+      label: "Right-to-Left",
+      Icon: (iconProps) => <IconDirectionRTL {...iconProps} />,
     },
   },
   {
