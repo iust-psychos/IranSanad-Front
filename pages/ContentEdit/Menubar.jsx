@@ -58,37 +58,37 @@ const Menubar = () => {
     }
   };
   const handleChange = (event) => {
-      const file = event.target.files[0];
-      console.log(file)
-      if (!file) return;
-      if (file.type.startsWith("image/")) {
-        uploadImage(file).then(({ src, altText }) => {
-          editor.dispatchCommand(INSERT_IMAGE_COMMAND, { src, altText });
-        });
-      }
+    const file = event.target.files[0];
+    console.log(file);
+    if (!file) return;
+    if (file.type.startsWith("image/")) {
+      uploadImage(file).then(({ src, altText }) => {
+        editor.dispatchCommand(INSERT_IMAGE_COMMAND, { src, altText });
+      });
+    }
   };
 
   return (
-      <menu className="menubar">
-        {getMenuBlueprint(fileRefrence, editor, () => setOpenFindReplaceDialog(true)).map(
-          (section) => (
-            <MenubarDropdown
-              key={section.label}
-              mainLabel={section.label}
-              items={section.items}
-            />
-          )
-        )}
-        {/* Added By Erfan  */}
-        {/* it was obvious, trash code */}
-        {openFindReplaceDialog && (
-          <FindReplaceModal
-            onClose={() => setOpenFindReplaceDialog(false)}
-            isOpen={openFindReplaceDialog}
-          />
-        )}
-        <input type="file" ref={fileRefrence} style={{display:"none"}} onChange={handleChange}/>
-      </menu>
+    <menu className="menubar">
+      {getMenuBlueprint(fileRefrence, editor, () =>
+        setOpenFindReplaceDialog(true)
+      ).map((section) => (
+        <MenubarDropdown
+          key={section.label}
+          mainLabel={section.label}
+          items={section.items}
+        />
+      ))}
+      {openFindReplaceDialog && (
+        <FindReplaceModal onClose={() => setOpenFindReplaceDialog(false)} />
+      )}
+      <input
+        type="file"
+        ref={fileRefrence}
+        style={{ display: "none" }}
+        onChange={handleChange}
+      />
+    </menu>
   );
 };
 
