@@ -3,17 +3,15 @@ import Editor from "./Editor";
 import UserProfileDropdown from "@/pages/UserDashboard/UserProfileDropdown";
 import "@/pages/ContentEdit/index.css";
 import { IconComment, IconHistory, IconShare } from "@/pages/ContentEdit/Icons";
-import Share from "@/Components/Share";
+import Share from "@/pages/Share";
 import { useParams, useLoaderData, useNavigate } from "react-router-dom";
-import ReactDOM from "react-dom";
 import { renameDocument } from "@/managers/userDashboardManager";
 import HistoryModal from "@/pages/ContentEdit/HistoryModal";
 import SideTool from "./SideTool";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import Commentsystem from "@/components/Comment";
 import { useTheme } from "@/src/ThemeContext";
-import logo_dark from "/images/logo_dark.png";
-import logo_light from "/images/logo_light.png";
+import logo from "/images/logo.png";
 import { useUserStore } from "@/store/userStore";
 import Menubar from "@/pages/ContentEdit/Menubar";
 import { TiChevronLeft, TiChevronRight } from "react-icons/ti";
@@ -34,7 +32,6 @@ const ContentEditor = () => {
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
 
-  const shareModalRef = useRef(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [openHistoryModal, setOpenHistoryModal] = useState(false);
 
@@ -77,11 +74,7 @@ const ContentEditor = () => {
     >
       <menu className="navbar">
         <button className="menu-logo" onClick={() => navigate("/landing")}>
-          <img
-            style={{ width: "50px", height: "50px" }}
-            src={isDarkMode ? logo_dark : logo_light}
-            alt=""
-          />
+          <img style={{ width: "50px", height: "50px" }} src={logo} alt="" />
         </button>
         <div className="document-header">
           <input
@@ -118,18 +111,9 @@ const ContentEditor = () => {
         <UserProfileDropdown />
       </menu>
 
-      {showShareModal &&
-        ReactDOM.createPortal(
-          <div className="share-modal-overlay">
-            <div ref={shareModalRef}>
-              <Share
-                onClose={() => setShowShareModal(false)}
-                doc_uuid={doc_uuid}
-              />
-            </div>
-          </div>,
-          document.body
-        )}
+      {showShareModal && (
+        <Share onClose={() => setShowShareModal(false)} doc_uuid={doc_uuid} />
+      )}
 
       <HistoryModal open={openHistoryModal} setOpen={setOpenHistoryModal} />
 

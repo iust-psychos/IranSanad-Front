@@ -1,0 +1,209 @@
+.user-profile {
+    height: 100vh;
+    background-color: var(--primary-bg);
+    align-items: center;
+}
+
+.user-profile * {
+    font-family: 'Vazir';
+    color: var(--text-primary);
+}
+
+.user-profile-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2% auto 0 auto;
+    padding: 2px;
+    width: 450px;
+    background-color: var(--secondary-bg);
+    border-radius: 15px;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+}
+
+.user-profile-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: linear-gradient(to bottom, var(--accent-gold), var(--secondary-bg));
+    border-radius: 15px;
+    height: 80px;
+}
+
+.user-profile-header-image {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    border-top: 3px solid var(--accent-gold);
+    border-bottom: 3px solid var(--secondary-bg);
+    margin: 10% 3% 0 3%;
+    cursor: pointer;
+}
+
+.user-profile-header-image:hover {
+    transform: scale(1.1);
+    transition: ease-in-out 0.3s;
+}
+
+.user-profile-header-buttons {
+    margin: 25% 3% 0 3%;
+}
+
+.user-profile-header-buttons > button,
+.user-profile-header-buttons > label > button, 
+.user-profile-content-forms-buttons > button {
+    border: none;
+    width: 90px;
+    height: 30px;
+    border-radius: 5px;
+    box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px, rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.04) 0px 6px 6px -3px, rgba(14, 63, 126, 0.04) 0px 12px 12px -6px, rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;
+    margin: 0 5px;
+    background-color: var(--primary-bg);
+    color: var(--button-bg);
+}
+
+.user-profile-header-buttons > button:hover,
+.user-profile-header-buttons > label > button:hover,
+.user-profile-content-forms-buttons > button:hover {
+    background: var(--button-hover);
+    color: var(--primary-bg);
+    box-shadow: 0 var(--button-bg);
+}
+
+.user-profile-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1% 3%;
+    margin-top: 10%;
+}
+
+.user-profile-content-text {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.user-profile-content-right {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-profile-content-name {
+    font-size: 18px;
+    margin: 2.5px 0;
+}
+
+.user-profile-content-email {
+    font-size: 10px;
+    font-weight: 300;
+    font-family: monospace;
+    margin: 2.5px 0;
+    color: var(--text-secondary);
+}
+
+.user-profile-content-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-profile-content-datejoined {
+    font-size: 10px;
+    font-weight: 200;
+}
+
+.user-profile-content-forms-selector {
+    display: flex;
+    flex-direction: row;
+    margin: 2% 0;
+    border-bottom: 1px solid var(--accent-gold);
+}
+
+.user-profile-content-forms-selector > button {
+    height: 30px;
+    margin: 1% 0 0 5px;
+    padding: 5px;
+    color: var(--button-bg);
+    background: none;
+    border: none;
+    border-radius: 5px 5px 0 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-profile-content-forms-selector > button:hover {
+    background: var(--button-hover);
+    color: var(--primary-bg);
+    transition: ease-in 0.3s;
+}
+
+.user-profile-content-forms-selector > button.activeSelector {
+    background: var(--accent-gold);
+    color: var(--primary-bg);
+    font-weight: bold;
+}
+
+.user-profile-forms-labelinput {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7.5px 3px;
+    border-bottom: 1px solid var(--border);
+}
+
+.user-profile-forms-labelinput > label {
+    width: 30%;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.user-profile-forms-labelinput-input {
+    width: 70%;
+    border: 1px solid var(--border);
+    height: 30px;
+    padding: 3px 6px;
+    border-radius: 5px;
+    background-color: var(--secondary-bg);
+    color: var(--text-primary);
+    font-family: monospace;
+}
+
+.user-profile-forms-labelinput-input.name {
+    width: 35%;
+    margin: 0 0.5%;
+    font-family: 'Vazir';
+}
+
+.user-profile-forms-labelinput-button {
+    background: none;
+    border: none;
+    margin-left: -7%;
+    z-index: 1;
+}
+
+.user-profile-forms-labelinput-button > * {
+    vertical-align: middle;
+}
+
+.user-profile-content-forms-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: 2.5% 0;
+}
+
+.user-profile-content-forms-buttons > button {
+    width: 60px;
+}
+
+.user-profile-button-save {
+    color: var(--primary-bg) !important;
+    background-color: var(--accent-gold) !important;
+}

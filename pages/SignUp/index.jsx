@@ -15,7 +15,7 @@ import { Tooltip } from "react-tooltip";
 import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
 import { RingLoader } from "react-spinners";
 import CookieManager from "@/managers/CookieManager.js";
-import LogoIcon from "/images/logo_light.png";
+import LogoIcon from "/images/logo.png";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -92,7 +92,7 @@ const SignUp = () => {
       );
     } catch (err) {
       if (err.name == "AxiosError") {
-        showErrorToast(err.response.data.message);
+        showErrorToast(err.message);
       } else {
         const validationErrors = {};
         if (err.inner !== undefined) {

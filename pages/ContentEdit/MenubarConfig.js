@@ -71,9 +71,10 @@ import {
   convertLexicalToMarkdown,
   convertLexicalToPdf,
   convertLexicalToPlainText,
+  insertImage
 } from "./ImportExportUtility";
 
-export const getMenuBlueprint = (editor, openFindReplaceDialog) => [
+export const getMenuBlueprint = (fileRefrence, editor, openFindReplaceDialog) => [
   {
     label: "فایل",
     items: [
@@ -128,7 +129,7 @@ export const getMenuBlueprint = (editor, openFindReplaceDialog) => [
   {
     label: "درج",
     items: [
-      { label: "تصویر", action: () => insertImage(editor) },
+      { label: "تصویر", action: () => insertImage(editor,fileRefrence) },
       { label: "جدول", action: () => insertTable(editor) },
       { label: "پیوند", action: () => insertLink(editor) },
       { label: "خط افقی", action: () => insertHorizontalRule(editor) },

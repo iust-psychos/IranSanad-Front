@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { Dialog } from "@base-ui-components/react/dialog";
+import { useState, useEffect, useCallback } from "react";
 import "@/pages/ContentEdit/index.css";
 import { IoMdClose } from "react-icons/io";
 import { LuReplace, LuReplaceAll } from "react-icons/lu";
@@ -20,19 +19,19 @@ import {
 } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
-const FindReplaceModal = ({ onClose, isOpen }) => {
+const FindReplaceModal = ({ onClose }) => {
   const [editor] = useLexicalComposerContext();
   const [findText, setFindText] = useState("");
   const [replaceText, setReplaceText] = useState("");
   const [showReplace, setShowReplace] = useState(false);
   const [matches, setMatches] = useState([]);
-  const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
+  const [currentMatchIndex, setCurrentMatchIndex] = useState(-1);
 
   // Find all matches in the document
   useEffect(() => {
     if (!editor || findText.trim() === "") {
       setMatches([]);
-      setCurrentMatchIndex(0);
+      setCurrentMatchIndex(-1);
       return;
     }
 
@@ -65,51 +64,70 @@ const FindReplaceModal = ({ onClose, isOpen }) => {
     });
 
     setMatches(foundMatches);
-    setCurrentMatchIndex(0);
-
-    // Select the first match if any
-    if (foundMatches.length > 0) {
-      selectMatch(0);
-    }
+    // Don't automatically select the first match
+    // Just reset the current index
+    setCurrentMatchIndex(-1);
   }, [findText, editor]);
 
-  // Highlight and scroll to the current match
-  const selectMatch = (index) => {
-    if (matches.length === 0 || index < 0 || index >= matches.length) return;
+  const selectMatch = useCallback(
+    (index) => {
+      if (matches.length === 0 || index < 0 || index >= matches.length) return;
 
-    const match = matches[index];
-    editor.update(() => {
-      const node = $getNodeByKey(match.nodeKey);
+      const match = matches[index];
+      editor.update(() => {
+        const node = $getNodeByKey(match.nodeKey);
 
-      if ($isTextNode(node)) {
-        // Create a range selection for the match
-        const rangeSelection = $createRangeSelection();
-        rangeSelection.anchor.set(match.nodeKey, match.start, "text");
-        rangeSelection.focus.set(match.nodeKey, match.end, "text");
-        $setSelection(rangeSelection);
+        if ($isTextNode(node)) {
+          // Create a range selection for the match
+          const rangeSelection = $createRangeSelection();
+          rangeSelection.anchor.set(match.nodeKey, match.start, "text");
+          rangeSelection.focus.set(match.nodeKey, match.end, "text");
+          $setSelection(rangeSelection);
 
-        // Scroll to the selection
-        const element = editor.getElementByKey(match.nodeKey);
-        if (element) {
-          element.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "center",
-          });
+          // Scroll to the selection
+          const element = editor.getElementByKey(match.nodeKey);
+          if (element) {
+            element.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "center",
+            });
 
-          // Add temporary highlight class
-          element.classList.add("text-match-highlight");
-          setTimeout(() => {
-            element.classList.remove("text-match-highlight");
-          }, 1000);
+            // Add temporary highlight class
+            element.classList.add("text-match-highlight");
+            setTimeout(() => {
+              element.classList.remove("text-match-highlight");
+            }, 1000);
+          }
         }
+      });
+    },
+    [matches, editor]
+  );
+
+  // Navigate to next/previous match
+  const navigateMatch = useCallback(
+    (direction) => {
+      if (matches.length === 0) return;
+
+      // If no match is currently selected, select the first one in the direction
+      let newIndex;
+      if (currentMatchIndex === -1) {
+        newIndex = direction > 0 ? 0 : matches.length - 1;
+      } else {
+        newIndex =
+          (currentMatchIndex + direction + matches.length) % matches.length;
       }
-    });
-  };
+
+      setCurrentMatchIndex(newIndex);
+      selectMatch(newIndex);
+    },
+    [matches, currentMatchIndex, selectMatch]
+  );
 
   // Replace current match
-  const replaceCurrent = () => {
-    if (matches.length === 0) return;
+  const replaceCurrent = useCallback(() => {
+    if (matches.length === 0 || currentMatchIndex === -1) return;
 
     const match = matches[currentMatchIndex];
     editor.update(() => {
@@ -154,10 +172,10 @@ const FindReplaceModal = ({ onClose, isOpen }) => {
     } else {
       setFindText(""); // Reset search to refresh matches
     }
-  };
+  }, [matches, currentMatchIndex, replaceText, findText, editor, selectMatch]);
 
   // Replace all matches
-  const replaceAll = () => {
+  const replaceAll = useCallback(() => {
     if (matches.length === 0) return;
 
     editor.update(() => {
@@ -182,106 +200,94 @@ const FindReplaceModal = ({ onClose, isOpen }) => {
 
     setFindText("");
     setMatches([]);
-  };
-
-  // Navigate to next/previous match
-  const navigateMatch = (direction) => {
-    if (matches.length === 0) return;
-
-    const newIndex =
-      (currentMatchIndex + direction + matches.length) % matches.length;
-    setCurrentMatchIndex(newIndex);
-    selectMatch(newIndex);
-  };
+    setCurrentMatchIndex(-1);
+  }, [matches, replaceText, editor]);
 
   const matchCount = matches.length;
-  const currentIndex = matchCount ? currentMatchIndex + 1 : 0;
+  const currentIndex = currentMatchIndex >= 0 ? currentMatchIndex + 1 : 0;
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <Dialog.Portal>
-        <Dialog.Backdrop />
-        <Dialog.Popup className="FindReplaceModal-Popup">
-          <div className="FindReplaceModal-Content">
-            <div className="FindReplaceModal-SearchGroup">
-              <input
-                type="text"
-                placeholder="جست و جو ..."
-                className="FindReplaceModal-Input"
-                value={findText}
-                onChange={(e) => setFindText(e.target.value)}
-                autoFocus
-              />
-              <div className="FindReplaceModal-Actions">
-                <span className="FindReplaceModal-Result">
-                  {matchCount
-                    ? `نتیجه ${currentIndex} از ${matchCount}`
-                    : "موردی یافت نشد"}
-                </span>
-                <button
-                  className="FindReplaceModal-ActionButton"
-                  onClick={() => navigateMatch(-1)}
-                  disabled={!matchCount}
-                >
-                  <IoIosArrowRoundUp className="FindReplaceModal-Icon" />
-                </button>
-                <button
-                  className="FindReplaceModal-ActionButton"
-                  onClick={() => navigateMatch(1)}
-                  disabled={!matchCount}
-                >
-                  <IoIosArrowRoundDown className="FindReplaceModal-Icon" />
-                </button>
-              </div>
-            </div>
-
-            <div className="FindReplaceModal-ToggleContainer">
+    <div>
+      <div className="FindReplaceModal-Popup">
+        <div className="FindReplaceModal-Content">
+          <div className="FindReplaceModal-SearchGroup">
+            <input
+              type="text"
+              placeholder="جست و جو ..."
+              className="FindReplaceModal-Input"
+              value={findText}
+              onChange={(e) => setFindText(e.target.value)}
+              autoFocus
+            />
+            <div className="FindReplaceModal-Actions">
+              <span className="FindReplaceModal-Result">
+                {matchCount
+                  ? `نتیجه ${currentIndex} از ${matchCount}`
+                  : "موردی یافت نشد"}
+              </span>
               <button
-                className="FindReplaceModal-ToggleButton"
-                onClick={() => setShowReplace(!showReplace)}
-                aria-expanded={showReplace}
+                className="FindReplaceModal-ActionButton"
+                onClick={() => navigateMatch(-1)}
+                disabled={!matchCount}
               >
-                <IoIosArrowBack className="FindReplaceModal-ToggleIcon" />
+                <IoIosArrowRoundUp className="FindReplaceModal-Icon" />
+              </button>
+              <button
+                className="FindReplaceModal-ActionButton"
+                onClick={() => navigateMatch(1)}
+                disabled={!matchCount}
+              >
+                <IoIosArrowRoundDown className="FindReplaceModal-Icon" />
               </button>
             </div>
-
-            {showReplace && (
-              <div className="FindReplaceModal-ReplaceGroup">
-                <input
-                  type="text"
-                  placeholder="جایگزینی با ..."
-                  className="FindReplaceModal-Input"
-                  value={replaceText}
-                  onChange={(e) => setReplaceText(e.target.value)}
-                />
-                <div className="FindReplaceModal-Actions">
-                  <button
-                    className="FindReplaceModal-ReplaceButton"
-                    onClick={replaceCurrent}
-                    disabled={!matchCount}
-                  >
-                    <LuReplace className="FindReplaceModal-Icon" />
-                    {/* <span>جایگزینی</span> */}
-                  </button>
-                  <button
-                    className="FindReplaceModal-ReplaceButton"
-                    onClick={replaceAll}
-                    disabled={!matchCount}
-                  >
-                    <LuReplaceAll className="FindReplaceModal-Icon" />
-                    {/* <span>جایگزینی همه</span> */}
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
 
-          <button className="FindReplaceModal-CloseButton" onClick={onClose}>
-            <IoMdClose className="FindReplaceModal-Icon" />
-          </button>
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+          <div className="FindReplaceModal-ToggleContainer">
+            <button
+              className="FindReplaceModal-ToggleButton"
+              onClick={() => setShowReplace(!showReplace)}
+              aria-expanded={showReplace}
+            >
+              <IoIosArrowBack className="FindReplaceModal-ToggleIcon" />
+            </button>
+          </div>
+
+          {showReplace && (
+            <div className="FindReplaceModal-ReplaceGroup">
+              <input
+                type="text"
+                placeholder="جایگزینی با ..."
+                className="FindReplaceModal-Input"
+                value={replaceText}
+                onChange={(e) => setReplaceText(e.target.value)}
+              />
+              <div className="FindReplaceModal-Actions">
+                <button
+                  className="FindReplaceModal-ReplaceButton"
+                  onClick={replaceCurrent}
+                  disabled={!matchCount || currentMatchIndex === -1}
+                >
+                  <LuReplace className="FindReplaceModal-Icon" />
+                  {/* <span>جایگزینی</span> */}
+                </button>
+                <button
+                  className="FindReplaceModal-ReplaceButton"
+                  onClick={replaceAll}
+                  disabled={!matchCount}
+                >
+                  <LuReplaceAll className="FindReplaceModal-Icon" />
+                  {/* <span>جایگزینی همه</span> */}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <button className="FindReplaceModal-CloseButton" onClick={onClose}>
+          <IoMdClose className="FindReplaceModal-Icon" />
+        </button>
+      </div>
+    </div>
   );
 };
 

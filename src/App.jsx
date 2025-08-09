@@ -9,12 +9,11 @@ import Login from "@/pages/Login/index";
 import Forgot_password from "@/pages/ForgetPassword/index";
 import UserDashboard from "@/pages/UserDashboard/index";
 import { userDashboardLoader } from "@/managers/UserDashboardManager";
-import Loading from "@/components/Loading";
 import { ToastContainer } from "react-toastify";
 import ContentEditor from "@/pages/ContentEdit/index";
 import EmailVerification from "@/Components/EmailVerification";
 import ErrorPage from "@/pages/Error/index";
-import Share from "@/components/Share";
+import Share from "@/pages/Share/index";
 import UserProfile from "@/pages/UserProfile/index";
 import { useState, useEffect } from "react";
 import "@/styles/App.css";
@@ -41,7 +40,7 @@ const ProtectedRoute = ({
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <Landing />,
   },
   {
     path: "/login",
@@ -58,10 +57,6 @@ const router = createBrowserRouter([
   {
     path: "/EmailVerification",
     element: <EmailVerification />,
-  },
-  {
-    path: "/landing",
-    element: <Landing />,
   },
   // Protected routes group
   {
@@ -97,25 +92,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-function Root() {
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return isLoading ? <Loading /> : <Navigate to="/landing" />;
-}
-
 function updateFavicon(mode) {
   const favicon =
     document.getElementById("favicon") || document.createElement("link");
   favicon.id = "favicon";
   favicon.rel = "icon";
   favicon.type = "image";
-  favicon.href = mode ? "/logo_dark.png" : "/logo_light.png";
+  favicon.href = "/logo.png";
   document.head.appendChild(favicon);
 }
 

@@ -7,8 +7,9 @@ import { userInfoLoader } from "@/managers/UserDashboardManager";
 import CookieManager from "@/managers/CookieManager";
 import { RingLoader } from "react-spinners";
 import constants from "@/managers/Constants";
+import { baseAPI } from "@/Managers/NavbarManager";
 
-export default function UserProfileDropdown() {
+export default function UserProfileDropdown({ profile_image }) {
   const navigate = useNavigate();
   const {
     data: userInfo,
@@ -31,13 +32,17 @@ export default function UserProfileDropdown() {
   return (
     <Menu.Root modal={false} onOpenChange={(open) => open && refetch()}>
       <Menu.Trigger className="menu-profile">
-        <img src={DEFAULT_IMAGE} alt="عکس پروفایل" />
+        <img
+          src={profile_image ? baseAPI + profile_image : DEFAULT_IMAGE}
+          alt="عکس پروفایل"
+          className="menu-profile-image"
+        />
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner sideOffset={6} align="end">
           <Menu.Popup className="user-dashboard-dropdown profile-dropdown">
             {isLoading ? (
-              <RingLoader color="#bba1ea" size="1.5rem" data-testid="spinner" />
+              <RingLoader color="gold" size="1.5rem" data-testid="spinner" />
             ) : isError ? (
               <div className="p-4 text-red-600">خطا در دریافت اطلاعات</div>
             ) : userInfo ? (
@@ -52,10 +57,7 @@ export default function UserProfileDropdown() {
                     </button>
                   </Menu.Item>
                   <img
-                    src={
-                      `${constants.baseDomain}${userInfo.profile_image}` ||
-                      DEFAULT_IMAGE
-                    }
+                    src={`${baseAPI + profile_image}` || DEFAULT_IMAGE}
                     alt="عکس پروفایل"
                   />
                 </menu>
@@ -64,7 +66,9 @@ export default function UserProfileDropdown() {
                     {userInfo.first_name || "بدون نام"}{" "}
                     {userInfo.last_name || ""}
                   </p>
-                  <p>{userInfo.email}</p>
+                  <p style={{ fontFamily: "monospace", fontSize: "14px" }}>
+                    {userInfo.email}
+                  </p>
                 </section>
                 <menu className="user-dashboard-dropdown profile-dropdown-buttons">
                   <Link to="/profile" discover="none">

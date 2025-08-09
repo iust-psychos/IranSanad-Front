@@ -1,4 +1,5 @@
 import constants from "./constants.js";
+import CookieManager from "./CookieManager.js"
 
 export const baseAPI = `${constants.baseDomain}`;
 
@@ -9,3 +10,5 @@ export const getPermissionsAPI = `${constants.baseUrl}docs/permission/get_permis
 export const checkValidUserAPI = `${constants.baseUrl}auth/user_lookup/`;
 
 export const getDocAPI = `${constants.baseUrl}docs/`;
+
+export const token = CookieManager.LoadToken();

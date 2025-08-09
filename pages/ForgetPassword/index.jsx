@@ -140,7 +140,8 @@ const Forgot_password = () => {
       );
     } catch (err) {
       if (err.name == "AxiosError") {
-        showErrorToast(err.response.data.code[0]);
+        console.log(err)
+        showErrorToast(err.code);
       } else {
         setErrorValidationCode(err.message);
       }
