@@ -16,7 +16,7 @@ describe("Info Form", () => {
   const mockOnChange = vitest.fn();
 
   it("should render all info fields when all provided correctly", () => {
-    render(<InfoForm user={mockInfo} mockOnchange={mockOnChange} />);
+    render(<InfoForm user={mockInfo} onUpdate={mockOnChange} />);
 
     expect(screen.getByDisplayValue(mockInfo.first_name)).toBeInTheDocument();
     expect(screen.getByDisplayValue(mockInfo.last_name)).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe("Info Form", () => {
   };
 
   it("should render all info fields when some provided correctly", () => {
-    render(<InfoForm user={mockIncompleteInfo} mockOnchange={mockOnChange} />);
+    render(<InfoForm user={mockIncompleteInfo} onUpdate={mockOnChange} />);
 
     const labels = ["نام", "نشانی ایمیل", "شماره تماس", "نام کاربری"];
 
@@ -51,18 +51,22 @@ describe("Info Form", () => {
     expect(emptyInputs).toHaveLength(2);
   });
 
-  it("should call onUpdate when editable fields change and not call on email field", () => {
-    render(<InfoForm user={mockIncompleteInfo} mockOnchange={mockOnChange} />);
+  it("should call onUpdate when editable fields change and not call on email field", async () => {
+    render(<InfoForm user={mockIncompleteInfo} onUpdate={mockOnChange} />);
 
     const inputs = screen.getAllByRole("textbox");
     const editableInputs = inputs.filter((input) => input.name !== "email");
     expect(editableInputs).toHaveLength(4);
 
     const user = userEvent.setup();
-    editableInputs.forEach(async (input) => {
+    mockOnChange.mockClear();
+
+    for (const input of editableInputs) {
       await user.type(input, "test value");
-      expect(mockOnChange).toHaveBeenCalledWith(input.name, "test value");
-    });
+      expect(mockOnChange).toHaveBeenCalledTimes(10);
+
+      mockOnChange.mockClear();
+    }
 
     const disabledInput = inputs.filter((input) => input.disabled === true);
     expect(disabledInput).toHaveLength(1);
