@@ -13,4 +13,6 @@ export const Service3 = "/images/Landing/service3.svg";
 export const Service4 = "/images/Landing/service4.svg";
 
 export const Join = "/images/Landing/join.svg";
-export const logo = "/images/logo.png";
+
+export const logo_dark = "/images/logo_dark.png";
+export const logo_light = "/images/logo_light.png";
