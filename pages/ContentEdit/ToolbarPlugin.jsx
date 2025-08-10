@@ -17,12 +17,15 @@ import {
   COMMAND_PRIORITY_LOW,
   CAN_REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
+  $getRoot,
+  $isNodeSelection,
   INDENT_CONTENT_COMMAND,
   OUTDENT_CONTENT_COMMAND,
 } from "lexical";
 import {
   $patchStyleText,
   $getSelectionStyleValueForProperty,
+  getStyleObjectFromCSS,
 } from "@lexical/selection";
 import { $isTableSelection } from "@lexical/table";
 import {
@@ -31,7 +34,7 @@ import {
   ListNode,
 } from "@lexical/list";
 import { $isHeadingNode } from "@lexical/rich-text";
-import { IconDivider1 } from "./Icons";
+import { IconDivider1, MinusIcon, PlusIcon } from "./Icons";
 import {
   clearFormatting,
   getFontFallback,
@@ -70,6 +73,7 @@ function ToolbarPlugin() {
         ? selectedElement.getTag()
         : selectedElement.getType();
 
+      console.log(`${richTextActions.Block.Update}:${lexicalToBlockId[type]}`);
       if (type in lexicalToBlockId) {
         setSelectionMap((prev) => ({
           ...prev,
@@ -142,6 +146,25 @@ function ToolbarPlugin() {
       };
       setSelectionMap(newSelectionMap);
     }
+
+    // if ($isNodeSelection(selection)) {
+    //   console.log("there");
+    //   const nodes = selection.getNodes();
+    //   for (const selectedNode of nodes) {
+    //     const parentList = $getNearestNodeOfType(selectedNode, ListNode);
+    //     if (parentList) {
+    //       const type = parentList.getListType();
+    //       setSelectionMap((prev) => ({
+    //         ...prev,
+    //         [richTextActions.Block.Update]: lexicalToBlockId[type],
+    //       }));
+    //     } else {
+    //       const selectedElement = $findTopLevelElement(selectedNode);
+    //       $handleBlockNode(selectedElement);
+    //       // $handleCodeNode(selectedElement);
+    //     }
+    //   }
+    // }
   }, [editor, setSelectionMap]);
 
   useEffect(() => {
@@ -154,7 +177,7 @@ function ToolbarPlugin() {
         }),
         editor.registerCommand(
           SELECTION_CHANGE_COMMAND,
-          (payload) => {
+          (payLoad) => {
             updateToolbar();
             return false;
           },
@@ -162,22 +185,22 @@ function ToolbarPlugin() {
         ),
         editor.registerCommand(
           CAN_UNDO_COMMAND,
-          (payload) => {
-            setDisableMap((prev) => ({ ...prev, undo: !payload }));
+          (payLoad) => {
+            setDisableMap((prev) => ({ ...prev, undo: !payLoad }));
             return false;
           },
           COMMAND_PRIORITY_LOW
         ),
         editor.registerCommand(
           CAN_REDO_COMMAND,
-          (payload) => {
-            setDisableMap((prev) => ({ ...prev, redo: !payload }));
+          (payLoad) => {
+            setDisableMap((prev) => ({ ...prev, redo: !payLoad }));
             return false;
           },
           COMMAND_PRIORITY_LOW
         )
       );
-  }, [editor, updateToolbar]);
+  });
 
   const onAction = (id, option = "", value = "") => {
     switch (id) {
@@ -282,14 +305,6 @@ function ToolbarPlugin() {
       case richTextActions.LeftOutdent:
         editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
         break;
-
-      case richTextActions.TextDirectionLTR:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "ltr");
-        break;
-      case richTextActions.TextDirectionRTL:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "rtl");
-        break;
-
       default:
         break;
     }
