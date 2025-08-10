@@ -20,11 +20,22 @@ const SelectBox = ({
     </Select.Item>
   );
 
+  const labelMap = {
+    ReadOnly: "نظاره‌گر",
+    Writer: "ویراستار",
+    view: "مشاهده",
+    edit: "ویرایش",
+    restricted: "محدود",
+    public: "عمومی",
+  };
+
   const commonTriggerProps = {
     className: "share-select-trigger",
     children: (
       <>
-        <Select.Value className="share-item-status-label" />
+        <Select.Value className="share-item-status-label">
+          {(value) => labelMap[value] || value}
+        </Select.Value>
         <HiChevronUpDown className="share-select-icon" />
       </>
     ),
