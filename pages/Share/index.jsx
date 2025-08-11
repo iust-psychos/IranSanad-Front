@@ -211,7 +211,7 @@ const Share = ({ onClose, doc_uuid }) => {
                               }}
                             />
                           ) : (
-                            <FaUser fill="black" />
+                            <FaUser data-testid="FaUser-icon" fill="black" />
                           )}
                         </div>
                         <div className="share-item-name-email">
