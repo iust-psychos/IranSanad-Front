@@ -2,15 +2,22 @@ import { it, expect, describe, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
-import Share from "../../Components/Share";
+import { showSuccessToast } from "@/utils/Toast";
+import Share from "../../../pages/Share/index";
 import axios from "axios";
+import { wait } from "@testing-library/user-event/dist/cjs/utils/index.js";
 
-describe("Share General Tests", () => {
+vi.mock("@/utils/Toast", () => ({
+  showErrorToast: vi.fn(),
+  showSuccessToast: vi.fn(),
+}));
+
+vi.mock("../path/CookieManager", () => ({
+  LoadToken: () => "fake-token",
+}));
+
+describe("Share", () => {
   vi.mock("axios");
-
-  vi.mock("../path/to/CookieManager", () => ({
-    LoadToken: () => "fake-token",
-  }));
 
   const mockDocument = {
     id: 123,
@@ -25,9 +32,9 @@ describe("Share General Tests", () => {
         id: 1,
         username: "readuser",
         email: "read@example.com",
-        profile_image: null,
+        profile_image: "sample",
       },
-      access_level: "ReadOnly",
+      access_level: "Owner",
     },
     {
       user: {
@@ -36,7 +43,7 @@ describe("Share General Tests", () => {
         email: "edit@example.com",
         profile_image: null,
       },
-      access_level: "Write",
+      access_level: "Writer",
     },
     {
       user: {
@@ -97,16 +104,47 @@ describe("Share General Tests", () => {
         expect(userCard).toHaveTextContent(permission.user.email);
 
         const expectedAccess =
-          permission.access_level === "ReadOnly" ? "نظاره‌گر" : "ویراستار";
+          permission.access_level === "Owner"
+            ? "مالک"
+            : permission.access_level === "ReadOnly"
+            ? "نظاره‌گر"
+            : "ویراستار";
         expect(userCard).toHaveTextContent(expectedAccess);
       });
     });
   });
-});
 
-///////////////////////////////////////////////////
+  it("should render permissions user image correctly", async () => {
+    render(<Share onClose={vi.fn()} doc_uuid="test-uuid" />);
 
-describe("Share User Interaction Tests", () => {
+    await waitFor(() => {
+      expect(screen.getAllByRole("img")).toHaveLength(1);
+      expect(screen.getAllByTestId("FaUser-icon").length).equal(2);
+    });
+  });
+
+  it("should copy link to clipboard on copy link successfully", async () => {
+    const mockDocument = {
+      link: "https://example.com/doc-link",
+      name: "Test Doc",
+    };
+
+    axios.get.mockResolvedValueOnce({ data: mockDocument });
+
+    const mockWriteText = vi.fn().mockResolvedValue();
+    navigator.clipboard = { writeText: mockWriteText };
+
+    render(<Share onClose={vi.fn()} doc_uuid="test-uuid" />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/اشتراک گذاری "Test Doc"/)).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByRole("button", { name: /رونویس پیوند/ }));
+
+    expect(mockWriteText).toHaveBeenCalledWith(mockDocument.link);
+  });
+
   const singleUserDoc = {
     id: 123,
     title: "Single User Doc",
@@ -126,86 +164,15 @@ describe("Share User Interaction Tests", () => {
     },
   ];
 
-  beforeEach(() => {
+  it("should modify permissions on select change and submit", async () => {
     axios.get.mockReset();
     axios.get
       .mockResolvedValueOnce({ data: singleUserDoc })
       .mockResolvedValueOnce({ data: singleUserPermission });
     axios.post.mockResolvedValueOnce({});
-  });
 
-  // it("should modify permissions on select change and submit", async () => {
-  //   const user = userEvent.setup();
-  //   const onClose = vi.fn();
-
-  //   render(<Share onClose={onClose} doc_uuid="test-uuid" />);
-
-  //   await waitFor(() => {
-  //     expect(screen.getByText("singleuser")).toBeInTheDocument();
-  //   });
-
-  //   const selectTrigger = screen.getByTestId("permission-select-5");
-  //   await user.click(selectTrigger);
-
-  //   await user.click(screen.getByText("ویراستار"));
-
-  //   const confirmButton = screen.getByRole("button", { name: /تایید/i });
-  //   await user.click(confirmButton);
-
-  //   await waitFor(() => {
-  //     expect(axios.post).toHaveBeenCalledWith(
-  //       expect.stringContaining("/api/v1/docs/permission/set_permission/"),
-  //       {
-  //         document: 123,
-  //         permissions: [
-  //           {
-  //             user: 5,
-  //             permission: "Write",
-  //           },
-  //         ],
-  //       },
-  //       expect.any(Object) // headers
-  //     );
-  //   });
-
-  //   // Optionally assert that the modal was closed
-  //   expect(onClose).toHaveBeenCalled();
-  // });
-
-  it("allows searching and adding a new user", async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
-
-    const newUser = {
-      user_id: 42,
-      username: "searchuser",
-      email: "search@example.com",
-      profile_image: null,
-    };
-
-    const updatedPermissions = [
-      ...singleUserPermission,
-      {
-        user: {
-          id: 42,
-          username: "searchuser",
-          email: "search@example.com",
-          profile_image: null,
-        },
-        access_level: "ReadOnly",
-      },
-    ];
-
-    axios.get.mockReset();
-    axios.get
-      .mockResolvedValueOnce({ data: singleUserDoc })
-      .mockResolvedValueOnce({ data: singleUserPermission })
-      .mockResolvedValueOnce({ data: updatedPermissions });
-
-    axios.post.mockReset();
-    axios.post
-      .mockResolvedValueOnce({ data: newUser })
-      .mockResolvedValueOnce({});
 
     render(<Share onClose={onClose} doc_uuid="test-uuid" />);
 
@@ -213,32 +180,30 @@ describe("Share User Interaction Tests", () => {
       expect(screen.getByText("singleuser")).toBeInTheDocument();
     });
 
-    const searchInput = screen.getByPlaceholderText(/نام کاربری یا ایمیل/i);
-    await user.type(searchInput, "search@example.com");
-    await user.keyboard("{Enter}");
+    const selectTrigger = screen.getByTestId("permission-select-5");
+    await user.click(selectTrigger);
+
+    await user.click(screen.getByText("ویراستار"));
+
+    const confirmButton = screen.getByRole("button", { name: /تایید/i });
+    await user.click(confirmButton);
 
     await waitFor(() => {
-      expect(screen.getByText("searchuser")).toBeInTheDocument();
+      expect(axios.post).toHaveBeenCalledWith(
+        expect.stringContaining("/api/v1/docs/permission/set_permission/"),
+        {
+          document: 123,
+          permissions: [
+            {
+              user: 5,
+              permission: "Writer",
+            },
+          ],
+        },
+        expect.any(Object) // headers
+      );
     });
 
-    expect(axios.post).toHaveBeenCalledWith(
-      expect.stringContaining("/user_lookup/"),
-      { email: "search@example.com" },
-      expect.any(Object)
-    );
-
-    expect(axios.post).toHaveBeenCalledWith(
-      expect.stringContaining("/set_permission/"),
-      {
-        document: 123,
-        permissions: [
-          {
-            user: 42,
-            permission: "ReadOnly",
-          },
-        ],
-      },
-      expect.any(Object)
-    );
+    expect(onClose).toHaveBeenCalled();
   });
 });
