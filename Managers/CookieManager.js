@@ -1,16 +1,16 @@
-import TokenCookieKey from "./Constants";
-
+import Constants from "./Constants";
 import Cookies from "js-cookie";
+
 const SaveToken = (expire, token) => {
-  Cookies.set(TokenCookieKey.TokenCookieKey, token, { expires: expire });
+  Cookies.set(Constants.CookieKey, token, { expires: expire });
 };
 
 const LoadToken = () => {
-  return Cookies.get(TokenCookieKey.TokenCookieKey);
+  return Cookies.get(Constants.CookieKey);
 };
 
 const RemoveToken = () => {
-  Cookies.remove(TokenCookieKey.TokenCookieKey);
+  Cookies.remove(Constants.CookieKey);
 };
 
 export default { SaveToken, LoadToken, RemoveToken };

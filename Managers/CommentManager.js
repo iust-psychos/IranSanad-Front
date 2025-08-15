@@ -1,4 +1,4 @@
-import constants from "./constants";
+import constants from "./Constants";
 
 export const commentsBaseAPI = `${constants.baseUrl}docs/document`;
 

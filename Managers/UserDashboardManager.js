@@ -1,5 +1,4 @@
-import { apiFetch } from "@/utils/apiFetch";
-import constants from "./constants.js";
+import { api } from "./ApiManager";
 
 export const initialDocuments = [
   {
@@ -33,28 +32,26 @@ export const initialDocuments = [
 ];
 
 export const userDashboardLoader = async () => {
-  return apiFetch(`${constants.baseUrl}docs/`);
+  const response = await api.get("/docs/");
+  return response.data;
 };
 
 export const userInfoLoader = async () => {
-  return apiFetch(`${constants.baseUrl}auth/info/`);
+  const response = await api.get("/auth/info/");
+  return response.data;
 };
 
-export const deleteDocument = async (uuid) => {
-  return await apiFetch(`${constants.baseUrl}docs/${uuid}/`, {
-    method: "DELETE",
-  });
+export const deleteDocument = async (id) => {
+  const response = api.delete(`/docs/${id}/`);
+  return response.data;
 };
 
-export const renameDocument = async (uuid, name) => {
-  return await apiFetch(`${constants.baseUrl}docs/${uuid}/`, {
-    method: "PATCH",
-    body: JSON.stringify({ title: name }),
-  });
+export const renameDocument = async (id, name) => {
+  const response = api.patch(`docs/${id}/`, { title: name });
+  return response.data;
 };
 
 export const createDocument = async () => {
-  return await apiFetch(`${constants.baseUrl}docs/`, {
-    method: "Post",
-  });
+  const response = await api.post(`/docs/`);
+  return response.data;
 };

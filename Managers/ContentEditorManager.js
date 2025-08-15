@@ -1,10 +1,9 @@
-import { apiFetch } from "@/utils/ApiFetch";
-import constants from "./constants.js";
+import { api } from "./ApiManager";
 
 export const contentEditorLoader = async ({ params }) => {
   const { doc_uuid } = params;
-  return apiFetch(`${constants.baseUrl}docs/document_lookup/`, {
-    method: "Post",
-    body: JSON.stringify({ doc_uuid: doc_uuid }),
+  const response = await api.post(`/docs/document_lookup/`, {
+    doc_uuid: doc_uuid,
   });
+  return response.data;
 };

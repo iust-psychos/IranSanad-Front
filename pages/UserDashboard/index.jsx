@@ -19,8 +19,6 @@ export default function UserDashboard() {
   const [documents, setDocuments] = useState(fetchedDocuments);
   const navigate = useNavigate();
 
-  const { isDarkMode } = useTheme();
-
   const handleSearch = () => {
     const searchValue = searchRef.current.value;
     setDocuments(
