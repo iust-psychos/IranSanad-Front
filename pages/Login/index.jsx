@@ -112,9 +112,10 @@ const Login = () => {
             />
           </div>
           <div className={styles.formBox}>
-            <span className={styles.loginTitle}>ورود به حساب</span>
+            
 
             <form onSubmit={handleSubmit} className={styles.inputsBox}>
+              <span className={styles.loginTitle}>ورود به حساب</span>
               <div className={styles.inputsBoxUsername}>
                 <label className={styles.inputsBoxLabels} htmlFor="email">
                   ایمیل

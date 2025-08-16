@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import { login_slides } from "@/utils/mockData";
 import { Input } from "@base-ui-components/react/input";
 import InfoIcon from "@mui/icons-material/Info";
+import { Grid } from "@mui/joy";
 import Tip_slide from "@/components/TipSlide";
 import SignupManager from "@/managers/SignUpManager";
 import * as yup from "yup";
@@ -180,12 +181,13 @@ const SignUp = () => {
             />
           </div>
           <div className={styles.formBox}>
-            <span className={styles.loginTitle}>حساب جدید</span>
+            
             <form
               className={styles.inputsBox}
               ref={signupRef}
               onSubmit={handleSubmit}
             >
+              <span className={styles.loginTitle}>حساب جدید</span>
               <div>
                 <label className={styles.inputsBoxLabels} htmlFor="username">
                   نام کاربری
@@ -213,7 +215,7 @@ const SignUp = () => {
                   />
                 )}
               </div>
-              <div>
+              <div className={styles.margintop}>
                 <label className={styles.inputsBoxLabels} htmlFor="email">
                   ایمیل
                 </label>
@@ -238,14 +240,21 @@ const SignUp = () => {
                   />
                 )}
               </div>
+              <Grid container sx={{marginTop: "10px"}}>
+                <Grid size={3} className={styles.passwordLabel}>
+                  <label className={styles.inputsBoxLabels} htmlFor="password">
+                    رمز عبور
+                  </label>
+                </Grid>
+                <Grid size={3}>
+                  <InfoIcon
+                    className={styles.infoIcon}
+                    data-tooltip-id="passwordPrequesties_tooltip"
+                  />
+                </Grid>
+                <Grid size={6}></Grid>
+              </Grid>
 
-              <label className={styles.inputsBoxLabels} htmlFor="password">
-                رمز عبور
-              </label>
-              <InfoIcon
-                className={styles.infoIcon}
-                data-tooltip-id="passwordPrequesties_tooltip"
-              />
               <Tooltip
                 id="passwordPrequesties_tooltip"
                 className={styles.passwordPrequesties}
@@ -294,7 +303,6 @@ const SignUp = () => {
               >
                 تکرار رمز عبور
               </label>
-              <br />
               <div className={styles.passwordInputWrapper}>
                 <Input
                   className={
